@@ -1,0 +1,40 @@
+﻿@using StandDigital.Models
+@using StandDigital.Repositories
+
+@inject ICarRepository carRepository
+
+@{
+    @if(Cars is null)
+    {
+        <section class="our-courses" id="courses">
+            <span style="font-size:25pt;font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;margin:5px 50px 50px 110px;color:white">Viaturas @Combustivel</span>
+            <div class="container">
+                <div class="row">
+                    <span style="color:white;font-size:22pt">A carregar...</span>
+                </div>
+            </div>
+        </section>
+    }
+    else
+    {
+        if(Cars.Count() > 0)
+        {
+            <div class="row" style="background-color:black">
+                @foreach (var car in Cars)
+                {
+                    <CarCard Carro="car" />
+                }
+            </div>
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public string Combustivel { get; set; }
+
+    private IEnumerable<CarCardModel>? Cars;
+
+    protected override async Task OnInitializedAsync()
+        => Cars = await carRepository.GetTop5CarsByFuelAsync(Combustivel);
+}

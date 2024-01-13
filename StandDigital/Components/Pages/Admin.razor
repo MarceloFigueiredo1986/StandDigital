@@ -1,0 +1,30 @@
+﻿@page "/admin"
+
+@attribute [StreamRendering]
+@inject ICarRepository carRepo
+
+<QuickGrid Items="Cars">
+    <PropertyColumn Property="@(p => p.Marca)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Modelo)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Lotacao)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Condicao)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Caixa)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Bateria)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.TipoCarregamento)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Cilindrada)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Combustivel)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Cvs)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Cor)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Kms)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.MesRegisto)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Ano)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Portas)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.Preco)" Sortable="true" />
+</QuickGrid>
+
+@code {
+    IQueryable<CarEntity> Cars;
+
+    protected override async Task OnInitializedAsync()
+        => Cars = (await carRepo.GetAllCardCarsAsync()).AsQueryable();
+}

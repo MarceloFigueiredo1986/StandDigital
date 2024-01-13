@@ -1,0 +1,63 @@
+﻿@using StandDigital.Models
+@attribute [StreamRendering]
+
+<div class="CardMain" style="width:@_viewWidthStr">
+    <img src="@Carro.ImageMin" height="250">
+    <div class="down-content">
+        <h4>@Carro.Marca @Carro.Modelo</h4>
+        <h6>
+            <span>@Carro.Combustivel</span>
+            <span>@Carro.Cv</span>
+            <span>@Carro.Kms</span></h6>
+        <div class="info">
+            <div class="row">
+                <div class="col-8">
+                    @_viewWidthStr
+                    @Carro.MesRegisto / @Carro.Ano
+                </div>
+                <div class="col-4">
+                    <span>@Carro.Preco €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .CardMain {
+        padding:15px;
+        margin: 10px;
+        float: left;
+        border-radius: 10px;
+        background-color: whitesmoke;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+@code {
+    [Parameter]
+    public CarCardModel Carro { get; set; }
+
+    [CascadingParameter]
+    public int WindowWidth { get; set; }
+
+    string? _viewWidthStr;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (WindowWidth == 0 || _viewWidthStr is not null) return;
+
+        _viewWidthStr = WindowWidth switch
+        {
+            0 => $"{400}px",
+            >= 560 => $"{530}px",
+            (> 350 and < 560) => $"{WindowWidth - 30}px",
+            < 350 => $"{(WindowWidth - 10)}px",
+            _ => $"{400}px",
+        };
+
+        await InvokeAsync(StateHasChanged);
+    } 
+}

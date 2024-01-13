@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@inherits LayoutComponentBase
+@inject IJSRuntime js
+@attribute [StreamRendering]
+
+<PageTitle>Paraíso automóvel</PageTitle>
+
+<div class="page">
+    <main>
+        <CascadingValue Value="@WindowWidth">
+            @Body
+        </CascadingValue>
+    </main>
+</div>
+
+@code{
+    private int WindowWidth = 0;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                WindowWidth = await js.InvokeAsync<int>("GetWidth");
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error MainLayout.OnAfterRenderAsync:{ex}");
+        }
+    }
+}
