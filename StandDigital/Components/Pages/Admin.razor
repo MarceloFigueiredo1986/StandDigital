@@ -2,29 +2,79 @@
 
 @attribute [StreamRendering]
 @inject ICarRepository carRepo
+@inject NavigationManager navman
 
-<QuickGrid Items="Cars">
-    <PropertyColumn Property="@(p => p.Marca)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Modelo)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Lotacao)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Condicao)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Caixa)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Bateria)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.TipoCarregamento)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Cilindrada)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Combustivel)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Cvs)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Cor)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Kms)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.MesRegisto)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Ano)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Portas)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Preco)" Sortable="true" />
-</QuickGrid>
+<div class="row" style="padding:15px">
+    <h3>Stock de viaturas</h3>
+    <Virtualize Items="@Cars" Context="Car">
+        <div style="margin:@_marginStr;float:@_float;margin-bottom:15px;" class="card">
+            <div class="row">
+                <div class="leftdiv"><a><b>@Car.Marca</b></a></div>
+                <div class="leftdiv"><a>@Car.Modelo </a></div>
+                <div class="leftdiv"><a>@Car.Kms km <span style="position:absolute;right:110px">@Car.Cv cv</span></a></div>
+                <div class="leftdiv"><a>@Car.Combustivel</a></div>
+                <div class="leftdiv"><a>@Car.TipoCarregamento <span style="position:absolute;right:110px">@Car.Bateria Kw</span></a></div>
+                <div class="leftdiv"><a>@Car.Cilindrada cc <span style="position:absolute;right:110px">@Car.Caixa</span></a></div>
+                <div style="max-width:100px;position:absolute;right:2px"><img src="@Car.ImageMin" height="93" style="position:absolute;right:0px;border-radius:45px" /></div>
+            </div>
+        </div>
+    </Virtualize>
+</div>
+
+<StandDigital.Components.Components.FloatingButton>
+    <FloatButton>
+        <input type="button" value="+" class="btn btn-outline-success" style="max-width:35px;margin-left:15px;border-radius:25px" @onclick="() => GotoCarDetails()" />
+    </FloatButton>
+</StandDigital.Components.Components.FloatingButton>
+
+<style type="text/css">
+    .card {
+        height: 200px;
+        width: 260px;
+        background-color: whitesmoke;
+        width: 250px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .floatingmenu{
+        position:absolute;
+        bottom:15px;
+        right:15px;
+    }
+
+    .leftdiv{
+    font-size:10pt;
+    min-height:25px;
+    min-width: 190px;
+    margin: 2px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+</style>
 
 @code {
-    IQueryable<CarEntity> Cars;
+    ICollection<CarEntity> Cars;
 
     protected override async Task OnInitializedAsync()
-        => Cars = (await carRepo.GetAllCardCarsAsync()).AsQueryable();
+        => Cars = (await carRepo.GetAllCardCarsAsync()).ToArray();
+
+    [CascadingParameter]
+    public int WindowWidth { get; set; }
+
+    string? _marginStr;
+    string? _float;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (WindowWidth == 0 || _marginStr is not null) return;
+
+        (_marginStr,_float) = WindowWidth switch
+        {
+            > 560 => ($"{15}px","left"),
+            <= 560 => ($"auto","none")
+        };
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected void GotoCarDetails(int? carid = null) => navman.NavigateTo($"managecar/{carid}");
 }

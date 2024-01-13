@@ -1,0 +1,54 @@
+﻿@if (ButtonClicked)
+{
+    <div class="floatingmenuUp">
+        @MenuOptions
+    </div>
+    <div class="floatingmenu">
+        <input type="button"
+               style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/undo.png?updatedAt=1705156194876');
+                        transform:scale(1.5);
+                        background-repeat:no-repeat;
+                        background-color:transparent;
+                        border-style:none;
+                        max-width:35px;
+                        width:50px;
+                        height:40px;
+                        margin-left:15px;" @onclick="() => {ButtonClicked = false;}" />
+    </div>
+}
+else
+{
+    <div class="floatingmenu">
+        @FloatButton
+    </div>
+}
+<style type="text/css">
+    .floatingmenu {
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .floatingmenuUp{
+        position: fixed;
+        bottom: 75px;
+        right: 20px;
+        width: 150px;
+        height: 100px;
+        background-color: whitesmoke;
+        opacity: 0.5;
+        border-radius:15px;
+        padding:10px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public RenderFragment FloatButton { get; set; }
+
+    [Parameter]
+    public RenderFragment MenuOptions { get; set; }
+
+    [Parameter]
+    public bool ButtonClicked { get; set; }
+}

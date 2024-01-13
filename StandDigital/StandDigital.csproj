@@ -15,23 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Include="wwwroot\scripts\DocumentInterop.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </ApplicationDefinition>
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Blazored.Typeahead" Version="4.7.0" />
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.1" />
     <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3" Version="2.1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\scripts\DocumentInterop.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

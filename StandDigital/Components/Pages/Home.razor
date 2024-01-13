@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
-                    <a href="index.html" class="logo">
+                    <a href="/" class="logo">
                         <span style="font-size:16pt">Paraíso automóvel</span>
                     </a>
                     <ul class="nav">
@@ -36,17 +36,15 @@
                         <li><a href="admin">Gestão</a></li>
                         <li class="scroll-to-section"><a href="#contact">Contactos</a></li>
                     </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
                 </nav>
             </div>
         </div>
     </div>
 </header>
+
 <section class="section main-banner" id="top" data-section="section1">
     <video autoplay muted loop id="bg-video">
-        <source src="https://ik.imagekit.io/da113ycvp/StandDigital/wwwroot/images/carback.mp4?updatedAt=1704827241866" type="video/mp4" />
+        <source src="https://ik.imagekit.io/da113ycvp/StandDigital/carback.mp4?updatedAt=1705148983408" type="video/mp4" />
     </video>
 
     <div class="video-overlay header-text">
@@ -75,7 +73,7 @@
 
 <StandDigital.Components.Components.CarCarrosselComponent Combustivel="Elétrico" />
 
-<section class="contact-us" id="contact" >
+<section class="contact-us" id="contact" style="background-image:url(https://ik.imagekit.io/da113ycvp/StandDigital/meetings-bg_jpg.webp?updatedAt=1705148982462)">
     <div class="container">
       <div class="row">
         <div class="col-lg-9 align-self-center">
@@ -172,3 +170,45 @@
         checkSection();
     });
 </script>
+
+@if(WindowWidth < 991)
+{
+    <StandDigital.Components.Components.FloatingButton ButtonClicked="floatingButtonClicked">
+        <FloatButton>
+                <input type="button"
+                       style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/list.png?updatedAt=1705153925369');
+                        transform:scale(1.5);
+                        background-repeat:no-repeat;
+                        background-color:transparent;
+                        border-style:none;
+                        max-width:35px;
+                        width:50px;
+                        height:40px;
+                        margin-left:15px;" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}" />
+        </FloatButton>
+        <MenuOptions>
+            <div class="row menuOption"><a href="carros" style="menuOption">Carros</a></div>
+            <div class="row menuOption"><a href="admin">Gestão</a></div>
+        </MenuOptions>
+    </StandDigital.Components.Components.FloatingButton>
+}
+
+<style type="text/css">
+    .menuOption{
+        font-weight:bolder;
+        margin:10px;
+        color:black;
+        cursor:pointer;
+    }
+
+    .menuOption:active{
+        color:darkgoldenrod;
+    }
+</style>
+
+@code {
+    private bool floatingButtonClicked;
+
+    [CascadingParameter]
+    public int WindowWidth { get; set; }
+}

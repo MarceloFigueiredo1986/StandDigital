@@ -3,21 +3,21 @@
 public class CarEntity
 {
     public int CarroId { get; set; }
-    public required string Marca { get; set; }
-    public required string Modelo { get; set; }
-    public required string Combustivel { get; set; }
-    public required string ImageMin { get; set; }
+    public string Marca { get; set; }
+    public string Modelo { get; set; }
+    public string Combustivel { get; set; }
+    public string ImageMin { get; set; }
     public uint Kms { get; set; }
-    public ushort Cvs { get; set; }
+    public ushort Cv { get; set; }
     public ushort? Bateria { get; set; }
     public string? TipoCarregamento { get; set; }
     public ushort? Cilindrada { get; set; }
-    public required ushort Portas { get; set; }
-    public required string Cor { get; set; }
+    public ushort Portas { get; set; }
+    public string Cor { get; set; }
     public uint Preco { get; set; }
     public ushort MesRegisto { get; set; }
     public ushort Ano { get; set; }
-    public required ushort Lotacao { get; set; }
+    public ushort Lotacao { get; set; }
     public string? Caixa { get; set; }
-    public required string Condicao { get; set; }
+    public string Condicao { get; set; }
 }
