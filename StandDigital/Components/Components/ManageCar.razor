@@ -1,7 +1,14 @@
 ﻿@page "/managecar/{carid:int}"
 @page "/managecar"
 
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Formats
+@using SixLabors.ImageSharp.Formats.Jpeg
+@using SixLabors.ImageSharp.Formats.Png
+@using SixLabors.ImageSharp.Processing
+
 @attribute [StreamRendering]
+@inject IWebHostEnvironment _env;
 
 <EditForm Model="Car" OnSubmit="ManageCommandToApply">
     <div class="edit-form-container">
@@ -25,36 +32,28 @@
                         <label for="firstName" class="form-label">Combustível</label>
                     </p>
                     <div class="row" style="margin:0px 10px 20px 10px">
-                        <div class="form-check" style="float:left;width:150px;">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Gasolina
-                            </label>
-                        </div>
-                        <div class="form-check" style="float:left;width:150px;">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Gasóleo
-                            </label>
-                        </div>
-                        <div class="form-check" style="float:left;width:150px;">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked>
-                            <label class="form-check-label" for="flexRadioDefault3">
-                                Híbrido
-                            </label>
-                        </div>
-                        <div class="form-check" style="float:left;width:150px;">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" checked>
-                            <label class="form-check-label" for="flexRadioDefault4">
-                                Elétrico
-                            </label>
-                        </div>
+                        @{
+                            int incr = 0;
+                            string flexRadioDefault;
+
+                            foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
+                            {
+                                flexRadioDefault = $"flexRadioDefault{incr}";
+                                <div class="form-check" style="float:left;width:170px;">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
+                                    <label class="form-check-label" for="@flexRadioDefault">
+                                        @tipoCombustivel.GetDescription()
+                                    </label>
+                                </div>
+                                incr++;
+                            }
+                        }
                     </div>
                 </div>
 
                 <div class="mb-3" disabled>
                     <label for="firstName" class="form-label">Modelo</label>
-                    <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null">
+                    <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
                         <SelectedTemplate Context="contextB">
                             @contextB
                         </SelectedTemplate>
@@ -65,7 +64,100 @@
                     <ValidationMessage For="@(() => Car.Modelo)" />
                 </div>
 
-                <button type="submit" class="btn btn-primary">Save</button>
+                <div class="mb-3" disabled>
+                    <label for="firstName" class="form-label">Lotação</label>
+                    <div class="slidecontainer">
+                        <input type="range" class="form-range" min="1" max="10" style="width:340px;padding-top:15px;margin-left:5px" id="customRange22" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Lotacao">
+                        <output>@Car.Lotacao</output>
+                    </div>
+                </div>
+
+                <div class="mb-3" disabled>
+                    <label for="firstName" class="form-label">Portas</label>
+                    <div class="slidecontainer">
+                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="5" id="customRange232" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Portas">
+                        <output>@Car.Portas</output>
+                    </div>
+                </div>
+
+                <div class="mb-3" disabled>
+                    <div class="slidecontainer">
+                        <label for="firstName" class="form-label" style="width:400px">Ano registo</label>
+                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Ano" />
+                    </div>
+                </div>
+
+
+                <div class="mb-3" disabled>
+                    <div class="slidecontainer">
+                        <label for="firstName" class="form-label" style="width:400px">Mês registo</label>
+                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.Cv">
+                        <output>@Car.MesRegisto</output>
+                    </div>
+                </div>
+
+                <div class="mb-3" disabled>
+                    <div class="slidecontainer">
+                        <label for="firstName" class="form-label" style="width:400px">Potência (Cv)</label>
+                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Cv" />
+                    </div>
+                </div>
+
+                <div class="mb-3" disabled>
+                    <div class="form-outline">
+                        <label for="firstName" class="form-label" style="width:400px">Preço</label>
+                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Preco" />
+                    </div>
+                </div>
+
+                <div class="mb-3" disabled>
+                    <label for="firstName" class="form-label">Carro novo?</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" @onclick="() => DefineCondicao(false)" />
+                        <label class="form-check-label" for="inlineRadio1">Não</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" @onclick="() => DefineCondicao(true)" />
+                        <label class="form-check-label" for="inlineRadio2">Sim</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Fotos</label>
+                        <InputFile id="inputDrop" OnChange="OnChangeCarPhotoDrop" multiple />
+                        
+                        @if(!string.IsNullOrEmpty(photosImportErrorMsg))
+                        {
+                            <span style="color:red">Carregamento em curso</span>
+                        }
+                        @if(ProgressPercentage is not null)
+                        {
+                            <input type="button" class="btn btn-danger" @onclick="() => cancelToken!.Cancel()" value="Cancelar" />
+                            if (ProgressPercentage == 0)
+                            {
+                                <span>Carregamento em curso</span>
+                            }else
+                            {
+                                <div class="progress mb-3" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" style="width: @DownloadSize%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage/@DownloadSize/@FinalSize Complete</div>
+                                </div>
+                            }
+                        }
+
+                        @foreach (var foto in Fotos)
+                        {
+                            <div class="divFoto">
+                                <img src="@MemStringToBase64(foto.Value)" width="45" height="45" />
+                                <span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto.Key)">X</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -79,7 +171,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift */
         padding: 20px 10px 20px 10px; /* Padding inside the container */
         margin-top: 20px; /* Add margin to separate from the header */
-        width:400px;
+        width:410px;
         margin:auto;
         margin-top:15px;
     }
@@ -88,11 +180,18 @@
             font-weight: bold; /* Make form labels bold */
         }
 
+    .divFoto{
+        width:45px;
+        height:55px;
+        float:left;
+        margin:5px;
+    }
 </style>
 
 @code
 {
     protected CarEntity Car { get; set; } = new();
+    const int maxFileSize = 10485760;
 
     [Parameter]
     public int? Carid { get; set; }
@@ -100,16 +199,22 @@
     public ImmutableArray<string> Marcas => ["Mercedes-Benz", "Audi", "Bmw", "VW", "Seat", "Byd"];
     public (string Marca, string Combustivel, ImmutableArray<string> Modelos)[] Modelos => new(string, string, ImmutableArray<string>)[]
     {
-        ("Mercedes-Benz","Gasóleo",["A","B","C","E","S","CLS","CLA","CLC"] ),
-        ("Audi","Gasóleo",["A1","A2","A3","A4","A5","A6","A7","A8"] ),
-        ("Bmw","Gasóleo",["Série 1","Série 2","Série 3","Série 4","Série 5","Série 6","Série 8","X1","X2","X3","X4","X5","X6"] ),
-        ("VW","Gasóleo",["Golf","Passat","Lupo","Amarok"] ),
-        ("Byd","Gasóleo",["Seal"] )
+        ("Mercedes-Benz",Combustivel.Gasoleo.ToString(),["A","B","C","E","S","CLS","CLA","CLC"] ),
+        ("Audi",Combustivel.Gasoleo.ToString(),["A1","A2","A3","A4","A5","A6","A7","A8"] ),
+        ("Bmw",Combustivel.Gasoleo.ToString(),["Série 1","Série 2","Série 3","Série 4","Série 5","Série 6","Série 8","X1","X2","X3","X4","X5","X6"] ),
+        ("VW",Combustivel.Gasolina.ToString(),["Golf","Passat","Lupo","Amarok"] ),
+        ("Byd",Combustivel.Electrico.ToString(),["Seal"] )
     };
+
+    protected Dictionary<string, MemoryStream> Fotos = new();
+    long? ProgressPercentage;
+    long? DownloadSize;
+    long? FinalSize;
+    CancellationTokenSource? cancelToken = null;
+    string? photosImportErrorMsg;
 
     private async Task<IEnumerable<string>> SearchBrand(string searchText) 
     => await Task.FromResult(Marcas.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
-
     private async Task<IEnumerable<string>> SearchModel(string searchText)
     {
         var modelosFiltrados = Modelos.
@@ -117,20 +222,111 @@
         Where(aa => aa.Combustivel == Car.Combustivel).
         Select(aaa => aaa.Modelos).First();
         return await Task.FromResult(modelosFiltrados.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+    }
+    private void SetCombustivel(Combustivel Combustivel)
+        => Car.Combustivel = Combustivel.ToString();
+    private async Task OnChangeCarPhotoDrop(InputFileChangeEventArgs e)
+    {
+        cancelToken = new CancellationTokenSource();
+        var contextCancelToken = cancelToken.Token;
+        photosImportErrorMsg = null;
+
+        var files = e.GetMultipleFiles();
+        if (files.Count == 0) return;
+        ProgressPercentage = 0;
+
+        DownloadSize = files.Sum(a => a.Size);
+
+        var guid = Guid.NewGuid().ToString();
+
+        foreach(var file in files)
+        {
+            try
+            {
+                if (contextCancelToken.IsCancellationRequested)
+                {
+                    Fotos.Clear();
+                    break;
+                }
+                using (var stream = file.OpenReadStream(maxFileSize))
+                {
+                    Image image;
+
+                    using (var mstream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(mstream);
+                        mstream.Position = 0;
+
+                        if(file.Size > 1000000)
+                        {
+                            image = await Image.LoadAsync(mstream);
+
+                            image.Mutate(x => x.Resize(new ResizeOptions
+                                {
+                                    Size = new Size(700, 500),
+                                    Mode = ResizeMode.Max
+                                }));
+
+                            mstream.SetLength(0);
+
+                            IImageEncoder encoder = file.Name.Substring(file.Name.LastIndexOf('.')) switch
+                            {
+                                ".jpeg" => new JpegEncoder(),
+                                ".png" => new PngEncoder(),
+                                _ => throw new Exception("Not supported")
+                            };
+
+                            await image.SaveAsync(mstream, encoder);
+                        }
+                   
+                        FinalSize += mstream.Length;
+
+                        Fotos.Add($"{file.Name}_{guid}", mstream);
+                        ProgressPercentage += file.Size;
+                    }
+
+                    await InvokeAsync(StateHasChanged);
+                }
+
+                await Task.Delay(3000);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex}");
+            }
+        }
+
+        ProgressPercentage = null;
+        await InvokeAsync(StateHasChanged);
+    }
+    protected string MemStringToBase64(MemoryStream stream)
+    {
+        byte[] byteArray = stream.ToArray();
+        var b64String = Convert.ToBase64String(byteArray);
+        return "data:image/png;base64," + b64String;
+    }
+    protected void RemoveImage(string imageName) => Fotos.Remove(imageName);
+    protected void DefineCondicao(bool estadoNovo) => Car.Condicao = estadoNovo switch
+    {
+        true => "Novo",
+        false => "Usado"
     };
 
-    public async Task ManageCommandToApply(EditContext editContext)
+    protected async Task ManageCommandToApply(EditContext editContext)
     {
         if (Carid is null)
             await CreateCar();
         else
             await EditCar();
+
+        Fotos.Clear();
+        Car = new();
     }
-    public Task CreateCar()
+    protected Task CreateCar()
     {
         throw new NotImplementedException();
     }
-    public Task EditCar()
+    protected Task EditCar()
     {
         throw new NotImplementedException();
     }
