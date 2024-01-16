@@ -1,0 +1,80 @@
+﻿@attribute [StreamRendering]
+
+@inject IWebHostEnvironment _env;
+@implements IDisposable
+
+<div class="row">
+    <div class="mb-3">
+        <label for="firstName" class="form-label">Fotos</label>
+        <InputFile id="inputDrop" OnChange="OnChangeCarPhotoDrop" multiple />
+
+        @if (isLoading)
+        {
+            <p>Progress: @string.Format("{0:P0}", progressPercent)</p>
+        }
+        else
+        {
+            @foreach (var foto in loadedFiles)
+            {
+                <div class="divFoto">
+                    <span style="font-size:10pt">@foto.Name</span><span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto)">X</span>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 7000;
+    private int maxAllowedFiles = 3;
+    private bool isLoading;
+    private decimal progressPercent;
+
+    private async Task OnChangeCarPhotoDrop(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedFiles.Clear();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            try
+            {
+                loadedFiles.Add(file);
+
+                var trustedFileNameForFileStorage = Path.GetRandomFileName();
+                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",
+                        trustedFileNameForFileStorage);
+
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("File: {Filename} Error: {Error}", file.Name, ex.Message);
+            }
+        }
+        isLoading = false;
+    }
+    protected void RemoveImage(IBrowserFile image)
+    {
+        try
+        {
+            var trustedFileNameForFileStorage = Path.GetRandomFileName();
+            var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",
+                    trustedFileNameForFileStorage);
+
+            loadedFiles.Remove(image);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("File: {Filename} Error: {Error}", image.Name, ex.Message);
+        }
+    }
+
+    public void Dispose()
+    {
+        loadedFiles.Clear();
+    }
+}

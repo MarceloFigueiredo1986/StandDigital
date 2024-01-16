@@ -8,7 +8,6 @@
 @using SixLabors.ImageSharp.Processing
 
 @attribute [StreamRendering]
-@inject IWebHostEnvironment _env;
 
 <EditForm Model="Car" OnSubmit="ManageCommandToApply">
     <div class="edit-form-container">
@@ -87,11 +86,10 @@
                     </div>
                 </div>
 
-
                 <div class="mb-3" disabled>
                     <div class="slidecontainer">
                         <label for="firstName" class="form-label" style="width:400px">Mês registo</label>
-                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.Cv">
+                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.MesRegisto">
                         <output>@Car.MesRegisto</output>
                     </div>
                 </div>
@@ -122,38 +120,7 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="mb-3">
-                        <label for="firstName" class="form-label">Fotos</label>
-                        <InputFile id="inputDrop" OnChange="OnChangeCarPhotoDrop" multiple />
-                        
-                        @if(!string.IsNullOrEmpty(photosImportErrorMsg))
-                        {
-                            <span style="color:red">Carregamento em curso</span>
-                        }
-                        @if(ProgressPercentage is not null)
-                        {
-                            <input type="button" class="btn btn-danger" @onclick="() => cancelToken!.Cancel()" value="Cancelar" />
-                            if (ProgressPercentage == 0)
-                            {
-                                <span>Carregamento em curso</span>
-                            }else
-                            {
-                                <div class="progress mb-3" style="height: 20px;">
-                                    <div class="progress-bar" role="progressbar" style="width: @DownloadSize%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage/@DownloadSize/@FinalSize Complete</div>
-                                </div>
-                            }
-                        }
-
-                        @foreach (var foto in Fotos)
-                        {
-                            <div class="divFoto">
-                                <img src="@MemStringToBase64(foto.Value)" width="45" height="45" />
-                                <span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto.Key)">X</span>
-                            </div>
-                        }
-                    </div>
-                </div>
+                <PhotosImporter />
 
                 <div class="row">
                     <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
@@ -181,17 +148,15 @@
         }
 
     .divFoto{
-        width:45px;
+        width: 400px;
         height:55px;
         float:left;
-        margin:5px;
     }
 </style>
 
 @code
 {
     protected CarEntity Car { get; set; } = new();
-    const int maxFileSize = 10485760;
 
     [Parameter]
     public int? Carid { get; set; }
@@ -206,13 +171,7 @@
         ("Byd",Combustivel.Electrico.ToString(),["Seal"] )
     };
 
-    protected Dictionary<string, MemoryStream> Fotos = new();
-    long? ProgressPercentage;
-    long? DownloadSize;
-    long? FinalSize;
-    CancellationTokenSource? cancelToken = null;
-    string? photosImportErrorMsg;
-
+   
     private async Task<IEnumerable<string>> SearchBrand(string searchText) 
     => await Task.FromResult(Marcas.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
     private async Task<IEnumerable<string>> SearchModel(string searchText)
@@ -225,87 +184,7 @@
     }
     private void SetCombustivel(Combustivel Combustivel)
         => Car.Combustivel = Combustivel.ToString();
-    private async Task OnChangeCarPhotoDrop(InputFileChangeEventArgs e)
-    {
-        cancelToken = new CancellationTokenSource();
-        var contextCancelToken = cancelToken.Token;
-        photosImportErrorMsg = null;
-
-        var files = e.GetMultipleFiles();
-        if (files.Count == 0) return;
-        ProgressPercentage = 0;
-
-        DownloadSize = files.Sum(a => a.Size);
-
-        var guid = Guid.NewGuid().ToString();
-
-        foreach(var file in files)
-        {
-            try
-            {
-                if (contextCancelToken.IsCancellationRequested)
-                {
-                    Fotos.Clear();
-                    break;
-                }
-                using (var stream = file.OpenReadStream(maxFileSize))
-                {
-                    Image image;
-
-                    using (var mstream = new MemoryStream())
-                    {
-                        await stream.CopyToAsync(mstream);
-                        mstream.Position = 0;
-
-                        if(file.Size > 1000000)
-                        {
-                            image = await Image.LoadAsync(mstream);
-
-                            image.Mutate(x => x.Resize(new ResizeOptions
-                                {
-                                    Size = new Size(700, 500),
-                                    Mode = ResizeMode.Max
-                                }));
-
-                            mstream.SetLength(0);
-
-                            IImageEncoder encoder = file.Name.Substring(file.Name.LastIndexOf('.')) switch
-                            {
-                                ".jpeg" => new JpegEncoder(),
-                                ".png" => new PngEncoder(),
-                                _ => throw new Exception("Not supported")
-                            };
-
-                            await image.SaveAsync(mstream, encoder);
-                        }
-                   
-                        FinalSize += mstream.Length;
-
-                        Fotos.Add($"{file.Name}_{guid}", mstream);
-                        ProgressPercentage += file.Size;
-                    }
-
-                    await InvokeAsync(StateHasChanged);
-                }
-
-                await Task.Delay(3000);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex}");
-            }
-        }
-
-        ProgressPercentage = null;
-        await InvokeAsync(StateHasChanged);
-    }
-    protected string MemStringToBase64(MemoryStream stream)
-    {
-        byte[] byteArray = stream.ToArray();
-        var b64String = Convert.ToBase64String(byteArray);
-        return "data:image/png;base64," + b64String;
-    }
-    protected void RemoveImage(string imageName) => Fotos.Remove(imageName);
+    
     protected void DefineCondicao(bool estadoNovo) => Car.Condicao = estadoNovo switch
     {
         true => "Novo",
@@ -318,9 +197,6 @@
             await CreateCar();
         else
             await EditCar();
-
-        Fotos.Clear();
-        Car = new();
     }
     protected Task CreateCar()
     {
