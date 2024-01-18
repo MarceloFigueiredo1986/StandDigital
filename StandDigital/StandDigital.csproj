@@ -15,6 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="temporaryfiles\**" />
+    <Content Remove="temporaryfiles\**" />
+    <EmbeddedResource Remove="temporaryfiles\**" />
+    <None Remove="temporaryfiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.Typeahead" Version="4.7.0" />
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.1" />

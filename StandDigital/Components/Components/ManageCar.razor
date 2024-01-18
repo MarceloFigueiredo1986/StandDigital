@@ -9,126 +9,132 @@
 
 @attribute [StreamRendering]
 
-<EditForm Model="Car" OnSubmit="ManageCommandToApply">
-    <div class="edit-form-container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="mb-12">
-                    <label for="firstName" class="form-label">Marca</label>
-                    <BlazoredTypeahead SearchMethod="SearchBrand" @bind-Value="Car.Marca">
-                        <SelectedTemplate Context="contextA">
-                            @contextA
-                        </SelectedTemplate>
-                        <ResultTemplate Context="contextA">
-                            @contextA
-                        </ResultTemplate>
-                    </BlazoredTypeahead>
-                    <ValidationMessage For="@(() => Car.Marca)" />
-                </div>
+@if(isSaving)
+{
+    <span>A gravar...</span>
+}else
+{
+    <EditForm Model="Car" OnSubmit="ManageCommandToApply">
+        <div class="edit-form-container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="mb-12">
+                        <label for="firstName" class="form-label">Marca</label>
+                        <BlazoredTypeahead SearchMethod="SearchBrand" @bind-Value="Car.Marca">
+                            <SelectedTemplate Context="contextA">
+                                @contextA
+                            </SelectedTemplate>
+                            <ResultTemplate Context="contextA">
+                                @contextA
+                            </ResultTemplate>
+                        </BlazoredTypeahead>
+                        <ValidationMessage For="@(() => Car.Marca)" />
+                    </div>
 
-                <div class="mb-3" style="margin-top:15px">
-                    <p>
-                        <label for="firstName" class="form-label">Combustível</label>
-                    </p>
-                    <div class="row" style="margin:0px 10px 20px 10px">
-                        @{
-                            int incr = 0;
-                            string flexRadioDefault;
+                    <div class="mb-3" style="margin-top:15px">
+                        <p>
+                            <label for="firstName" class="form-label">Combustível</label>
+                        </p>
+                        <div class="row" style="margin:0px 10px 20px 10px">
+                            @{
+                                int incr = 0;
+                                string flexRadioDefault;
 
-                            foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
-                            {
-                                flexRadioDefault = $"flexRadioDefault{incr}";
-                                <div class="form-check" style="float:left;width:170px;">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
-                                    <label class="form-check-label" for="@flexRadioDefault">
-                                        @tipoCombustivel.GetDescription()
-                                    </label>
-                                </div>
-                                incr++;
+                                foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
+                                {
+                                    flexRadioDefault = $"flexRadioDefault{incr}";
+                                    <div class="form-check" style="float:left;width:170px;">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
+                                        <label class="form-check-label" for="@flexRadioDefault">
+                                            @tipoCombustivel.GetDescription()
+                                        </label>
+                                    </div>
+                                    incr++;
+                                }
                             }
-                        }
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <label for="firstName" class="form-label">Modelo</label>
-                    <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
-                        <SelectedTemplate Context="contextB">
-                            @contextB
-                        </SelectedTemplate>
-                        <ResultTemplate Context="contextB">
-                            @contextB
-                        </ResultTemplate>
-                    </BlazoredTypeahead>
-                    <ValidationMessage For="@(() => Car.Modelo)" />
-                </div>
-
-                <div class="mb-3" disabled>
-                    <label for="firstName" class="form-label">Lotação</label>
-                    <div class="slidecontainer">
-                        <input type="range" class="form-range" min="1" max="10" style="width:340px;padding-top:15px;margin-left:5px" id="customRange22" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Lotacao">
-                        <output>@Car.Lotacao</output>
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Modelo</label>
+                        <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
+                            <SelectedTemplate Context="contextB">
+                                @contextB
+                            </SelectedTemplate>
+                            <ResultTemplate Context="contextB">
+                                @contextB
+                            </ResultTemplate>
+                        </BlazoredTypeahead>
+                        <ValidationMessage For="@(() => Car.Modelo)" />
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <label for="firstName" class="form-label">Portas</label>
-                    <div class="slidecontainer">
-                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="5" id="customRange232" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Portas">
-                        <output>@Car.Portas</output>
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Lotação</label>
+                        <div class="slidecontainer">
+                            <input type="range" class="form-range" min="1" max="10" style="width:340px;padding-top:15px;margin-left:5px" id="customRange22" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Lotacao">
+                            <output>@Car.Lotacao</output>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <div class="slidecontainer">
-                        <label for="firstName" class="form-label" style="width:400px">Ano registo</label>
-                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Ano" />
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Portas</label>
+                        <div class="slidecontainer">
+                            <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="5" id="customRange232" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Portas">
+                            <output>@Car.Portas</output>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <div class="slidecontainer">
-                        <label for="firstName" class="form-label" style="width:400px">Mês registo</label>
-                        <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.MesRegisto">
-                        <output>@Car.MesRegisto</output>
+                    <div class="mb-3" disabled>
+                        <div class="slidecontainer">
+                            <label for="firstName" class="form-label" style="width:400px">Ano registo</label>
+                            <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Ano" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <div class="slidecontainer">
-                        <label for="firstName" class="form-label" style="width:400px">Potência (Cv)</label>
-                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Cv" />
+                    <div class="mb-3" disabled>
+                        <div class="slidecontainer">
+                            <label for="firstName" class="form-label" style="width:400px">Mês registo</label>
+                            <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.MesRegisto">
+                            <output>@Car.MesRegisto</output>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <div class="form-outline">
-                        <label for="firstName" class="form-label" style="width:400px">Preço</label>
-                        <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Preco" />
+                    <div class="mb-3" disabled>
+                        <div class="slidecontainer">
+                            <label for="firstName" class="form-label" style="width:400px">Potência (Cv)</label>
+                            <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Cv" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3" disabled>
-                    <label for="firstName" class="form-label">Carro novo?</label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" @onclick="() => DefineCondicao(false)" />
-                        <label class="form-check-label" for="inlineRadio1">Não</label>
+                    <div class="mb-3" disabled>
+                        <div class="form-outline">
+                            <label for="firstName" class="form-label" style="width:400px">Preço</label>
+                            <input type="number" id="typeNumber" class="form-control" @bind-value="Car.Preco" />
+                        </div>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" @onclick="() => DefineCondicao(true)" />
-                        <label class="form-check-label" for="inlineRadio2">Sim</label>
+
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Carro novo?</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" @onclick="() => DefineCondicao(false)" />
+                            <label class="form-check-label" for="inlineRadio1">Não</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" @onclick="() => DefineCondicao(true)" />
+                            <label class="form-check-label" for="inlineRadio2">Sim</label>
+                        </div>
                     </div>
-                </div>
 
-                <PhotosImporter />
+                    <PhotosImporter Files="TemporaryPhotos" />
 
-                <div class="row">
-                    <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
+                    <div class="row">
+                        <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</EditForm>
+    </EditForm>
+}
 
 <style type="text/css">
 
@@ -156,6 +162,8 @@
 
 @code
 {
+    private Dictionary<string, string> TemporaryPhotos { get; set; } = new();
+
     protected CarEntity Car { get; set; } = new();
 
     [Parameter]
@@ -171,7 +179,8 @@
         ("Byd",Combustivel.Electrico.ToString(),["Seal"] )
     };
 
-   
+    private bool isSaving;
+
     private async Task<IEnumerable<string>> SearchBrand(string searchText) 
     => await Task.FromResult(Marcas.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
     private async Task<IEnumerable<string>> SearchModel(string searchText)
@@ -184,7 +193,7 @@
     }
     private void SetCombustivel(Combustivel Combustivel)
         => Car.Combustivel = Combustivel.ToString();
-    
+
     protected void DefineCondicao(bool estadoNovo) => Car.Condicao = estadoNovo switch
     {
         true => "Novo",
@@ -193,14 +202,28 @@
 
     protected async Task ManageCommandToApply(EditContext editContext)
     {
-        if (Carid is null)
-            await CreateCar();
-        else
-            await EditCar();
+        try
+        {
+            isSaving = true;
+            if (Carid is null)
+                await CreateCar();
+            else
+                await EditCar();
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+        finally
+        {
+            isSaving = false;
+        }
     }
-    protected Task CreateCar()
+    protected async Task CreateCar()
     {
-        throw new NotImplementedException();
+        await Task.Delay(5000);
     }
     protected Task EditCar()
     {

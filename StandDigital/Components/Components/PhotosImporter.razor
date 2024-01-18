@@ -10,71 +10,90 @@
 
         @if (isLoading)
         {
-            <p>Progress: @string.Format("{0:P0}", progressPercent)</p>
+            <p>A carregar...</p>
         }
         else
         {
-            @foreach (var foto in loadedFiles)
+            @foreach (var foto in Files)
             {
-                <div class="divFoto">
-                    <span style="font-size:10pt">@foto.Name</span><span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto)">X</span>
+                <div style="height:15px;font-size:10pt">
+                    <span style="font-size:10pt">@foto.Value</span><span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto.Key)">X</span>
                 </div>
             }
+            <span style="color:red">@errorLoadingImages</span>
         }
     </div>
 </div>
 
 
 @code {
-    private List<IBrowserFile> loadedFiles = new();
+
+    [Parameter]
+    public Dictionary<string, string> Files { get; set; }
+
+    [Parameter]
+    public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
+
     private long maxFileSize = 1024 * 7000;
-    private int maxAllowedFiles = 3;
+    private int maxAllowedFiles = 30;
     private bool isLoading;
     private decimal progressPercent;
+    private string? errorLoadingImages;
 
     private async Task OnChangeCarPhotoDrop(InputFileChangeEventArgs e)
     {
         isLoading = true;
-        loadedFiles.Clear();
+        Files.Clear();
+        errorLoadingImages = null;
+
+        if(e.FileCount > maxAllowedFiles)
+        {
+            errorLoadingImages = $"Maximum number of images is {e.FileCount}";
+            return;
+        }
 
         foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
         {
             try
             {
-                loadedFiles.Add(file);
-
-                var trustedFileNameForFileStorage = Path.GetRandomFileName();
-                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",
-                        trustedFileNameForFileStorage);
-
+                var filename = $"{file.Name}__{Guid.NewGuid()}";
+                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",filename);
                 await using FileStream fs = new(path, FileMode.Create);
                 await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                Files.Add(filename,file.Name);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("File: {Filename} Error: {Error}", file.Name, ex.Message);
             }
         }
+
         isLoading = false;
     }
-    protected void RemoveImage(IBrowserFile image)
+    protected void RemoveImage(string imageName)
     {
         try
         {
-            var trustedFileNameForFileStorage = Path.GetRandomFileName();
-            var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",
-                    trustedFileNameForFileStorage);
+            File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles",
+                    imageName));
 
-            loadedFiles.Remove(image);
+            Files.Remove(imageName);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("File: {Filename} Error: {Error}", image.Name, ex.Message);
+            Console.WriteLine("File: {Filename} Error: {Error}", imageName, ex.Message);
         }
     }
-
     public void Dispose()
     {
-        loadedFiles.Clear();
+        var tsk = new Thread(a => 
+             {
+                 Files.ToList().ForEach(a =>
+                 {
+                     File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles",
+                            a.Key));
+                 });
+             });
+        tsk.Start();
     }
 }
