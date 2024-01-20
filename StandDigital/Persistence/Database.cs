@@ -19,8 +19,12 @@ public sealed class Database(IConfiguration configuration) : IDatabase
              dynamicParameters,
              transaction);
 
-    public async Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject) =>
-        await _dbConnection.QuerySingleAsync<TOut>($"{query};SELECT CAST(SCOPE_IDENTITY() AS INT);", newObject, transaction);
+    public async Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject,CancellationToken cancellationToken) =>
+        await _dbConnection.QuerySingleAsync<TOut>(new CommandDefinition(
+            commandText : $"{query};SELECT CAST(SCOPE_IDENTITY() AS INT);",
+            parameters: newObject,
+            transaction: transaction,
+            cancellationToken: cancellationToken));
 
     public async Task<bool> InsertAsync<T>(string query,T entity) where T : class
     {

@@ -1,0 +1,247 @@
+﻿@page "/managecar/{carid:int}"
+@page "/managecar"
+
+@inherits CarDetailsService
+
+
+@attribute [StreamRendering]
+
+<EditForm Model="Car" OnSubmit="ManageCommandToApply">
+        <div class="edit-form-container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="mb-12">
+                        <ComponentLoader LoadingObj="Marcas">
+                            <Fragment>
+                            <label for="firstName" class="form-label">Marca</label>
+                            <BlazoredTypeahead AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
+                                <SelectedTemplate Context="contextA">
+                                    @contextA
+                                </SelectedTemplate>
+                                <ResultTemplate Context="contextA">
+                                    @contextA
+                                </ResultTemplate>
+                            </BlazoredTypeahead>
+                            <ValidationMessage For="@(() => Car.Marca)" />
+                            <span>Carregue em Enter para confirmar valor</span>
+                            </Fragment>
+                        </ComponentLoader>
+                    </div>
+
+                    <!--Combustível-->
+                    <div class="mb-3" style="margin-top:15px">
+                        <p>
+                            <label for="firstName" class="form-label">Combustível</label>
+                        </p>
+                        <div class="row" style="margin:0px 10px 20px 10px">
+                        @{
+                            int incr = 0;
+                            string flexRadioDefault;
+
+                            foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
+                            {
+                                flexRadioDefault = $"flexRadioDefault{incr}";
+                                <div class="form-check" style="float:left;width:170px;">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
+                                    <label class="form-check-label" for="@flexRadioDefault">
+                                        @tipoCombustivel.GetDescription()
+                                    </label>
+                                </div>
+                                incr++;
+                            }
+                        }
+                    </div>
+                    </div>
+
+                    <!--Modelo-->
+                    <div class="mb-3" disabled>
+                        <ComponentLoader LoadingObj="Modelos">
+                            <Fragment>
+                            <label for="firstName" class="form-label">Modelo</label>
+                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null || Car.Combustivel is null">
+                                <SelectedTemplate Context="contextB">
+                                    @contextB
+                                </SelectedTemplate>
+                                <ResultTemplate Context="contextB">
+                                    @contextB
+                                </ResultTemplate>
+                            </BlazoredTypeahead>
+                            <ValidationMessage For="@(() => Car.Modelo)" />
+                            <span>Carregue em Enter para confirmar valor</span>
+                            </Fragment>
+                        </ComponentLoader>
+                </div>
+
+                    <DynamicComponent Type="@MenuOpcoesTipoCombustivel" Parameters="ParametrosComponenteOpcoesCombustivel" />
+
+                    <!--Lotação-->
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Lotação</label>
+                        <div class="slidecontainer">
+                            <input type="range" class="form-range" min="1" max="10" style="width:340px;padding-top:15px;margin-left:5px" id="customRange22" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Lotacao">
+                            <output>@Car.Lotacao</output>
+                        </div>
+                    </div>
+
+                    <!--Portas-->
+                    <div class="mb-3" disabled>
+                        <label for="firstName" class="form-label">Portas</label>
+                        <div class="slidecontainer">
+                            <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="5" id="customRange232" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Portas">
+                            <output>@Car.Portas</output>
+                        </div>
+                    </div>
+
+                    <!--Mês registo-->
+                    <div class="mb-3" disabled>
+                        <div class="slidecontainer">
+                            <label for="firstName" class="form-label" style="width:400px">Mês registo</label>
+                            <input type="range" class="form-range" min="1" style="width:340px;padding-top:15px;margin-left:5px" max="12" oninput="this.nextElementSibling.value = this.value" id="customRange5fds" @bind-value="Car.MesRegisto">
+                            <output>@Car.MesRegisto</output>
+                        </div>
+                    </div>
+
+                    <!--Kms e Cavalagem-->
+                    <div class="mb-3" style="height:70px" disabled>
+                        <div style="width:180px;float:left" class="form-outline">
+                            <label for="firstName" class="form-label">Quilómetros</label>
+                        <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Kms" />
+                        </div>
+                        <div style="width:200px;float:left" class="slidecontainer">
+                            <label for="firstName" class="form-label">Potência (Cv)</label>
+                            <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Cv" />
+                        </div>
+                    </div>
+                    <!--Preço e Ano-->
+                   <div class="mb-3" style="height:70px" disabled>
+                        <div class="form-outline" style="width:180px;float:left">
+                            <label for="firstName" class="form-label">Preço</label>
+                            <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Preco" />
+                        </div>
+                        <div class="slidecontainer" style="width:180px;float:left">
+                            <label for="firstName" class="form-label" >Ano registo</label>
+                            <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Ano" />
+                        </div>
+                    </div>
+                    
+                    <!--Carro novo e Anúncio ativo-->
+                    <div class="mb-3" disabled>
+                        <div class="form-check form-check-inline">
+                            <label for="firstName" class="form-label">Carro novo</label>
+                            <input class="form-check-input" type="checkbox" name="inlineRadioOptions" @bind-value="Car.Condicao" />
+
+                            <label style="float:left;margin-right:65px" for="firstName" class="form-label">Anúncio ativo</label>
+                            <input class="form-check-input" type="checkbox" name="inlineRadioOptions" @bind-value="CarMetadata.Ativo" />
+                        </div>
+                    </div>
+
+                    <!--Data matrícula e Data Venda-->
+                    <div class="mb-3" disabled>
+                    <label style="width:180px" for="firstName" class="form-label">Data matrícula</label>
+                    <input type="date" @bind-value="CarMetadata.DataMatricula" />
+                    <br />
+                    <label style="width:180px"  for="firstName" class="form-label">Data Venda</label>
+                    <input type="date" name="inlineRadioOptions" @bind-value="CarMetadata.DataVenda" disabled/>
+                </div>
+
+                    <!--Extras-->
+                    <div class="mb-3" disabled>
+                    <ComponentLoader LoadingObj="DefaultExtras">
+                        <Fragment>
+                            <label for="firstName" class="form-label">Modelo</label>
+                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null || Car.Combustivel is null">
+                                <SelectedTemplate Context="contextB">
+                                    @contextB
+                                </SelectedTemplate>
+                                <ResultTemplate Context="contextB">
+                                    @contextB
+                                </ResultTemplate>
+                            </BlazoredTypeahead>
+                            <ValidationMessage For="@(() => Car.Modelo)" />
+                            <span>Carregue em Enter para confirmar valor</span>
+                            @foreach (var extra in Extras)
+                            {
+                                <span>@extra</span>
+                            }
+                        </Fragment>
+                    </ComponentLoader>
+                </div>
+                
+                    <PhotosImporter Files="TemporaryPhotos" />
+
+                    @if(isSaving)
+                    {
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            A gravar...
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
+                        </div>
+                        <span style="color:red">@error</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+<style type="text/css">
+
+    .edit-form-container {
+        border: 1px solid #ddd; /* Border color */
+        border-radius: 8px; /* Border radius for rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift */
+        padding: 20px 10px 20px 10px; /* Padding inside the container */
+        margin-top: 20px; /* Add margin to separate from the header */
+        width:410px;
+        margin:auto;
+        margin-top:15px;
+    }
+
+        .edit-form-container .form-label {
+            font-weight: bold; /* Make form labels bold */
+        }
+
+    .divFoto{
+        width: 400px;
+        height:55px;
+        float:left;
+    }
+</style>
+
+@code
+{
+    private Type? MenuOpcoesTipoCombustivel;
+    private Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "carro", Car } };
+
+    private async Task<IEnumerable<string>> SearchBrand(string searchText) 
+        => await Task.FromResult(Marcas!.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+    private async Task<IEnumerable<string>> SearchModel(string searchText)
+    {
+        var modelosFiltrados = Modelos.
+        Where(a => a.Marca == Car.Marca).
+        Where(aa => aa.Combustivel == Car.Combustivel).
+        Select(aaa => aaa.Modelos).First();
+        return await Task.FromResult(modelosFiltrados.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+    }
+    private async Task<IEnumerable<string>> SearchExtras(string searchText)
+        => await Task.FromResult(DefaultExtras.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+    private void SetCombustivel(Combustivel Combustivel)
+    {
+        Car.Combustivel = Combustivel.ToString();
+        MenuOpcoesTipoCombustivel = Combustivel switch
+        {
+            Combustivel.Electrico => typeof(Eletrico),
+            Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
+            _ => typeof(Combustao)
+        };
+    }
+    private async Task<string> DefaultWhenBrandNotFound(string value)
+    {
+        Car.Marca = value;
+        return await Task.FromResult(value);
+    }
+}

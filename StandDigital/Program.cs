@@ -1,6 +1,9 @@
 using StandDigital.Components;
 using StandDigital.Persistence;
-using StandDigital.Repositories;
+using StandDigital.Repositories.Car;
+using StandDigital.Repositories.CarMetadata;
+using StandDigital.Repositories.CarPhotos;
+using StandDigital.UnitsOfWork.Car;
 
 namespace StandDigital
 {
@@ -14,8 +17,11 @@ namespace StandDigital
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddTransient<IDatabase, Database>();
+            builder.Services.AddScoped<IDatabase, Database>();
             builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<ICarMetadataRepository, CarMetadataRepository>();
+            builder.Services.AddScoped<IPhotosRepository, PhotosRepository>();
+            builder.Services.AddScoped<ICarUoW, CarUoW>();
 
             var app = builder.Build();
 

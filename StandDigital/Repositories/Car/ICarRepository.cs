@@ -1,10 +1,9 @@
 ﻿using StandDigital.Entities;
 using StandDigital.Models;
 
-namespace StandDigital.Repositories;
+namespace StandDigital.Repositories.Car;
 
-public interface ICarRepository
+public interface ICarRepository : IBaseRepository<CarEntity>
 {
     Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(string fuel);
-    Task<IEnumerable<CarEntity>> GetAllCardCarsAsync();
 }

@@ -55,7 +55,7 @@
     ICollection<CarEntity> Cars;
 
     protected override async Task OnInitializedAsync()
-        => Cars = (await carRepo.GetAllCardCarsAsync()).ToArray();
+        => Cars = (await carRepo.GetAllAsync()).ToArray();
 
     [CascadingParameter]
     public int WindowWidth { get; set; }

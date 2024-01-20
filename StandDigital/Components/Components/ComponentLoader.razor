@@ -1,0 +1,16 @@
+﻿@if (LoadingObj is null)
+{
+    <Loader />
+}
+else
+{
+    @Fragment
+}
+
+@code {
+    [Parameter]
+    public object? LoadingObj { get; set; }
+
+    [Parameter]
+    public RenderFragment? Fragment { get; set; }
+}

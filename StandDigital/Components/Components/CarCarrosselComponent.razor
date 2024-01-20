@@ -1,5 +1,6 @@
 ﻿@using StandDigital.Models
-@using StandDigital.Repositories
+@using StandDigital.Repositories;
+@using StandDigital.Repositories.Car
 
 @inject ICarRepository carRepository
 
@@ -31,7 +32,7 @@
 
 @code {
     [Parameter]
-    public string Combustivel { get; set; }
+    public string? Combustivel { get; set; }
 
     private IEnumerable<CarCardModel>? Cars;
 

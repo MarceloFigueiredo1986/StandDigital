@@ -9,5 +9,5 @@ public interface IDatabase : IDisposable
     void CommitTransaction();
     Task<bool> InsertAsync<T>(string query, T entity) where T : class;
     Task<IEnumerable<T>> GetAsync<T>(string query, Dictionary<string, object>? dynamicParameters = null) where T : class;
-    Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject);
+    Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject, CancellationToken cancellationToken);
 }

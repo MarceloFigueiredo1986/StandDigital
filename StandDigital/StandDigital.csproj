@@ -22,19 +22,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="database.sqlite" />
+    <None Remove="database.sqlite-journal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.Typeahead" Version="4.7.0" />
     <PackageReference Include="Dapper" Version="2.1.28" />
+    <PackageReference Include="ErrorOr" Version="1.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
     <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3" Version="2.1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="database.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

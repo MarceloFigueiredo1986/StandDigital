@@ -21,5 +21,5 @@ public class CarEntity
     public ushort Ano { get; set; }
     public ushort Lotacao { get; set; }
     public string? Caixa { get; set; }
-    public string Condicao { get; set; }
+    public int Condicao { get; set; }
 }

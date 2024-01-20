@@ -1,8 +1,9 @@
 ﻿using StandDigital.Models;
 using StandDigital.Persistence;
 using StandDigital.Entities;
+using ErrorOr;
 
-namespace StandDigital.Repositories;
+namespace StandDigital.Repositories.Car;
 
 public class CarRepository(IDatabase database) : ICarRepository
 {
@@ -13,17 +14,16 @@ public class CarRepository(IDatabase database) : ICarRepository
             """,
             new Dictionary<string, object>() { { "combustivel", fuel } });
 
-    public async Task<IEnumerable<CarEntity>> GetAllCardCarsAsync()
+    public async Task<IEnumerable<CarEntity>> GetAllAsync()
      => await _dbcontext.GetAsync<CarEntity>("""
             Select * from Carros
             """);
 
-    public async Task InsertCarAsync(CarEntity carEntity, CarMetadataEntity carMetadata)
+    public async Task<ErrorOr<int>> CreateAsync(CarEntity value,CancellationToken cancellationToken)
     {
-        _dbcontext.OpenTransaction();
         try
         {
-            var createdCarId = await _dbcontext.InsertAsyncAndGetIdAsync<CarEntity,int>("""
+            var createdCarId = await _dbcontext.InsertAsyncAndGetIdAsync<CarEntity, int>("""
             INSERT INTO Carros
             VALUES 
             (
@@ -43,35 +43,18 @@ public class CarRepository(IDatabase database) : ICarRepository
             @Lotacao,
             @Caixa,
             @Condicao)
-            """, carEntity);
+            """, 
+            value, cancellationToken);
 
             if (createdCarId == 0)
-                throw new Exception("Car not created");
+                return ErrorOr.Error.Failure(description: "Car not created");
 
-            var createdCarMetadataId = await _dbcontext.InsertAsyncAndGetIdAsync<CarMetadataEntity, int>(
-                """
-            INSERT INTO 
-            CarrosMetadata
-            VALUES
-            (
-            @CarroId,
-            @DataMatricula,
-            @DataVenda,
-            @Ativo,
-            @CliquesAnuncio
-            )
-            SELECT CAST(SCOPE_IDENTITY() AS INT);
-            """, carMetadata);
-
-            if (createdCarMetadataId == 0)
-                throw new Exception("CarMetadata not created");
-
-            _dbcontext.CommitTransaction();
+            return createdCarId;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            _dbcontext.RollbackTransaction();
-            throw;
+            return Error.Failure(description: $"{ex}");
         }
     }
+
 }
