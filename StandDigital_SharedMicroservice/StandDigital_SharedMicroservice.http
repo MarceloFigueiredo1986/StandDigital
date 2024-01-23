@@ -1,0 +1,9 @@
+@StandDigital_SharedMicroservice_HostAddress = http://localhost:5265
+
+GET {{StandDigital_SharedMicroservice_HostAddress}}/brands/all
+
+###
+
+GET {{StandDigital_SharedMicroservice_HostAddress}}/brandmodels/v1/byBrandidAndFuel/1/Eletrico
+
+###

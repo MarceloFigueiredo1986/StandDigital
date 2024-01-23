@@ -1,9 +1,10 @@
 ﻿using StandDigital.Entities;
-using StandDigital.Persistence;
 using StandDigital.Repositories.Car;
-using StandDigital.Repositories.CarExtras;
 using StandDigital.Repositories.CarMetadata;
 using StandDigital.Repositories.CarPhotos;
+using StandDigital_Shared.Entities;
+using StandDigital_Shared.Persistence;
+using StandDigital_Shared.Repositories.CarExtras;
 
 namespace StandDigital.UnitsOfWork.Car;
 

@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using StandDigital.Entities;
-using StandDigital.Persistence;
+using StandDigital_Shared.Persistence;
 
 namespace StandDigital.Repositories.CarMetadata;
 

@@ -1,9 +1,9 @@
 using StandDigital.Components;
-using StandDigital.Persistence;
 using StandDigital.Repositories.Car;
 using StandDigital.Repositories.CarMetadata;
 using StandDigital.Repositories.CarPhotos;
 using StandDigital.UnitsOfWork.Car;
+using StandDigital_Shared.Persistence;
 
 namespace StandDigital
 {

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using StandDigital.Entities;
 using StandDigital.UnitsOfWork.Brand;
 using StandDigital.UnitsOfWork.Car;
+using StandDigital_Shared.Repositories.CarBrandModels;
+using StandDigital_Shared.Repositories.CarBrands;
 
 namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
 
@@ -17,6 +19,7 @@ public class CarDetailsService : ComponentBase
     /// </summary>
     public Dictionary<string, bool> Extras { get; set; } = new();
 
+    #region DI
     [Inject]
     public NavigationManager navMan { get; set; }
 
@@ -28,6 +31,14 @@ public class CarDetailsService : ComponentBase
 
     [Inject]
     public IWebHostEnvironment _env { get; set; }
+
+    [Inject]
+    public ICarBrandRepository _carBrandRepository { get; set; }
+
+    [Inject]
+    public ICarBrandModelRepository _carBrandModelsRepository { get; set; }
+
+    #endregion
 
     protected string? error;
     protected bool isSaving;
@@ -94,5 +105,22 @@ public class CarDetailsService : ComponentBase
     protected Task EditCar()
     {
         throw new NotImplementedException();
+    }
+
+    protected async Task InitialLoadAsync()
+    {
+        var brandsLoad = async () =>
+        {
+            var result = await _carBrandRepository.GetAllAsync();
+            if (!result.Any()) return;
+            DefaultMarcas = result.Select(a => a.Name);
+        };
+
+        var modelsLoad = async () =>
+        {
+            var result = await _carBrandModelsRepository.GetAllAsync();
+            if (!result.Any()) return;
+            DefaultModelos = result.Select(a => a.Nome);
+        };
     }
 }

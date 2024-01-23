@@ -11,7 +11,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="mb-12">
-                        <ComponentLoader LoadingObj="Marcas">
+                    <ComponentLoader LoadingObj="DefaultMarcas">
                             <Fragment>
                             <label for="firstName" class="form-label">Marca</label>
                             <BlazoredTypeahead AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
@@ -218,7 +218,8 @@
     private Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "carro", Car } };
 
     private async Task<IEnumerable<string>> SearchBrand(string searchText) 
-        => await Task.FromResult(Marcas!.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+        => await Task.FromResult(DefaultMarcas!.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+
     private async Task<IEnumerable<string>> SearchModel(string searchText)
     {
         var modelosFiltrados = Modelos.
@@ -227,8 +228,10 @@
         Select(aaa => aaa.Modelos).First();
         return await Task.FromResult(modelosFiltrados.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
     }
+
     private async Task<IEnumerable<string>> SearchExtras(string searchText)
         => await Task.FromResult(DefaultExtras.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+
     private void SetCombustivel(Combustivel Combustivel)
     {
         Car.Combustivel = Combustivel.ToString();
@@ -239,9 +242,13 @@
             _ => typeof(Combustao)
         };
     }
+
     private async Task<string> DefaultWhenBrandNotFound(string value)
     {
         Car.Marca = value;
         return await Task.FromResult(value);
     }
+
+    protected override async Task OnInitializedAsync()
+        => await InitialLoadAsync();
 }

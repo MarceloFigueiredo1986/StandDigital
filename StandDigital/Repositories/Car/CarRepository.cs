@@ -1,7 +1,7 @@
 ﻿using StandDigital.Models;
-using StandDigital.Persistence;
-using StandDigital.Entities;
 using ErrorOr;
+using StandDigital_Shared.Persistence;
+using StandDigital.Entities;
 
 namespace StandDigital.Repositories.Car;
 
@@ -47,7 +47,7 @@ public class CarRepository(IDatabase database) : ICarRepository
             value, cancellationToken);
 
             if (createdCarId == 0)
-                return ErrorOr.Error.Failure(description: "Car not created");
+                return Error.Failure(description: "Car not created");
 
             return createdCarId;
         }

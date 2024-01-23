@@ -1,4 +1,4 @@
-﻿namespace StandDigital.Entities;
+﻿namespace StandDigital_Shared.Entities;
 
 public record ExtraEntity(int ExtraId, string Nome)
 {

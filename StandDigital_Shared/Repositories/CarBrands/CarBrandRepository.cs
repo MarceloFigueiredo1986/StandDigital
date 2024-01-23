@@ -1,18 +1,18 @@
 ﻿using ErrorOr;
-using StandDigital.Entities;
-using StandDigital.Persistence;
+using StandDigital_Shared.Models;
+using StandDigital_Shared.Persistence;
 
-namespace StandDigital.Repositories.CarBrands;
+namespace StandDigital_Shared.Repositories.CarBrands;
 
 public sealed class CarBrandRepository(IDatabase dbContext) : ICarBrandRepository
 {
     private readonly IDatabase _dbContext = dbContext;
 
-    public async Task<ErrorOr<int>> CreateAsync(Brand value, CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> CreateAsync(BrandEntity value, CancellationToken cancellationToken)
     {
         try
         {
-            var createdBrandId = await _dbContext.InsertAsyncAndGetIdAsync<Brand, int>(
+            var createdBrandId = await _dbContext.InsertAsyncAndGetIdAsync<BrandEntity, int>(
                      """
             INSERT INTO 
             Marcas
@@ -23,7 +23,7 @@ public sealed class CarBrandRepository(IDatabase dbContext) : ICarBrandRepositor
             """, value, cancellationToken);
 
             if (createdBrandId == 0)
-                throw new Exception($"{nameof(Brand)} not created");
+                throw new Exception($"{nameof(BrandEntity)} not created");
 
             return createdBrandId;
         }
@@ -33,8 +33,8 @@ public sealed class CarBrandRepository(IDatabase dbContext) : ICarBrandRepositor
         }
     }
 
-    public async Task<IEnumerable<Brand>> GetAllAsync()
-     => await _dbContext.GetAsync<Brand>("""
+    public async Task<IEnumerable<BrandEntity>> GetAllAsync()
+     => await _dbContext.GetAsync<BrandEntity>("""
             Select * from Marcas
             """);
 }

@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 
-namespace StandDigital.Repositories;
+namespace StandDigital_Shared.Repositories;
 
 public interface IBaseRepository<T> where T : class
 {

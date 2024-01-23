@@ -1,6 +1,4 @@
-﻿using Dapper;
-
-namespace StandDigital.Persistence;
+﻿namespace StandDigital_Shared.Persistence;
 
 public interface IDatabase : IDisposable
 {

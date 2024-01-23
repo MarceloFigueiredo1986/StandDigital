@@ -1,6 +1,4 @@
-﻿using StandDigital.Enums;
-
-namespace StandDigital.Entities;
+﻿namespace StandDigital.Entities;
 
 public class CarEntity
 {

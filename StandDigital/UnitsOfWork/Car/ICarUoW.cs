@@ -1,4 +1,5 @@
 ﻿using StandDigital.Entities;
+using StandDigital_Shared.Entities;
 
 namespace StandDigital.UnitsOfWork.Car;
 
