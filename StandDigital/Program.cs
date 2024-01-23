@@ -3,6 +3,7 @@ using StandDigital.Repositories.Car;
 using StandDigital.Repositories.CarMetadata;
 using StandDigital.Repositories.CarPhotos;
 using StandDigital.UnitsOfWork.Car;
+using StandDigital_HttpClient;
 using StandDigital_Shared.Persistence;
 
 namespace StandDigital
@@ -22,6 +23,7 @@ namespace StandDigital
             builder.Services.AddScoped<ICarMetadataRepository, CarMetadataRepository>();
             builder.Services.AddScoped<IPhotosRepository, PhotosRepository>();
             builder.Services.AddScoped<ICarUoW, CarUoW>();
+            builder.Services.InstallHttpClient();
 
             var app = builder.Build();
 
