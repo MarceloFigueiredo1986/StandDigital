@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
-using StandDigital_Shared.Entities;
+using StandDigital.Entities;
 using StandDigital_Shared.Persistence;
 
-namespace StandDigital_Shared.Repositories.CarExtras;
+namespace StandDigital.Services.Repositories.CarExtras;
 
 public sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasRepository
 {

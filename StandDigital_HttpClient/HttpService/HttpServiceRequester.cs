@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ErrorOr;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Web;
 
 namespace StandDigital_HttpClient.HttpService;
 
-public sealed class HttpServiceRequester(IHttpClientFactory httpClientFactory) : IHttpService
+public sealed class HttpServiceRequester : IHttpService
 {
-    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly HttpClient _httpClientFactory;
+    private readonly IConfiguration _configuration;
 
-    public async Task<HttpResponseMessage> SendAsync(
+    public HttpServiceRequester(HttpClient httpClientFactory, IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _httpClientFactory = httpClientFactory;
+        _httpClientFactory.BaseAddress = new Uri(_configuration.GetValue<string>("BrandMicroservice") 
+            ?? throw new NullReferenceException("BrandMicroservice"));
+    }
+
+    public async Task<ErrorOr<Tout?>> SendAsync<Tout>(
         string endpointUrl,
         Dictionary<string, string>? queryStringParams, 
-        Dictionary<string, string>? parameters,
+        HashSet<string>? parameters,
         CancellationToken cancellationToken)
     {
-        var requester = _httpClientFactory.CreateClient();
-
         if (parameters is not null)
-            foreach ((string key, string value) in parameters)
-                requester.DefaultRequestHeaders.Add(key, value);
+           endpointUrl += string.Join('/', parameters);
 
         if(queryStringParams is not null)
         {
@@ -32,6 +37,19 @@ public sealed class HttpServiceRequester(IHttpClientFactory httpClientFactory) :
            endpointUrl = string.Join("?", endpointUrl, query.ToString());
         }
 
-        return await requester.GetAsync(endpointUrl,cancellationToken);
+        var result = await _httpClientFactory.GetAsync(endpointUrl,cancellationToken);
+
+        if (!result.IsSuccessStatusCode)
+            return Error.Failure(description: await result.Content.ReadAsStringAsync());
+
+        var resulString = await result.Content.ReadAsStringAsync();
+        var resultJson = JsonConvert.DeserializeObject<ResultDeserializer<Tout>>(resulString);
+
+        return resultJson!.Result;
     }
+}
+
+class ResultDeserializer<T>
+{
+    public T Result { get; set; }
 }

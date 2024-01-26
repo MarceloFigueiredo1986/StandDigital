@@ -1,4 +1,4 @@
-﻿namespace StandDigital_Shared.Entities;
+﻿namespace StandDigital.Entities;
 
 public record CarExtra(int CarroExtraId, int CarroId)
 {

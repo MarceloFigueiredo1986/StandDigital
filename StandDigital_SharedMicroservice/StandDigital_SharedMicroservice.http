@@ -1,6 +1,6 @@
 @StandDigital_SharedMicroservice_HostAddress = http://localhost:5265
 
-GET {{StandDigital_SharedMicroservice_HostAddress}}/brands/all
+GET {{StandDigital_SharedMicroservice_HostAddress}}/brands/v1/all
 
 ###
 

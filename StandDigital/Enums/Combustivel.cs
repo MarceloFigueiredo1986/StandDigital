@@ -5,7 +5,7 @@ namespace StandDigital.Enums;
 public enum Combustivel : ushort
 {
     [Description("Gasóleo")]
-    Gasoleo = 0,
+    Diesel = 0,
     [Description("Gasolina")]
     Gasolina = 1,
     [Description("Híbrido Gasóleo")]

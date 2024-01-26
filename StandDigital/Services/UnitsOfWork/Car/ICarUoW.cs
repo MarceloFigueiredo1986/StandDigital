@@ -1,7 +1,6 @@
 ﻿using StandDigital.Entities;
-using StandDigital_Shared.Entities;
 
-namespace StandDigital.UnitsOfWork.Car;
+namespace StandDigital.Services.UnitsOfWork.Car;
 
 public interface ICarUoW
 {

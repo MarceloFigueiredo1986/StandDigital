@@ -1,12 +1,11 @@
 ﻿using StandDigital.Entities;
-using StandDigital.Repositories.Car;
-using StandDigital.Repositories.CarMetadata;
-using StandDigital.Repositories.CarPhotos;
-using StandDigital_Shared.Entities;
+using StandDigital.Services.Repositories.Car;
+using StandDigital.Services.Repositories.CarExtras;
+using StandDigital.Services.Repositories.CarMetadata;
+using StandDigital.Services.Repositories.CarPhotos;
 using StandDigital_Shared.Persistence;
-using StandDigital_Shared.Repositories.CarExtras;
 
-namespace StandDigital.UnitsOfWork.Car;
+namespace StandDigital.Services.UnitsOfWork.Car;
 
 public class CarUoW(
     ICarRepository carRepository,
@@ -44,7 +43,7 @@ public class CarUoW(
             if (carMetadataCreationResult.IsError)
                 throw new Exception($"Car metadata creation proccess:{carMetadataCreationResult.FirstError.Description}");
 
-            foreach(var pht in photos)
+            foreach (var pht in photos)
             {
                 var newPhoto = new CarPhoto(carCreationResult.Value, pht.Key, pht.Value);
 
@@ -54,9 +53,9 @@ public class CarUoW(
                     throw new Exception($"Car photos creation proccess:{photosCreationResul.FirstError.Description}");
             }
 
-            foreach(var extra in extras)
+            foreach (var extra in extras)
             {
-                var newExtra = new CarExtra(extra,carCreationResult.Value);
+                var newExtra = new CarExtra(extra, carCreationResult.Value);
 
                 var photosCreationResul = await _carExtrasRepository.CreateAsync(newExtra, cancellationToken);
 

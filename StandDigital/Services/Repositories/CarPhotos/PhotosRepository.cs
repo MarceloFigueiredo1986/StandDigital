@@ -2,7 +2,7 @@
 using StandDigital.Entities;
 using StandDigital_Shared.Persistence;
 
-namespace StandDigital.Repositories.CarPhotos;
+namespace StandDigital.Services.Repositories.CarPhotos;
 
 public class PhotosRepository(IDatabase database) : IPhotosRepository
 {

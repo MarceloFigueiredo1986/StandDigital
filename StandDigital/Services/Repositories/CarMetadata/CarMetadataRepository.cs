@@ -2,7 +2,7 @@
 using StandDigital.Entities;
 using StandDigital_Shared.Persistence;
 
-namespace StandDigital.Repositories.CarMetadata;
+namespace StandDigital.Services.Repositories.CarMetadata;
 
 public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
 {
@@ -11,7 +11,7 @@ public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
     {
         try
         {
-            var createdCarMetadataId = await _dbcontext.InsertAsyncAndGetIdAsync<CarMetadataEntity,int>(
+            var createdCarMetadataId = await _dbcontext.InsertAsyncAndGetIdAsync<CarMetadataEntity, int>(
                      """
             INSERT INTO 
             CarrosMetadata

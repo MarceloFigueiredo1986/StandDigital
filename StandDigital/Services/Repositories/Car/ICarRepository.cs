@@ -2,7 +2,7 @@
 using StandDigital.Models;
 using StandDigital_Shared.Repositories;
 
-namespace StandDigital.Repositories.Car;
+namespace StandDigital.Services.Repositories.Car;
 
 public interface ICarRepository : IBaseRepository<CarEntity>
 {

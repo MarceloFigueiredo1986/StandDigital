@@ -3,7 +3,7 @@ using ErrorOr;
 using StandDigital_Shared.Persistence;
 using StandDigital.Entities;
 
-namespace StandDigital.Repositories.Car;
+namespace StandDigital.Services.Repositories.Car;
 
 public class CarRepository(IDatabase database) : ICarRepository
 {
@@ -19,7 +19,7 @@ public class CarRepository(IDatabase database) : ICarRepository
             Select * from Carros
             """);
 
-    public async Task<ErrorOr<int>> CreateAsync(CarEntity value,CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> CreateAsync(CarEntity value, CancellationToken cancellationToken)
     {
         try
         {
@@ -43,7 +43,7 @@ public class CarRepository(IDatabase database) : ICarRepository
             @Lotacao,
             @Caixa,
             @Condicao)
-            """, 
+            """,
             value, cancellationToken);
 
             if (createdCarId == 0)

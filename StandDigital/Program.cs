@@ -1,18 +1,28 @@
+using Serilog;
 using StandDigital.Components;
-using StandDigital.Repositories.Car;
-using StandDigital.Repositories.CarMetadata;
-using StandDigital.Repositories.CarPhotos;
-using StandDigital.UnitsOfWork.Car;
+using StandDigital.Services.Repositories.Car;
+using StandDigital.Services.Repositories.CarExtras;
+using StandDigital.Services.Repositories.CarMetadata;
+using StandDigital.Services.Repositories.CarPhotos;
+using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital_HttpClient;
+using StandDigital_Shared.Bootstrapping;
 using StandDigital_Shared.Persistence;
 
-namespace StandDigital
+namespace StandDigital;
+
+
+public class Program
 {
-    public class Program
+
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        Log.Logger = StandDigital_Shared.Bootstrapping.Installer.InstallSerilogSinksConfiguration();
+
+        try
         {
             var builder = WebApplication.CreateBuilder(args);
+
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
@@ -22,8 +32,10 @@ namespace StandDigital
             builder.Services.AddScoped<ICarRepository, CarRepository>();
             builder.Services.AddScoped<ICarMetadataRepository, CarMetadataRepository>();
             builder.Services.AddScoped<IPhotosRepository, PhotosRepository>();
+            builder.Services.AddScoped<ICarExtrasRepository, CarExtrasRepository>();
             builder.Services.AddScoped<ICarUoW, CarUoW>();
             builder.Services.InstallHttpClient();
+            builder.Services.InstallSharedProject();
 
             var app = builder.Build();
 
@@ -46,7 +58,17 @@ namespace StandDigital
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
+            Log.Logger.Information("--------------------App started");
+
             app.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Logger.Fatal($"{ex}");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
     }
 }

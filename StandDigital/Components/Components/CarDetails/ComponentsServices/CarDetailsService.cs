@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using StandDigital.Entities;
-using StandDigital.UnitsOfWork.Brand;
-using StandDigital.UnitsOfWork.Car;
-using StandDigital_Shared.Repositories.CarBrandModels;
-using StandDigital_Shared.Repositories.CarBrands;
+using StandDigital.Services.UnitsOfWork.Car;
+using StandDigital_HttpClient.HttpService;
+using StandDigital_Shared.Entities;
+using StandDigital_Shared.Models;
+using StandDigital_Shared.Services.Logging;
 
 namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
 
@@ -27,16 +28,16 @@ public class CarDetailsService : ComponentBase
     public ICarUoW _carRepo { get; set; }
 
     [Inject]
-    public ICarBrandUoW _brandsData { get; set; }
-
-    [Inject]
     public IWebHostEnvironment _env { get; set; }
 
     [Inject]
-    public ICarBrandRepository _carBrandRepository { get; set; }
+    public IHttpService _httpClient { get; set; }
 
     [Inject]
-    public ICarBrandModelRepository _carBrandModelsRepository { get; set; }
+    public IConfiguration _configuration { get; set; }
+
+    [Inject]
+    public ILogging _logger { get; set; }
 
     #endregion
 
@@ -45,9 +46,9 @@ public class CarDetailsService : ComponentBase
     private CancellationTokenSource cts = new();
 
     //Default values for typeahead
-    protected IEnumerable<string>? DefaultMarcas;
-    protected (string Marca, string Combustivel, IEnumerable<string> Modelos)[]? DefaultModelos;
-    protected IEnumerable<string>? DefaultExtras;
+    protected IEnumerable<BrandEntity>? DefaultMarcas;
+    protected IEnumerable<BrandModelEntity>? DefaultModelos = Enumerable.Empty<BrandModelEntity>();
+    protected IEnumerable<ExtraEntity>? DefaultExtras = Enumerable.Empty<ExtraEntity>();
 
     [Parameter]
     public int? Carid { get; set; }
@@ -109,18 +110,54 @@ public class CarDetailsService : ComponentBase
 
     protected async Task InitialLoadAsync()
     {
-        var brandsLoad = async () =>
+        try
         {
-            var result = await _carBrandRepository.GetAllAsync();
-            if (!result.Any()) return;
-            DefaultMarcas = result.Select(a => a.Name);
-        };
+            var brandMicroserviceUri = _configuration.GetValue<string>("AllBrandEndpoint") ?? throw new NullReferenceException("AllBrandEndpoint");
+            var result = await _httpClient.SendAsync<IEnumerable<BrandEntity>>(brandMicroserviceUri, null,null,cts.Token);
 
-        var modelsLoad = async () =>
+            if(result.IsError)
+            {
+                Console.WriteLine(result.FirstError.Description);
+                return;
+            }
+
+            if (result.Value!.Any())
+                DefaultMarcas = result.Value;
+        }
+        catch (Exception ex)
         {
-            var result = await _carBrandModelsRepository.GetAllAsync();
-            if (!result.Any()) return;
-            DefaultModelos = result.Select(a => a.Nome);
-        };
+            _logger.Log(ex);
+        }
+    }
+    protected async Task LoadModelsAsync()
+    {
+        _ = _logger.BeginScope(new {Car.Marca, Car.Combustivel });
+        
+        try
+        {
+            var marcaId = DefaultMarcas.First(a => a.Nome == Car.Marca).MarcaId;
+            var brandMicroserviceUri = _configuration.GetValue<string>("BrandModelsEndpoint") ?? throw new NullReferenceException("BrandModelsEndpoint");
+            var result = await _httpClient.SendAsync<IEnumerable<BrandModelEntity>>(
+                endpointUrl: brandMicroserviceUri,
+                queryStringParams: null,
+                parameters: new()
+                {
+                    { marcaId.ToString() },
+                    { Car.Combustivel }
+                }, 
+                cts.Token);
+
+            if (result.IsError)
+            {
+                Console.WriteLine(result.FirstError.Description);
+                return;
+            }
+
+            DefaultModelos = result.Value;
+        }
+        catch (Exception ex)
+        {
+            _logger.Log(ex);
+        }
     }
 }

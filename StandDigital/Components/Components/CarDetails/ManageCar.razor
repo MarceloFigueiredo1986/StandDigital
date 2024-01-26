@@ -14,7 +14,7 @@
                     <ComponentLoader LoadingObj="DefaultMarcas">
                             <Fragment>
                             <label for="firstName" class="form-label">Marca</label>
-                            <BlazoredTypeahead AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
+                            <BlazoredTypeahead @onfocusout="async () => await CheckIfShouldClearModelsForLoading()" AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
                                 <SelectedTemplate Context="contextA">
                                     @contextA
                                 </SelectedTemplate>
@@ -23,7 +23,7 @@
                                 </ResultTemplate>
                             </BlazoredTypeahead>
                             <ValidationMessage For="@(() => Car.Marca)" />
-                            <span>Carregue em Enter para confirmar valor</span>
+                            <span style="color:gray">Carregue em Enter para confirmar valor</span>
                             </Fragment>
                         </ComponentLoader>
                     </div>
@@ -55,10 +55,10 @@
 
                     <!--Modelo-->
                     <div class="mb-3" disabled>
-                        <ComponentLoader LoadingObj="Modelos">
+                    <ComponentLoader LoadingObj="DefaultModelos">
                             <Fragment>
                             <label for="firstName" class="form-label">Modelo</label>
-                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null || Car.Combustivel is null">
+                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
                                 <SelectedTemplate Context="contextB">
                                     @contextB
                                 </SelectedTemplate>
@@ -69,10 +69,13 @@
                             <ValidationMessage For="@(() => Car.Modelo)" />
                             <span>Carregue em Enter para confirmar valor</span>
                             </Fragment>
-                        </ComponentLoader>
+                    </ComponentLoader>
                 </div>
-
+                    
+                @if(MenuOpcoesTipoCombustivel is not null)
+                {
                     <DynamicComponent Type="@MenuOpcoesTipoCombustivel" Parameters="ParametrosComponenteOpcoesCombustivel" />
+                }
 
                     <!--Lotação-->
                     <div class="mb-3" disabled>
@@ -215,24 +218,35 @@
 @code
 {
     private Type? MenuOpcoesTipoCombustivel;
-    private Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "carro", Car } };
+    private Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "Carro", Car } };
 
     private async Task<IEnumerable<string>> SearchBrand(string searchText) 
-        => await Task.FromResult(DefaultMarcas!.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+        => await Task.FromResult(
+            DefaultMarcas!.
+            Where(x => 
+                x.Nome.ToLower().Contains(searchText.ToLower())).
+                Select(a => a.Nome).
+                Order().
+                ToList());
 
     private async Task<IEnumerable<string>> SearchModel(string searchText)
-    {
-        var modelosFiltrados = Modelos.
-        Where(a => a.Marca == Car.Marca).
-        Where(aa => aa.Combustivel == Car.Combustivel).
-        Select(aaa => aaa.Modelos).First();
-        return await Task.FromResult(modelosFiltrados.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
-    }
+        => await Task.FromResult(DefaultModelos.
+            Where(x => x.Nome.ToLower().
+                    Contains(searchText.ToLower())).
+            Select(a => a.Nome).
+            Order().
+            ToList());
 
     private async Task<IEnumerable<string>> SearchExtras(string searchText)
-        => await Task.FromResult(DefaultExtras.Where(x => x.ToLower().Contains(searchText.ToLower())).Order().ToList());
+        => await Task.FromResult(
+            DefaultExtras!.
+            Where(x => 
+                x.Nome.ToLower().Contains(searchText.ToLower())).
+                Select(a => a.Nome).
+                Order().
+                ToList());
 
-    private void SetCombustivel(Combustivel Combustivel)
+    private async void SetCombustivel(Combustivel Combustivel)
     {
         Car.Combustivel = Combustivel.ToString();
         MenuOpcoesTipoCombustivel = Combustivel switch
@@ -241,6 +255,14 @@
             Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
             _ => typeof(Combustao)
         };
+
+        await CheckIfShouldClearModelsForLoading();
+    }
+
+    private async Task CheckIfShouldClearModelsForLoading()
+    {
+        if (!string.IsNullOrEmpty(Car.Combustivel) && !string.IsNullOrEmpty(Car.Marca))
+            await LoadModelsAsync();
     }
 
     private async Task<string> DefaultWhenBrandNotFound(string value)

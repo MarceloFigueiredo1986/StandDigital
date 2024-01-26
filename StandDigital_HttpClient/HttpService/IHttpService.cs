@@ -1,10 +1,12 @@
-﻿namespace StandDigital_HttpClient.HttpService;
+﻿using ErrorOr;
+
+namespace StandDigital_HttpClient.HttpService;
 
 public interface IHttpService
 {
-    Task<HttpResponseMessage> SendAsync(
+    Task<ErrorOr<Tout?>> SendAsync<Tout>(
             string endpointUrl,
             Dictionary<string, string>? queryStringParams,
-            Dictionary<string, string>? parameters,
+            HashSet<string>? parameters,
             CancellationToken cancellationToken);
 }
