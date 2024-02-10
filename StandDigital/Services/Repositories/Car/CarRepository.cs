@@ -2,17 +2,18 @@
 using ErrorOr;
 using StandDigital_Shared.Persistence;
 using StandDigital.Entities;
+using StandDigital.Enums;
 
 namespace StandDigital.Services.Repositories.Car;
 
 public class CarRepository(IDatabase database) : ICarRepository
 {
     private readonly IDatabase _dbcontext = database;
-    public async Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(string fuel)
+    public async Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(Combustivel fuel)
          => await _dbcontext.GetAsync<CarCardModel>("""
-            Select * from Carros where Combustivel = @combustivel
+            Select * from Carros c inner join CarrosMetadata cm on c.CarroId = cm.CarroId where Combustivel = @combustivel
             """,
-            new Dictionary<string, object>() { { "combustivel", fuel } });
+            new Dictionary<string, object>() { { "combustivel", fuel.GetDescription() } });
 
     public async Task<IEnumerable<CarEntity>> GetAllAsync()
      => await _dbcontext.GetAsync<CarEntity>("""

@@ -5,13 +5,61 @@
 
 <PageTitle>Paraíso automóvel</PageTitle>
 
-<div class="page">
+<div class="page" style="background-color:black">
+        <header class="header-area header-sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="main-nav">
+                            <a href="/" class="logo">
+                                <span style="font-size:16pt">Paraíso automóvel</span>
+                            </a>
+                            <ul class="nav">
+                                <li><a href="/">Início</a></li>
+                                <li><a href="mercado">Negócios</a></li>
+                                <li><a href="admin">Gestão conta</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
     <main>
         <CascadingValue Value="@WindowWidth">
             @Body
         </CascadingValue>
     </main>
+    <footer>
+        <div class="footer">
+            <p>
+                Copyright © @DateTime.UtcNow.Year Paraiso Automóvel, todos os direitos reservados.
+                <br>Designed by <a href="https://www.linkedin.com/in/marcelofigueiredo86/" target="_parent" title="free css templates">Marcelo Figueiredo</a>
+            </p>
+        </div>
+    </footer>
 </div>
+
+@if (WindowWidth < 991)
+{
+    <StandDigital.Components.Components.FloatingButton ButtonClicked="floatingButtonClicked">
+        <FloatButton>
+            <input type="button"
+                   style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/list.png?updatedAt=1705153925369');
+                        transform:scale(1.5);
+                        background-repeat:no-repeat;
+                        background-color:transparent;
+                        border-style:none;
+                        max-width:35px;
+                        width:50px;
+                        height:40px;
+                        margin-left:15px;" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}" />
+        </FloatButton>
+        <MenuOptions>
+            <div class="row menuOption"><a href="carros" style="menuOption">Carros</a></div>
+            <div class="row menuOption"><a href="admin">Gestão</a></div>
+        </MenuOptions>
+    </StandDigital.Components.Components.FloatingButton>
+}
 
 <style type="text/css">
     body::-webkit-scrollbar {
@@ -23,10 +71,74 @@
         -ms-overflow-style: none; /* IE and Edge */
         scrollbar-width: none; /* Firefox */
     }
+
+    .menuOption {
+        font-weight: bolder;
+        margin: 10px;
+        color: black;
+        cursor: pointer;
+    }
+
+        .menuOption:active {
+            color: darkgoldenrod;
+        }
+
+    .footer{
+        user-select:none;
+    }
 </style>
+
+<script>
+    //according to loftblog tut
+    $('.nav li:first').addClass('active');
+
+    var showSection = function showSection(section, isAnimate) {
+        var
+            direction = section.replace(/#/, ''),
+            reqSection = $('.section').filter('[data-section="' + direction + '"]'),
+            reqSectionPos = reqSection.offset().top - 0;
+
+        if (isAnimate) {
+            $('body, html').animate({
+                scrollTop: reqSectionPos
+            },
+                800);
+        } else {
+            $('body, html').scrollTop(reqSectionPos);
+        }
+
+    };
+
+    var checkSection = function checkSection() {
+        $('.section').each(function () {
+            var
+                $this = $(this),
+                topEdge = $this.offset().top - 80,
+                bottomEdge = topEdge + $this.height(),
+                wScroll = $(window).scrollTop();
+            if (topEdge < wScroll && bottomEdge > wScroll) {
+                var
+                    currentId = $this.data('section'),
+                    reqLink = $('a').filter('[href*=\\#' + currentId + ']');
+                reqLink.closest('li').addClass('active').
+                    siblings().removeClass('active');
+            }
+        });
+    };
+
+    $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
+        e.preventDefault();
+        showSection($(this).attr('href'), true);
+    });
+
+    $(window).scroll(function () {
+        checkSection();
+    });
+</script>
 
 @code{
     private int WindowWidth = 0;
+    private bool floatingButtonClicked;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
