@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using StandDigital_Shared.Models;
+using StandDigital_Shared.Entities;
 using StandDigital_Shared.Persistence;
 
 namespace StandDigital_Shared.Repositories.CarBrands;

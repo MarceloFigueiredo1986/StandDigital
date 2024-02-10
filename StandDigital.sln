@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital", "StandDigital\StandDigital.csproj", "{0285A765-A618-455D-9DA3-757EF39412DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandDigital_SharedMicroservice", "StandDigital_SharedMicroservice\StandDigital_SharedMicroservice.csproj", "{E5DD14E6-08AB-4767-A068-886AC5C6C4E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_SharedMicroservice", "StandDigital_SharedMicroservice\StandDigital_SharedMicroservice.csproj", "{E5DD14E6-08AB-4767-A068-886AC5C6C4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandDigital_Shared", "StandDigital_Shared\StandDigital_Shared.csproj", "{6628E8EE-C9D7-4DBB-BC73-7F68DA8A0991}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_Shared", "StandDigital_Shared\StandDigital_Shared.csproj", "{6628E8EE-C9D7-4DBB-BC73-7F68DA8A0991}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandDigital_HttpClient", "StandDigital_HttpClient\StandDigital_HttpClient.csproj", "{2C8EBF7C-6616-4F36-BE0E-738DA6669072}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_HttpClient", "StandDigital_HttpClient\StandDigital_HttpClient.csproj", "{2C8EBF7C-6616-4F36-BE0E-738DA6669072}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

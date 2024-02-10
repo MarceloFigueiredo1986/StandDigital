@@ -4,7 +4,6 @@ using StandDigital.Entities;
 using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital_HttpClient.HttpService;
 using StandDigital_Shared.Entities;
-using StandDigital_Shared.Models;
 using StandDigital_Shared.Services.Logging;
 
 namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
@@ -16,9 +15,9 @@ public class CarDetailsService : ComponentBase
     protected CarMetadataEntity CarMetadata { get; set; } = new();
 
     /// <summary>
-    /// Key- extra name, Value- if already exists in BD
+    /// Key- extra name
     /// </summary>
-    public Dictionary<string, bool> Extras { get; set; } = new();
+    public HashSet<string> Extras { get; set; } = new();
 
     #region DI
     [Inject]
@@ -48,7 +47,7 @@ public class CarDetailsService : ComponentBase
     //Default values for typeahead
     protected IEnumerable<BrandEntity>? DefaultMarcas;
     protected IEnumerable<BrandModelEntity>? DefaultModelos = Enumerable.Empty<BrandModelEntity>();
-    protected IEnumerable<ExtraEntity>? DefaultExtras = Enumerable.Empty<ExtraEntity>();
+    protected IEnumerable<ExtraEntity> DefaultExtras = Enumerable.Empty<ExtraEntity>();
 
     [Parameter]
     public int? Carid { get; set; }
@@ -123,6 +122,19 @@ public class CarDetailsService : ComponentBase
 
             if (result.Value!.Any())
                 DefaultMarcas = result.Value;
+
+            var extrasMicroserviceUri = _configuration.GetValue<string>("ExtrasModelsEndpoint") ?? throw new NullReferenceException("ExtrasModelsEndpoint");
+            var resultExtras = await _httpClient.SendAsync<IEnumerable<ExtraEntity>>(extrasMicroserviceUri, null, null, cts.Token);
+
+            if (resultExtras.IsError)
+            {
+                Console.WriteLine(resultExtras.FirstError.Description);
+                return;
+            }
+
+            if (resultExtras.Value!.Any())
+                DefaultExtras = resultExtras.Value;
+
         }
         catch (Exception ex)
         {

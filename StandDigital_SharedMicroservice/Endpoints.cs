@@ -21,6 +21,12 @@ public static class Endpoints
             var service = input.ServiceProvider.GetRequiredService<IBrandModelService>();
             return await service.GetModelsByBrandAndFuelAsync(brandIdint,fuel!);
         }));
+
+        app.MapGet("/allcarextrastypes/v1/", httpconxt => DealWithRequest(httpconxt, async input =>
+        {
+            var service = input.ServiceProvider.GetRequiredService<IExtrasService>();
+            return await service.GetAllExtrasAsync(httpconxt.RequestAborted);
+        }));
     }
 
     private static async Task DealWithRequest<Tout>(HttpContext httpContext, Func<IServiceScope, Tout> endpointServiceHandler)

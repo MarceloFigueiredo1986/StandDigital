@@ -15,9 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="logs\**" />
     <Compile Remove="temporaryfiles\**" />
+    <Content Remove="logs\**" />
     <Content Remove="temporaryfiles\**" />
+    <EmbeddedResource Remove="logs\**" />
     <EmbeddedResource Remove="temporaryfiles\**" />
+    <None Remove="logs\**" />
     <None Remove="temporaryfiles\**" />
   </ItemGroup>
 

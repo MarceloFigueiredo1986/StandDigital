@@ -1,4 +1,4 @@
-﻿using StandDigital_Shared.Models;
+﻿using StandDigital_Shared.Entities;
 
 namespace StandDigital_SharedMicroservice.EndpointsServices;
 

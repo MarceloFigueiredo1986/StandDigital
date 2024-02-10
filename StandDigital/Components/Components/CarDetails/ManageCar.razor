@@ -1,8 +1,11 @@
 ﻿@page "/managecar/{carid:int}"
 @page "/managecar"
 
+
 @inherits CarDetailsService
 
+@attribute [Authorize(Roles = Roles.CreateCar)]
+@attribute [Authorize(Roles = Roles.UpdateCar)]
 
 @attribute [StreamRendering]
 
@@ -71,11 +74,6 @@
                             </Fragment>
                     </ComponentLoader>
                 </div>
-                    
-                @if(MenuOpcoesTipoCombustivel is not null)
-                {
-                    <DynamicComponent Type="@MenuOpcoesTipoCombustivel" Parameters="ParametrosComponenteOpcoesCombustivel" />
-                }
 
                     <!--Lotação-->
                     <div class="mb-3" disabled>
@@ -115,6 +113,12 @@
                             <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Cv" />
                         </div>
                     </div>
+
+                @if (MenuOpcoesTipoCombustivel is not null)
+                {
+                    <DynamicComponent Type="@MenuOpcoesTipoCombustivel" Parameters="ParametrosComponenteOpcoesCombustivel" />
+                }
+
                     <!--Preço e Ano-->
                    <div class="mb-3" style="height:70px" disabled>
                         <div class="form-outline" style="width:180px;float:left">
@@ -140,37 +144,28 @@
 
                     <!--Data matrícula e Data Venda-->
                     <div class="mb-3" disabled>
-                    <label style="width:180px" for="firstName" class="form-label">Data matrícula</label>
-                    <input type="date" @bind-value="CarMetadata.DataMatricula" />
-                    <br />
-                    <label style="width:180px"  for="firstName" class="form-label">Data Venda</label>
-                    <input type="date" name="inlineRadioOptions" @bind-value="CarMetadata.DataVenda" disabled/>
-                </div>
+                        <label style="width:180px" for="firstName" class="form-label">Data matrícula</label>
+                        <input type="date" @bind-value="CarMetadata.DataMatricula" />
+                        <br />
+                        <label style="width:180px"  for="firstName" class="form-label">Data Venda</label>
+                        <input type="date" name="inlineRadioOptions" @bind-value="CarMetadata.DataVenda" disabled/>
+                    </div>
 
-                    <!--Extras-->
+                    <!--Matrícula-->
                     <div class="mb-3" disabled>
-                    <ComponentLoader LoadingObj="DefaultExtras">
-                        <Fragment>
-                            <label for="firstName" class="form-label">Modelo</label>
-                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null || Car.Combustivel is null">
-                                <SelectedTemplate Context="contextB">
-                                    @contextB
-                                </SelectedTemplate>
-                                <ResultTemplate Context="contextB">
-                                    @contextB
-                                </ResultTemplate>
-                            </BlazoredTypeahead>
-                            <ValidationMessage For="@(() => Car.Modelo)" />
-                            <span>Carregue em Enter para confirmar valor</span>
-                            @foreach (var extra in Extras)
-                            {
-                                <span>@extra</span>
-                            }
-                        </Fragment>
-                    </ComponentLoader>
-                </div>
-                
+                        <label style="width:180px" for="matricula" class="form-label">Matrícula</label>
+                        <input type="text" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Matricula" />
+                    </div>
+
                     <PhotosImporter Files="TemporaryPhotos" />
+
+                <div class="mb-12">
+                    @foreach(var extra in DefaultExtras)
+                    {
+                        var classStyle = Extras.Contains(extra.Nome) ? "success" : "outline-success";
+                        <input style="margin:0.5px" type="button" class="btn btn-@classStyle" value="@extra.Nome" @onclick="() => ManageClickedExtra(extra.Nome)" />
+                    }
+                </div>
 
                     @if(isSaving)
                     {
@@ -184,7 +179,7 @@
                         <div class="row">
                             <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
                         </div>
-                        <span style="color:red">@error</span>
+                        <span style="color:red;margin:2px">@error</span>
                     }
                 </div>
             </div>
@@ -237,15 +232,6 @@
             Order().
             ToList());
 
-    private async Task<IEnumerable<string>> SearchExtras(string searchText)
-        => await Task.FromResult(
-            DefaultExtras!.
-            Where(x => 
-                x.Nome.ToLower().Contains(searchText.ToLower())).
-                Select(a => a.Nome).
-                Order().
-                ToList());
-
     private async void SetCombustivel(Combustivel Combustivel)
     {
         Car.Combustivel = Combustivel.ToString();
@@ -255,6 +241,11 @@
             Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
             _ => typeof(Combustao)
         };
+
+        Car.Bateria = null;
+        Car.Cilindrada = null;
+        Car.Caixa = null;
+        Car.TipoCarregamento = null;
 
         await CheckIfShouldClearModelsForLoading();
     }
@@ -269,6 +260,14 @@
     {
         Car.Marca = value;
         return await Task.FromResult(value);
+    }
+
+    private void ManageClickedExtra(string name)
+    {
+        if (Extras.Contains(name))
+            Extras.Remove(name);
+        else
+            Extras.Add(name);
     }
 
     protected override async Task OnInitializedAsync()

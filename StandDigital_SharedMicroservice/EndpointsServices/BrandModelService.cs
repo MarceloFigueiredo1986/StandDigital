@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using StandDigital_Shared.Entities;
-using StandDigital_Shared.Models;
 using StandDigital_Shared.Repositories.CarBrandModels;
 
 namespace StandDigital_SharedMicroservice.EndpointsServices;

@@ -6,6 +6,7 @@ public class CarEntity
     public string Marca { get; set; }
     public string Modelo { get; set; }
     public string Combustivel { get; set; }
+    public string Matricula { get; set; }
     public string ImageMin { get; set; }
     public uint Kms { get; set; }
     public ushort Cv { get; set; }

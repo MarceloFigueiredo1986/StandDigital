@@ -14,6 +14,7 @@ public class Program
         builder.Services.InstallSharedProject();
         builder.Services.AddScoped<IBrandService, BrandService>();
         builder.Services.AddScoped<IBrandModelService, BrandModelService>();
+        builder.Services.AddScoped<IExtrasService, ExtrasService>();
         builder.Services.AddProblemDetails();
 
         var app = builder.Build();

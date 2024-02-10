@@ -1830,3 +1830,128 @@ System.ObjectDisposedException: Cannot access a disposed object.
 2024-01-26 18:01:01.330 +00:00 [INF] Sending HTTP request GET http://localhost:5265/brandmodels/v1/byBrandidAndFuel/1/Diesel
 2024-01-26 18:01:01.350 +00:00 [INF] Received HTTP response headers after 17.1651ms - 200
 2024-01-26 18:01:01.353 +00:00 [INF] End processing HTTP request after 26.6673ms - 200
+2024-01-26 18:19:02.322 +00:00 [INF] User profile is available. Using 'C:\Users\Marcelo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-01-26 18:19:02.455 +00:00 [INF] --------------------App started
+2024-01-26 18:19:02.926 +00:00 [INF] Now listening on: https://localhost:7159
+2024-01-26 18:19:02.928 +00:00 [INF] Now listening on: http://localhost:5184
+2024-01-26 18:19:02.939 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-26 18:19:02.942 +00:00 [INF] Hosting environment: Development
+2024-01-26 18:19:02.944 +00:00 [INF] Content root path: C:\Users\Marcelo\Documents\GitHub\StandDigital\StandDigital
+2024-01-26 18:19:10.470 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A50371%2Fdevtools%2Fbrowser%2F7447b42c-c209-4769-8c9f-02897e1d139e - null null
+2024-01-26 18:19:11.518 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A50371%2Fdevtools%2Fbrowser%2F7447b42c-c209-4769-8c9f-02897e1d139e - 302 0 null 1059.9674ms
+2024-01-26 18:19:11.835 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-01-26 18:19:11.957 +00:00 [INF] Executing endpoint '/ (/)'
+2024-01-26 18:19:12.337 +00:00 [INF] Executed endpoint '/ (/)'
+2024-01-26 18:19:12.339 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/css/fontawesome.css - null null
+2024-01-26 18:19:12.342 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/css/fontawesome.css - 404 0 null 2.6767ms
+2024-01-26 18:19:12.343 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - null null
+2024-01-26 18:19:12.344 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/css/fontawesome.css, Response status code: 404
+2024-01-26 18:19:12.345 +00:00 [INF] Executing endpoint 'Blazor web static files'
+2024-01-26 18:19:12.349 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 200 null text/html; charset=utf-8 514.8009ms
+2024-01-26 18:19:12.351 +00:00 [INF] The file /_framework/blazor.web.js was not modified
+2024-01-26 18:19:12.353 +00:00 [INF] Executed endpoint 'Blazor web static files'
+2024-01-26 18:19:12.353 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - 304 null text/javascript 10.2242ms
+2024-01-26 18:19:14.818 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-01-26 18:19:14.818 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-01-26 18:19:14.826 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 8.901ms
+2024-01-26 18:19:15.033 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/prev.png - null null
+2024-01-26 18:19:15.034 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/loading.gif - null null
+2024-01-26 18:19:15.034 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/next.png - null null
+2024-01-26 18:19:15.040 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/loading.gif - 404 0 null 5.1447ms
+2024-01-26 18:19:15.040 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-01-26 18:19:15.040 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/close.png - null null
+2024-01-26 18:19:15.047 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/prev.png - 404 0 null 7.532ms
+2024-01-26 18:19:15.047 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/loading.gif, Response status code: 404
+2024-01-26 18:19:15.050 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 8.8903ms
+2024-01-26 18:19:15.040 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/next.png - 404 0 null 6.8519ms
+2024-01-26 18:19:15.051 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/close.png - 404 0 null 11.0524ms
+2024-01-26 18:19:15.068 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/close.png, Response status code: 404
+2024-01-26 18:19:15.052 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/prev.png, Response status code: 404
+2024-01-26 18:19:15.056 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-01-26 18:19:15.057 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-01-26 18:19:15.061 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/next.png, Response status code: 404
+2024-01-26 18:19:15.052 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_blazor/initializers - null null
+2024-01-26 18:19:15.074 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 17.7901ms
+2024-01-26 18:19:15.077 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:15.078 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-01-26 18:19:15.093 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:15.095 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_blazor/initializers - 200 null application/json; charset=utf-8 42.7603ms
+2024-01-26 18:19:15.126 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-01-26 18:19:15.126 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-01-26 18:19:15.128 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 1.6461ms
+2024-01-26 18:19:15.130 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-01-26 18:19:15.129 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 2.8857ms
+2024-01-26 18:19:15.133 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-01-26 18:19:15.159 +00:00 [INF] Request starting HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - null 0
+2024-01-26 18:19:15.162 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:15.197 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 378.0805ms
+2024-01-26 18:19:15.200 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:15.204 +00:00 [INF] Request finished HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - 200 316 application/json 45.5389ms
+2024-01-26 18:19:15.258 +00:00 [INF] Request starting HTTP/2 CONNECT https://localhost:7159/_blazor?id=MqPG6tve4Rv3HJHKp2Tf2g - null null
+2024-01-26 18:19:15.259 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:18.564 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/managecar/favicon.png - null null
+2024-01-26 18:19:18.569 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/managecar/favicon.png - 404 0 null 5.9454ms
+2024-01-26 18:19:18.587 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/managecar/favicon.png, Response status code: 404
+2024-01-26 18:19:18.605 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/brands/v1/all
+2024-01-26 18:19:18.618 +00:00 [INF] Sending HTTP request GET http://localhost:5265/brands/v1/all
+2024-01-26 18:19:18.921 +00:00 [INF] Received HTTP response headers after 290.1621ms - 200
+2024-01-26 18:19:18.927 +00:00 [INF] End processing HTTP request after 334.5301ms - 200
+2024-01-26 18:19:39.309 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-01-26 18:19:39.314 +00:00 [INF] Executing endpoint '/ (/)'
+2024-01-26 18:19:39.327 +00:00 [INF] Executed endpoint '/ (/)'
+2024-01-26 18:19:39.328 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 200 null text/html; charset=utf-8 18.9515ms
+2024-01-26 18:19:39.332 +00:00 [INF] Request starting HTTP/2 POST https://localhost:7159/_blazor/disconnect - multipart/form-data; boundary=----WebKitFormBoundarySRWJmZurtnra0KwF 359
+2024-01-26 18:19:39.333 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.347 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/css/fontawesome.css - null null
+2024-01-26 18:19:39.350 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - null null
+2024-01-26 18:19:39.350 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/css/fontawesome.css - 404 0 null 4.2303ms
+2024-01-26 18:19:39.350 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-01-26 18:19:39.357 +00:00 [INF] Executing endpoint 'Blazor web static files'
+2024-01-26 18:19:39.357 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/css/fontawesome.css, Response status code: 404
+2024-01-26 18:19:39.359 +00:00 [INF] The file /_framework/blazor.web.js was not modified
+2024-01-26 18:19:39.360 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 10.8287ms
+2024-01-26 18:19:39.361 +00:00 [INF] Executed endpoint 'Blazor web static files'
+2024-01-26 18:19:39.362 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - 304 null text/javascript 13.4976ms
+2024-01-26 18:19:39.366 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-01-26 18:19:39.381 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.383 +00:00 [INF] Request finished HTTP/2 POST https://localhost:7159/_blazor/disconnect - 200 0 null 51.0138ms
+2024-01-26 18:19:39.397 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.398 +00:00 [INF] Request finished HTTP/2 CONNECT https://localhost:7159/_blazor?id=MqPG6tve4Rv3HJHKp2Tf2g - 200 null null 24140.2022ms
+2024-01-26 18:19:39.399 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 33.8861ms
+2024-01-26 18:19:39.452 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-01-26 18:19:39.452 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-01-26 18:19:39.454 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 2.1273ms
+2024-01-26 18:19:39.455 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 2.4463ms
+2024-01-26 18:19:39.455 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-01-26 18:19:39.456 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-01-26 18:19:39.472 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-01-26 18:19:39.473 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-01-26 18:19:39.474 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 2.4887ms
+2024-01-26 18:19:39.475 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 1.6661ms
+2024-01-26 18:19:39.475 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-01-26 18:19:39.475 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-01-26 18:19:39.482 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/prev.png - null null
+2024-01-26 18:19:39.482 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/next.png - null null
+2024-01-26 18:19:39.484 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/prev.png - 404 0 null 2.1233ms
+2024-01-26 18:19:39.483 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/loading.gif - null null
+2024-01-26 18:19:39.483 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/close.png - null null
+2024-01-26 18:19:39.484 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/next.png - 404 0 null 2.1316ms
+2024-01-26 18:19:39.485 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/prev.png, Response status code: 404
+2024-01-26 18:19:39.486 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/loading.gif - 404 0 null 3.3028ms
+2024-01-26 18:19:39.487 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/close.png - 404 0 null 4.36ms
+2024-01-26 18:19:39.487 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/next.png, Response status code: 404
+2024-01-26 18:19:39.490 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/loading.gif, Response status code: 404
+2024-01-26 18:19:39.490 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/close.png, Response status code: 404
+2024-01-26 18:19:39.511 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_blazor/initializers - null null
+2024-01-26 18:19:39.513 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.513 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.514 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_blazor/initializers - 200 null application/json; charset=utf-8 2.9813ms
+2024-01-26 18:19:39.554 +00:00 [INF] Request starting HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - null 0
+2024-01-26 18:19:39.555 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.557 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-01-26 18:19:39.558 +00:00 [INF] Request finished HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - 200 316 application/json 4.5488ms
+2024-01-26 18:19:39.563 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/favicon.png - null null
+2024-01-26 18:19:39.571 +00:00 [INF] The file /favicon.png was not modified
+2024-01-26 18:19:39.576 +00:00 [INF] Request starting HTTP/2 CONNECT https://localhost:7159/_blazor?id=jCFDxtkZdhD5o6IK-g3Fpg - null null
+2024-01-26 18:19:39.576 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/favicon.png - 304 null image/png 13.521ms
+2024-01-26 18:19:39.578 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'

@@ -1,0 +1,339 @@
+2024-02-09 17:58:44.378 +00:00 [INF] User profile is available. Using 'C:\Users\Marcelo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-09 17:58:44.641 +00:00 [INF] --------------------App started
+2024-02-09 17:58:46.980 +00:00 [INF] Now listening on: https://localhost:7159
+2024-02-09 17:58:46.981 +00:00 [INF] Now listening on: http://localhost:5184
+2024-02-09 17:58:46.991 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-02-09 17:58:46.992 +00:00 [INF] Hosting environment: Development
+2024-02-09 17:58:46.992 +00:00 [INF] Content root path: C:\Users\Marcelo\Documents\GitHub\StandDigital\StandDigital
+2024-02-09 17:58:47.799 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-02-09 17:58:48.213 +00:00 [INF] Executing endpoint '/ (/)'
+2024-02-09 17:58:49.910 +00:00 [INF] Executed endpoint '/ (/)'
+2024-02-09 17:58:49.936 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 200 null text/html; charset=utf-8 2142.1168ms
+2024-02-09 17:58:50.060 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/css/fontawesome.css - null null
+2024-02-09 17:58:50.063 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - null null
+2024-02-09 17:58:50.065 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/css/fontawesome.css - 404 0 null 5.3837ms
+2024-02-09 17:58:50.073 +00:00 [INF] Executing endpoint 'Blazor web static files'
+2024-02-09 17:58:50.092 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-02-09 17:58:50.093 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-02-09 17:58:50.095 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/css/fontawesome.css, Response status code: 404
+2024-02-09 17:58:50.105 +00:00 [INF] The file /_framework/blazor.web.js was not modified
+2024-02-09 17:58:50.110 +00:00 [INF] Executed endpoint 'Blazor web static files'
+2024-02-09 17:58:50.113 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - 304 null text/javascript 49.5499ms
+2024-02-09 17:58:50.125 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 32.5707ms
+2024-02-09 17:58:50.440 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 333.4474ms
+2024-02-09 17:58:50.488 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/prev.png - null null
+2024-02-09 17:58:50.490 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/loading.gif - null null
+2024-02-09 17:58:50.491 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/next.png - null null
+2024-02-09 17:58:50.497 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/close.png - null null
+2024-02-09 17:58:50.507 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/prev.png - 404 0 null 18.7209ms
+2024-02-09 17:58:50.509 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/loading.gif - 404 0 null 18.091ms
+2024-02-09 17:58:50.517 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/next.png - 404 0 null 25.3312ms
+2024-02-09 17:58:50.523 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/close.png - 404 0 null 27.0627ms
+2024-02-09 17:58:50.544 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/loading.gif, Response status code: 404
+2024-02-09 17:58:50.545 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/prev.png, Response status code: 404
+2024-02-09 17:58:50.558 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/next.png, Response status code: 404
+2024-02-09 17:58:50.562 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_blazor/initializers - null null
+2024-02-09 17:58:50.566 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/close.png, Response status code: 404
+2024-02-09 17:58:50.580 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 17:58:50.590 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 17:58:50.592 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_blazor/initializers - 200 null application/json; charset=utf-8 31.5589ms
+2024-02-09 17:58:50.632 +00:00 [INF] Request starting HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - null 0
+2024-02-09 17:58:50.645 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 17:58:50.678 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 17:58:50.684 +00:00 [INF] Request finished HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - 200 316 application/json 52.6468ms
+2024-02-09 17:58:50.702 +00:00 [INF] Request starting HTTP/2 CONNECT https://localhost:7159/_blazor?id=RNzyRFnxFUII08dtMIEC3w - null null
+2024-02-09 17:58:50.712 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 17:58:57.196 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/managecar/favicon.png - null null
+2024-02-09 17:58:57.200 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/managecar/favicon.png - 404 0 null 4.2248ms
+2024-02-09 17:58:57.202 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/managecar/favicon.png, Response status code: 404
+2024-02-09 17:58:57.253 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/brands/v1/all
+2024-02-09 17:58:57.265 +00:00 [INF] Sending HTTP request GET http://localhost:5265/brands/v1/all
+2024-02-09 17:58:58.753 +00:00 [INF] Received HTTP response headers after 1468.7214ms - 200
+2024-02-09 17:58:58.761 +00:00 [INF] End processing HTTP request after 1518.0425ms - 200
+2024-02-09 17:58:59.242 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/allcarextrastypes/v1/
+2024-02-09 17:58:59.245 +00:00 [INF] Sending HTTP request GET http://localhost:5265/allcarextrastypes/v1/
+2024-02-09 17:58:59.263 +00:00 [INF] Received HTTP response headers after 17.8649ms - 200
+2024-02-09 17:58:59.267 +00:00 [INF] End processing HTTP request after 24.1763ms - 200
+2024-02-09 17:59:07.166 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/brandmodels/v1/byBrandidAndFuel/1/Diesel
+2024-02-09 17:59:07.168 +00:00 [INF] Sending HTTP request GET http://localhost:5265/brandmodels/v1/byBrandidAndFuel/1/Diesel
+2024-02-09 17:59:07.193 +00:00 [INF] Received HTTP response headers after 23.2578ms - 200
+2024-02-09 17:59:07.196 +00:00 [INF] End processing HTTP request after 29.7497ms - 200
+2024-02-09 18:26:36.533 +00:00 [INF] User profile is available. Using 'C:\Users\Marcelo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-09 18:26:36.706 +00:00 [INF] --------------------App started
+2024-02-09 18:26:37.238 +00:00 [INF] Now listening on: https://localhost:7159
+2024-02-09 18:26:37.241 +00:00 [INF] Now listening on: http://localhost:5184
+2024-02-09 18:26:37.251 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-02-09 18:26:37.255 +00:00 [INF] Hosting environment: Development
+2024-02-09 18:26:37.257 +00:00 [INF] Content root path: C:\Users\Marcelo\Documents\GitHub\StandDigital\StandDigital
+2024-02-09 18:26:46.671 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A62336%2Fdevtools%2Fbrowser%2F424aab7a-58fd-49e9-a100-c9dccbe5fcfa - null null
+2024-02-09 18:26:47.596 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A62336%2Fdevtools%2Fbrowser%2F424aab7a-58fd-49e9-a100-c9dccbe5fcfa - 302 0 null 935.7646ms
+2024-02-09 18:26:47.690 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A62336%2Fdevtools%2Fbrowser%2F424aab7a-58fd-49e9-a100-c9dccbe5fcfa - null null
+2024-02-09 18:26:47.697 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A62336%2Fdevtools%2Fbrowser%2F424aab7a-58fd-49e9-a100-c9dccbe5fcfa - 302 0 null 6.9027ms
+2024-02-09 18:26:48.312 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-02-09 18:26:48.506 +00:00 [INF] Executing endpoint '/ (/)'
+2024-02-09 18:26:49.214 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/css/fontawesome.css - null null
+2024-02-09 18:26:49.216 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - null null
+2024-02-09 18:26:49.221 +00:00 [INF] Executing endpoint 'Blazor web static files'
+2024-02-09 18:26:49.221 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/css/fontawesome.css - 404 0 null 7.3029ms
+2024-02-09 18:26:49.231 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/css/fontawesome.css, Response status code: 404
+2024-02-09 18:26:49.233 +00:00 [INF] Executed endpoint '/ (/)'
+2024-02-09 18:26:49.236 +00:00 [INF] The file /_framework/blazor.web.js was not modified
+2024-02-09 18:26:49.238 +00:00 [INF] Executed endpoint 'Blazor web static files'
+2024-02-09 18:26:49.239 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/blazor.web.js - 304 null text/javascript 22.7091ms
+2024-02-09 18:26:49.247 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 200 null text/html; charset=utf-8 937.7553ms
+2024-02-09 18:26:49.327 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-02-09 18:26:49.327 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-02-09 18:26:49.339 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 12.8286ms
+2024-02-09 18:26:49.600 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/next.png - null null
+2024-02-09 18:26:49.601 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/close.png - null null
+2024-02-09 18:26:49.606 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/loading.gif - null null
+2024-02-09 18:26:49.606 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/images/prev.png - null null
+2024-02-09 18:26:49.608 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/close.png - 404 0 null 7.7834ms
+2024-02-09 18:26:49.610 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_blazor/initializers - null null
+2024-02-09 18:26:49.614 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/loading.gif - 404 0 null 7.8109ms
+2024-02-09 18:26:49.615 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/prev.png - 404 0 null 8.7406ms
+2024-02-09 18:26:49.620 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:26:49.616 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/close.png, Response status code: 404
+2024-02-09 18:26:49.625 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/loading.gif, Response status code: 404
+2024-02-09 18:26:49.625 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/prev.png, Response status code: 404
+2024-02-09 18:26:49.631 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-02-09 18:26:49.632 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-02-09 18:26:49.642 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 11.357ms
+2024-02-09 18:26:49.607 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/images/next.png - 404 0 null 7.0981ms
+2024-02-09 18:26:49.642 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:26:49.642 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 315.8582ms
+2024-02-09 18:26:49.643 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 11.0274ms
+2024-02-09 18:26:49.644 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-02-09 18:26:49.646 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/images/next.png, Response status code: 404
+2024-02-09 18:26:49.647 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_blazor/initializers - 200 null application/json; charset=utf-8 38.1413ms
+2024-02-09 18:26:49.651 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-02-09 18:26:49.704 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - null null
+2024-02-09 18:26:49.703 +00:00 [INF] Request starting HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - null 0
+2024-02-09 18:26:49.706 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/bootstrap.min.js.map - 404 0 null 1.8845ms
+2024-02-09 18:26:49.707 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/bootstrap.min.js.map, Response status code: 404
+2024-02-09 18:26:49.709 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:26:49.727 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - null null
+2024-02-09 18:26:49.728 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost:7159/js/jquery.min.map - 404 0 null 1.6806ms
+2024-02-09 18:26:49.730 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/js/jquery.min.map, Response status code: 404
+2024-02-09 18:26:49.741 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:26:49.743 +00:00 [INF] Request finished HTTP/2 POST https://localhost:7159/_blazor/negotiate?negotiateVersion=1 - 200 316 application/json 42.8909ms
+2024-02-09 18:26:49.752 +00:00 [INF] Request starting HTTP/2 CONNECT https://localhost:7159/_blazor?id=k1byXsGmgAYYGOvpeT14_Q - null null
+2024-02-09 18:26:49.756 +00:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:26:56.675 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/managecar/favicon.png - null null
+2024-02-09 18:26:56.677 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/managecar/favicon.png - 404 0 null 2.7629ms
+2024-02-09 18:26:56.678 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/managecar/favicon.png, Response status code: 404
+2024-02-09 18:26:56.687 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/brands/v1/all
+2024-02-09 18:26:56.697 +00:00 [INF] Sending HTTP request GET http://localhost:5265/brands/v1/all
+2024-02-09 18:26:56.979 +00:00 [INF] Received HTTP response headers after 269.9987ms - 200
+2024-02-09 18:26:56.986 +00:00 [INF] End processing HTTP request after 307.3172ms - 200
+2024-02-09 18:26:57.118 +00:00 [INF] Start processing HTTP request GET http://localhost:5265/allcarextrastypes/v1/
+2024-02-09 18:26:57.122 +00:00 [INF] Sending HTTP request GET http://localhost:5265/allcarextrastypes/v1/
+2024-02-09 18:26:57.136 +00:00 [INF] Received HTTP response headers after 11.7205ms - 200
+2024-02-09 18:26:57.139 +00:00 [INF] End processing HTTP request after 21.3164ms - 200
+2024-02-09 18:29:04.506 +00:00 [WRN] Unhandled exception rendering component: Authorization requires a cascading parameter of type Task<AuthenticationState>. Consider using CascadingAuthenticationState to supply this.
+System.InvalidOperationException: Authorization requires a cascading parameter of type Task<AuthenticationState>. Consider using CascadingAuthenticationState to supply this.
+   at Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.OnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+2024-02-09 18:29:04.522 +00:00 [ERR] Unhandled exception in circuit 'zydvvFGjs5IWvXmVO8uYx_NuVCjmhSRefm3Q6T2cPwA'.
+System.InvalidOperationException: Authorization requires a cascading parameter of type Task<AuthenticationState>. Consider using CascadingAuthenticationState to supply this.
+   at Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.OnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+2024-02-09 18:29:04.548 +00:00 [WRN] Unhandled exception rendering component: Cannot access a disposed object.
+System.ObjectDisposedException: Cannot access a disposed object.
+   at Microsoft.AspNetCore.Components.RenderTree.ArrayBuilder`1.GrowBuffer(Int32 desiredCapacity)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InsertNewFrame(DiffContext& diffContext, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForFramesWithSameSequence(DiffContext& diffContext, Int32 oldFrameIndex, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForRange(DiffContext& diffContext, Int32 oldStartIndex, Int32 oldEndIndexExcl, Int32 newStartIndex, Int32 newEndIndexExcl)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.ComputeDiff(Renderer renderer, RenderBatchBuilder batchBuilder, Int32 componentId, ArrayRange`1 oldTree, ArrayRange`1 newTree)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment, Exception& renderFragmentException)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+2024-02-09 18:29:04.568 +00:00 [ERR] Unhandled exception in circuit 'zydvvFGjs5IWvXmVO8uYx_NuVCjmhSRefm3Q6T2cPwA'.
+System.ObjectDisposedException: Cannot access a disposed object.
+   at Microsoft.AspNetCore.Components.RenderTree.ArrayBuilder`1.GrowBuffer(Int32 desiredCapacity)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InsertNewFrame(DiffContext& diffContext, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForFramesWithSameSequence(DiffContext& diffContext, Int32 oldFrameIndex, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForRange(DiffContext& diffContext, Int32 oldStartIndex, Int32 oldEndIndexExcl, Int32 newStartIndex, Int32 newEndIndexExcl)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.ComputeDiff(Renderer renderer, RenderBatchBuilder batchBuilder, Int32 componentId, ArrayRange`1 oldTree, ArrayRange`1 newTree)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment, Exception& renderFragmentException)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+2024-02-09 18:29:04.584 +00:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2024-02-09 18:29:04.585 +00:00 [INF] Request finished HTTP/2 CONNECT https://localhost:7159/_blazor?id=k1byXsGmgAYYGOvpeT14_Q - 200 null null 134832.8905ms
+2024-02-09 18:29:04.587 +00:00 [INF] Connection id "0HN19JIJJGNTG", Request id "0HN19JIJJGNTG:00000017": the application completed without reading the entire request body.
+2024-02-09 18:29:05.316 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/admin - null null
+2024-02-09 18:29:05.331 +00:00 [INF] Executing endpoint '/admin (/admin)'
+2024-02-09 18:29:05.344 +00:00 [INF] Executed endpoint '/admin (/admin)'
+2024-02-09 18:29:05.358 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Authorization requires a cascading parameter of type Task<AuthenticationState>. Consider using CascadingAuthenticationState to supply this.
+   at Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.OnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewComponentFrame(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewSubtree(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InsertNewFrame(DiffContext& diffContext, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForRange(DiffContext& diffContext, Int32 oldStartIndex, Int32 oldEndIndexExcl, Int32 newStartIndex, Int32 newEndIndexExcl)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.ComputeDiff(Renderer renderer, RenderBatchBuilder batchBuilder, Int32 componentId, ArrayRange`1 oldTree, ArrayRange`1 newTree)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment, Exception& renderFragmentException)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessPendingRender()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToRenderQueue(Int32 componentId, RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.RenderHandle.Render(RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.ComponentBase.StateHasChanged()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallOnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderRootComponentAsync(Int32 componentId, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(IComponent component, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(Type componentType, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.Endpoints.EndpointHtmlRenderer.RenderEndpointComponent(HttpContext httpContext, Type rootComponentType, ParameterView parameters, Boolean waitForQuiescence)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Rendering.RendererSynchronizationContext.<>c.<<InvokeAsync>b__10_0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-02-09 18:29:05.394 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/admin - 500 null text/html; charset=utf-8 78.052ms
+2024-02-09 18:29:16.824 +00:00 [INF] User profile is available. Using 'C:\Users\Marcelo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-09 18:29:16.881 +00:00 [INF] --------------------App started
+2024-02-09 18:29:17.115 +00:00 [INF] Now listening on: https://localhost:7159
+2024-02-09 18:29:17.115 +00:00 [INF] Now listening on: http://localhost:5184
+2024-02-09 18:29:17.120 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-02-09 18:29:17.121 +00:00 [INF] Hosting environment: Development
+2024-02-09 18:29:17.121 +00:00 [INF] Content root path: C:\Users\Marcelo\Documents\GitHub\StandDigital\StandDigital
+2024-02-09 18:29:18.357 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-02-09 18:29:18.637 +00:00 [INF] Executing endpoint '/ (/)'
+2024-02-09 18:29:18.757 +00:00 [INF] Executed endpoint '/ (/)'
+2024-02-09 18:29:18.780 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Authorization requires a cascading parameter of type Task<AuthenticationState>. Consider using CascadingAuthenticationState to supply this.
+   at Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.OnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewComponentFrame(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewSubtree(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InsertNewFrame(DiffContext& diffContext, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForRange(DiffContext& diffContext, Int32 oldStartIndex, Int32 oldEndIndexExcl, Int32 newStartIndex, Int32 newEndIndexExcl)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.ComputeDiff(Renderer renderer, RenderBatchBuilder batchBuilder, Int32 componentId, ArrayRange`1 oldTree, ArrayRange`1 newTree)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment, Exception& renderFragmentException)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessPendingRender()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToRenderQueue(Int32 componentId, RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.RenderHandle.Render(RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.ComponentBase.StateHasChanged()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallOnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderRootComponentAsync(Int32 componentId, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(IComponent component, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(Type componentType, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.Endpoints.EndpointHtmlRenderer.RenderEndpointComponent(HttpContext httpContext, Type rootComponentType, ParameterView parameters, Boolean waitForQuiescence)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Rendering.RendererSynchronizationContext.<>c.<<InvokeAsync>b__10_0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-02-09 18:29:18.888 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 500 null text/html; charset=utf-8 535.3382ms
+2024-02-09 18:29:18.911 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-02-09 18:29:18.915 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-02-09 18:29:18.921 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 5.704ms
+2024-02-09 18:29:18.978 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 66.9593ms
+2024-02-09 18:29:19.088 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/favicon.ico - null null
+2024-02-09 18:29:19.092 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/favicon.ico - 404 0 null 3.9297ms
+2024-02-09 18:29:19.095 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/favicon.ico, Response status code: 404
+2024-02-09 18:45:20.331 +00:00 [INF] User profile is available. Using 'C:\Users\Marcelo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-09 18:45:20.791 +00:00 [INF] --------------------App started
+2024-02-09 18:45:23.183 +00:00 [INF] Now listening on: https://localhost:7159
+2024-02-09 18:45:23.192 +00:00 [INF] Now listening on: http://localhost:5184
+2024-02-09 18:45:23.208 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-02-09 18:45:23.216 +00:00 [INF] Hosting environment: Development
+2024-02-09 18:45:23.221 +00:00 [INF] Content root path: C:\Users\Marcelo\Documents\GitHub\StandDigital\StandDigital
+2024-02-09 18:45:27.175 +00:00 [INF] Request starting HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A64034%2Fdevtools%2Fbrowser%2F6a8cf742-efd0-4155-ba24-44537a8389b3 - null null
+2024-02-09 18:45:27.950 +00:00 [INF] Request finished HTTP/1.1 GET https://localhost/_framework/debug/ws-proxy?browser=ws%3A%2F%2F127.0.0.1%3A64034%2Fdevtools%2Fbrowser%2F6a8cf742-efd0-4155-ba24-44537a8389b3 - 302 0 null 790.4755ms
+2024-02-09 18:45:28.447 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/ - null null
+2024-02-09 18:45:28.849 +00:00 [INF] Executing endpoint '/ (/)'
+2024-02-09 18:45:29.128 +00:00 [INF] Executed endpoint '/ (/)'
+2024-02-09 18:45:29.300 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Object of type 'Microsoft.AspNetCore.Components.Authorization.AuthorizeView' does not have a property matching the name 'RouteData'.
+   at Microsoft.AspNetCore.Components.Reflection.ComponentProperties.ThrowForUnknownIncomingParameterName(Type targetType, String parameterName)
+   at Microsoft.AspNetCore.Components.Reflection.ComponentProperties.SetProperties(ParameterView& parameters, Object target)
+   at Microsoft.AspNetCore.Components.ParameterView.SetParameterProperties(Object target)
+   at Microsoft.AspNetCore.Components.ComponentBase.SetParametersAsync(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewComponentFrame(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InitializeNewSubtree(DiffContext& diffContext, Int32 frameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.InsertNewFrame(DiffContext& diffContext, Int32 newFrameIndex)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.AppendDiffEntriesForRange(DiffContext& diffContext, Int32 oldStartIndex, Int32 oldEndIndexExcl, Int32 newStartIndex, Int32 newEndIndexExcl)
+   at Microsoft.AspNetCore.Components.RenderTree.RenderTreeDiffBuilder.ComputeDiff(Renderer renderer, RenderBatchBuilder batchBuilder, Int32 componentId, ArrayRange`1 oldTree, ArrayRange`1 newTree)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment, Exception& renderFragmentException)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessPendingRender()
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToRenderQueue(Int32 componentId, RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.RenderHandle.Render(RenderFragment renderFragment)
+   at Microsoft.AspNetCore.Components.ComponentBase.StateHasChanged()
+   at Microsoft.AspNetCore.Components.ComponentBase.CallOnParametersSetAsync()
+   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.HandleException(Exception exception)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.HandleExceptionViaErrorBoundary(Exception error, ComponentState errorSourceOrNull)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.AddToPendingTasksWithErrorHandling(Task task, ComponentState owningComponentState)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SupplyCombinedParameters(ParameterView directAndCascadingParameters)
+   at Microsoft.AspNetCore.Components.Rendering.ComponentState.SetDirectParameters(ParameterView parameters)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderRootComponentAsync(Int32 componentId, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(IComponent component, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.HtmlRendering.Infrastructure.StaticHtmlRenderer.BeginRenderingComponent(Type componentType, ParameterView initialParameters)
+   at Microsoft.AspNetCore.Components.Endpoints.EndpointHtmlRenderer.RenderEndpointComponent(HttpContext httpContext, Type rootComponentType, ParameterView parameters, Boolean waitForQuiescence)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Endpoints.RazorComponentEndpointInvoker.RenderComponentCore(HttpContext context)
+   at Microsoft.AspNetCore.Components.Rendering.RendererSynchronizationContext.<>c.<<InvokeAsync>b__10_0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-02-09 18:45:29.426 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/ - 500 null text/html; charset=utf-8 979.1118ms
+2024-02-09 18:45:29.515 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_vs/browserLink - null null
+2024-02-09 18:45:29.515 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - null null
+2024-02-09 18:45:29.535 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_framework/aspnetcore-browser-refresh.js - 200 13760 application/javascript; charset=utf-8 20.3158ms
+2024-02-09 18:45:29.623 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/_vs/browserLink - 200 null text/javascript; charset=UTF-8 108.169ms
+2024-02-09 18:45:29.710 +00:00 [INF] Request starting HTTP/2 GET https://localhost:7159/favicon.ico - null null
+2024-02-09 18:45:29.720 +00:00 [INF] Request finished HTTP/2 GET https://localhost:7159/favicon.ico - 404 0 null 11.6254ms
+2024-02-09 18:45:29.730 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/favicon.ico, Response status code: 404
