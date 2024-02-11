@@ -20,7 +20,7 @@ public class CarEntity
     public string Matricula { get; set; }
     public ushort Lotacao { get; set; }
     public string? Caixa { get; set; }
-    public int Condicao { get; set; }
+    public bool Condicao { get; set; }
     public string? Comentarios { get; set; }
     public ushort PrecisaPneus { get; set; }
     public ushort PrimeiroDono { get; set; }

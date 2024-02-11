@@ -11,7 +11,7 @@ public class CarRepository(IDatabase database) : ICarRepository
     private readonly IDatabase _dbcontext = database;
     public async Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(Combustivel fuel)
          => await _dbcontext.GetAsync<CarCardModel>("""
-            Select * from Carros c inner join CarrosMetadata cm on c.CarroId = cm.CarroId where Combustivel = @combustivel
+            Select * from Carros c inner join CarrosMetadata cm on c.CarroId = cm.CarroId where Combustivel = @combustivel and cm.Ativo = 'true'
             """,
             new Dictionary<string, object>() { { "combustivel", fuel.GetDescription() } });
 

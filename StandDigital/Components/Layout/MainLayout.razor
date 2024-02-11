@@ -5,7 +5,7 @@
 
 <PageTitle>Paraíso automóvel</PageTitle>
 
-<div class="page" style="background-color:black">
+<div class="page" style="background-color:black;overflow-x:hidden">
         <header class="header-area header-sticky">
             <div class="container">
                 <div class="row">
@@ -16,7 +16,7 @@
                             </a>
                             <ul class="nav">
                                 <li><a href="/">Início</a></li>
-                                <li><a href="mercado">Negócios</a></li>
+                                <li><a href="mercado">Ofertas mercado</a></li>
                                 <li><a href="admin">Gestão conta</a></li>
                             </ul>
                         </nav>
@@ -30,10 +30,10 @@
         </CascadingValue>
     </main>
     <footer>
-        <div class="footer">
+        <div class="footer" style="margin-top:25px">
             <p>
                 Copyright © @DateTime.UtcNow.Year Paraiso Automóvel, todos os direitos reservados.
-                <br>Designed by <a href="https://www.linkedin.com/in/marcelofigueiredo86/" target="_parent" title="free css templates">Marcelo Figueiredo</a>
+                <br>Designed by <a href="https://www.bipow.pt/" target="_parent" title="free css templates">Bipow</a>
             </p>
         </div>
     </footer>
@@ -45,7 +45,6 @@
         <FloatButton>
             <input type="button"
                    style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/list.png?updatedAt=1705153925369');
-                        transform:scale(1.5);
                         background-repeat:no-repeat;
                         background-color:transparent;
                         border-style:none;
@@ -55,7 +54,8 @@
                         margin-left:15px;" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}" />
         </FloatButton>
         <MenuOptions>
-            <div class="row menuOption"><a href="carros" style="menuOption">Carros</a></div>
+            <div class="row menuOption"><a href="/">Início</a></div>
+            <div class="row menuOption"><a href="mercado">Ofertas mercado</a></div>
             <div class="row menuOption"><a href="admin">Gestão</a></div>
         </MenuOptions>
     </StandDigital.Components.Components.FloatingButton>

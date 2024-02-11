@@ -52,6 +52,9 @@ public class CarDetailsService : ComponentBase
     [Parameter]
     public int? Carid { get; set; }
 
+    [Parameter]
+    public string? Componente { get; set; }
+
     protected async Task ManageCommandToApply(EditContext editContext)
     {
         try

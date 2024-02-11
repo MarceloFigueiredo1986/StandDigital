@@ -1,0 +1,60 @@
+﻿@page "/detalhesnegocio/{tiponegocio}/{carroid:int}"
+
+<div class="maindiv">
+    <div class="row details">
+        <div class="col-6">
+            <BlazorSlickCarousel Configurations="configurations" CustomClass="carouselstyle">
+                <BlazorSlickCarouselContent>
+                    <img src="https://loremflickr.com/400/400?random=14" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=15" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=16" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=17" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=18" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=19" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=20" class="imgconfig" alt="">
+                    <img src="https://loremflickr.com/400/400?random=21" class="imgconfig" alt="">
+                </BlazorSlickCarouselContent>
+            </BlazorSlickCarousel>
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+        </div>
+        <div class="col-6">
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+            <p>T</p>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .maindiv{
+        margin:145px 5px;
+    }
+
+    .details{
+        background-color:white;
+    }
+
+    .imgconfig{
+        width:350px;
+        height:350px;
+    }
+
+    .carouselstyle{
+        height:350px;
+        width:350px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string TipoNegocio { get; set; }
+
+    [Parameter]
+    public int CarroId { get; set; }
+}
