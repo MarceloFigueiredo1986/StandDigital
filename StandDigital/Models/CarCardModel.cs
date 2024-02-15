@@ -2,5 +2,6 @@
 
 public class CarCardModel : BaseCar
 {
-    public int Cilindrada { get; set; }
+    public int? Cilindrada { get; set; }
+    public string Caixa { get; set; }
 }

@@ -1,43 +1,76 @@
 ﻿@page "/detalhesnegocio/{tiponegocio}/{carroid:int}"
+@using Microsoft.Data.Sqlite
 
-<div class="maindiv">
-    <div class="row details">
-        <div class="col-6">
-            <BlazorSlickCarousel Configurations="configurations" CustomClass="carouselstyle">
-                <BlazorSlickCarouselContent>
-                    <img src="https://loremflickr.com/400/400?random=14" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=15" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=16" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=17" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=18" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=19" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=20" class="imgconfig" alt="">
-                    <img src="https://loremflickr.com/400/400?random=21" class="imgconfig" alt="">
-                </BlazorSlickCarouselContent>
-            </BlazorSlickCarousel>
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
+@inject ICarRepository carRepository
+@inject ILogger<DetalhesNegocio> _logger
+
+<StandDigital.Components.Components.ComponentLoader LoadingObj="_detalhesCarro">
+    <Fragment>
+        <div class="maindiv">
+            <div class="row details">
+                <div style="width:370px">
+                    <StandDigital.Components.Components.ImageCarousel />
+                    <h5 style="color:white"><b>Dias para o fim do negócio:</b> @_detalhesCarro.Car.DiasParaFimAnuncio dias</h5>
+                    <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.Car.Preco €</span></b></h4>
+                    <br />
+                </div>
+                <div style="width:350px;">
+                    <p><b>Marca / Modelo:</b> @_detalhesCarro.Car.Marca / @_detalhesCarro.Car.Modelo</p>
+                    <p><b>Mês/Ano:</b> @_detalhesCarro.Car.MesRegisto.ToString().PadLeft(2,'0')/@_detalhesCarro.Car.Ano</p>
+                    <p><b>Combustível:</b> @_detalhesCarro.Car.Combustivel</p>
+                    <p><b>Kms:</b> @_detalhesCarro.Car.Kms</p>
+                    <p><b>Origem:</b> @(_detalhesCarro.Car.Nacional == 1 ? "Nacional" : "Importado")</p>
+                    @if (_detalhesCarro.Car.Combustivel != Combustivel.Electrico.GetDescription())
+                    {
+                        <p><b>Cilindrada:</b> @_detalhesCarro.Car.Cilindrada</p>
+                        <p><b>Caixa:</b> @_detalhesCarro.Car.Caixa</p>
+                    }else{
+                        <p><b>Capacidade bateria:</b> @_detalhesCarro.Car.Bateria</p>
+                        <p><b>Tipo carregamento:</b> @_detalhesCarro.Car.TipoCarregamento</p>
+                    }
+                    <p><b>Registos:</b> @(_detalhesCarro.Car.PrimeiroDono == 0 ? "2 ou + donos" : "1")</p>
+                    <p><b>Origem:</b> @(_detalhesCarro.Car.Nacional == 0 ? "Importado" : "Nacional")</p>
+                    <p><b>Problemas motor:</b> 
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.ProblemasMotor) ? "Sem danos" : _detalhesCarro.Car.ProblemasMotor)
+                    </p>
+                    <p><b>Danos carroceria:</b> 
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Danos) ? "Sem danos" : _detalhesCarro.Car.Danos)
+                    </p>
+                    <p>
+                        <b>Precisa Pneus:</b> @(_detalhesCarro.Car.PrecisaPneus == 1 ? "Sim" : "Não")
+                    </p>
+                    <p>
+                        <b>Lotação:</b> @_detalhesCarro.Car.Lotacao
+                    </p>
+                    @foreach (var extra in _detalhesCarro.Extras)
+                    {
+                        <input style="margin:0.5px;font-size:8pt;height:20px;padding:2px" 
+                        type="button" class="btn btn-primary" value="@extra" />
+                    }
+                </div>
+                <input type="button" class="btn btn-success comprarbutton" value="Licitar" />
+            </div>
         </div>
-        <div class="col-6">
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
-            <p>T</p>
-        </div>
-    </div>
-</div>
+    </Fragment>
+</StandDigital.Components.Components.ComponentLoader>
 
 <style type="text/css">
+
+    .comprarbutton{
+        width:250px;
+        margin:auto;
+    }
+
     .maindiv{
         margin:145px 5px;
     }
 
-    .details{
-        background-color:white;
+    b{
+        color:gray;
+    }
+
+    p{
+        color:white;
     }
 
     .imgconfig{
@@ -56,5 +89,27 @@
     public string TipoNegocio { get; set; }
 
     [Parameter]
-    public int CarroId { get; set; }
+    public int? CarroId { get; set; }
+
+    CarWithExtrasAndImagesDto? _detalhesCarro;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (CarroId != null)
+            {
+                _detalhesCarro = await carRepository.GetCompleteCarAsync(CarroId.Value);
+                _detalhesCarro.Photos.Add(_detalhesCarro.Car.ImageMin);
+            }
+        }
+        catch(SqliteException sqlex)
+        {
+            _logger.LogError("Exception:{exception}", sqlex);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "GetCompleteCarAsync");
+        }
+    }
 }

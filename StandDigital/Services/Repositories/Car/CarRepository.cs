@@ -58,4 +58,34 @@ public class CarRepository(IDatabase database) : ICarRepository
         }
     }
 
+    public async Task<CarWithExtrasAndImagesDto?> GetCompleteCarAsync(int carroId)
+    {
+        var queryCarDetails = """
+            SELECT * FROM Carros WHERE CarroId = @carroId;
+            """;
+
+        var queryCarExtras = """
+            SELECT Extra FROM CarrosExtras WHERE CarroId = @carroId;
+            """;
+
+        var queryCarPhotos = """
+            SELECT Data FROM CarrosFotos WHERE CarroId = @carroId;
+            """;
+
+        var dynamicParms = new Dictionary<string, object>
+        {
+            { "carroId", carroId }
+        };
+
+        var multipleResults = await _dbcontext.GetAsync(
+            queries: [queryCarDetails,queryCarExtras, queryCarPhotos], 
+            dynamicParameters: dynamicParms);
+
+        var carDetails = multipleResults.ReadFirst<CarCompleteModel>();
+        var carExtras = await multipleResults.ReadAsync<string>();
+        var carPhotosBA = await multipleResults.ReadAsync<byte[]>();
+        var carPhotosBase64 = carPhotosBA.Select(a => Convert.ToBase64String(a)).ToHashSet();
+
+        return new(Car: carDetails, Extras : carExtras.ToHashSet(), Photos : carPhotosBase64);
+    }
 }

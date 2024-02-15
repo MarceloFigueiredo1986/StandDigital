@@ -1,0 +1,49 @@
+﻿<div class="maindivcarousel">
+    @if (_imgs != null)
+    {
+        <img width="350" height="250" src="@_imgs[_selectedImg]" />
+        <input type="button" class="btn btn-outline-secondary imgsequence" id="previmg" 
+        @onclick="() => { _selectedImg = Convert.ToUInt16((_selectedImg -1)  == -1 ? _selectedImg : (_selectedImg -1));}" value="Anterior" />
+        <input type="button" class="btn btn-outline-secondary imgsequence" style="float:right;" id="nextimg" 
+        @onclick="() => { _selectedImg = Convert.ToUInt16((_selectedImg +1)  == _imgs.Count() ? _selectedImg : (_selectedImg +1));}" value="Próxima" />
+    }
+</div>
+
+<style type="text/css">
+    .imgconfigmin {
+        height: 80px;
+        width: 80px;
+        margin:3px 4.5px 3px 3px;
+        cursor:pointer;
+    }
+
+    .maindivcarousel{
+        width:350px;
+        height:350px;
+        margin:5px;
+    }
+
+    .imgsequence{
+        margin-top:5px;
+        cursor:pointer;
+    }
+</style>
+
+@code {
+    ushort _selectedImg;
+
+    string[]? _imgs;
+
+    protected override void OnInitialized()
+    {
+        _imgs = [
+            "https://assets.choosemycar.com/vehicles/large/5571197_001_5741_vehicle-5571197-001-20231229-100001-c34b35ec810267026f3fd25b551a224d93fe55816eda1fc8fdf9a2b99961e66b.jpg",
+            "https://i.ytimg.com/vi/-cEOGo7q-DY/maxresdefault.jpg",
+            "https://assets.choosemycar.com/vehicles/large/5571197_001_5741_vehicle-5571197-001-20231229-100001-c34b35ec810267026f3fd25b551a224d93fe55816eda1fc8fdf9a2b99961e66b.jpg",
+            "https://i.ytimg.com/vi/-cEOGo7q-DY/maxresdefault.jpg",
+            "https://assets.choosemycar.com/vehicles/large/5571197_001_5741_vehicle-5571197-001-20231229-100001-c34b35ec810267026f3fd25b551a224d93fe55816eda1fc8fdf9a2b99961e66b.jpg",
+            "https://i.ytimg.com/vi/-cEOGo7q-DY/maxresdefault.jpg"];
+
+        _selectedImg = 0;
+    }
+}

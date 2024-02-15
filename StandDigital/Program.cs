@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
 using StandDigital.Components;
+using StandDigital.HostedServices;
 using StandDigital.Services.Repositories.Car;
 using StandDigital.Services.Repositories.CarExtras;
 using StandDigital.Services.Repositories.CarMetadata;
@@ -37,6 +38,7 @@ public class Program
             builder.Services.AddScoped<ICarUoW, CarUoW>();
             builder.Services.InstallHttpClient();
             builder.Services.InstallSharedProject();
+            builder.Services.AddHostedService<DatabaseUpdate>();
 
             var app = builder.Build();
 

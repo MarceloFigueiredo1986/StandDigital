@@ -20,6 +20,16 @@ public sealed class Database(IConfiguration configuration) : IDatabase
              dynamicParameters,
              transaction);
 
+    public async Task<IEnumerable<T>> GetAsync<T,T1>(string query,string splitOn, Func<T,T1,T> mapFunction, 
+        Dictionary<string, object>? dynamicParameters = null) 
+        where T : class
+        where T1 : class
+     => await _dbConnection.QueryAsync(
+         sql: query,
+         map: mapFunction,
+         param: dynamicParameters,
+         splitOn: splitOn);
+
     public async Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject,CancellationToken cancellationToken) =>
         await _dbConnection.QuerySingleAsync<TOut>(new CommandDefinition(
             commandText : $"{query};SELECT CAST(SCOPE_IDENTITY() AS INT);",
@@ -42,4 +52,12 @@ public sealed class Database(IConfiguration configuration) : IDatabase
         _dbConnection.Dispose();
         transaction?.Dispose();
     }
+
+    public async Task<SqlMapper.GridReader> GetAsync(
+        string[] queries, 
+        Dictionary<string, object>? dynamicParameters = null)
+          => await _dbConnection.QueryMultipleAsync(
+             $"{string.Join(' ',queries)}",
+             dynamicParameters,
+             transaction);
 }

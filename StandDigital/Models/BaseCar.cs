@@ -16,4 +16,10 @@ public class BaseCar
     public ushort PrimeiroDono { get; set; }
     public string DataInicioAnuncio { get; set; }
     public int DiasParaFimAnuncio => DataInicioAnuncio is null ? 0 : (DateTimeOffset.Parse(DataInicioAnuncio).AddDays(14) - DateTimeOffset.Now).Days;
+    public int PrecisaPneus { get;set; }
+    public string Condicao { get;set; }
+    public string Comentarios { get;set; }
+    public string Matricula { get;set; }
+    public int Lotacao { get;set; }
+    public int Preco { get; set; }
 }

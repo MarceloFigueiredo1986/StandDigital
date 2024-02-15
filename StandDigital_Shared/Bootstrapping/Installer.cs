@@ -2,6 +2,7 @@
 using Serilog;
 using Serilog.Core;
 using Serilog.Sinks.SystemConsole.Themes;
+using StandDigital_Shared.Migrations;
 using StandDigital_Shared.Persistence;
 using StandDigital_Shared.Repositories.CarBrandModels;
 using StandDigital_Shared.Repositories.CarBrands;
@@ -20,6 +21,7 @@ public static class Installer
         services.AddScoped<IDatabase, Database>();
         services.AddScoped<ILogging, Logging>();
         services.AddLogging(config => config.AddSerilog());
+        services.AddScoped<MigrationsService>();
 
         return services;
     }

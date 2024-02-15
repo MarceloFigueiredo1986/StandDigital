@@ -54,9 +54,12 @@
                         margin-left:15px;" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}" />
         </FloatButton>
         <MenuOptions>
-            <div class="row menuOption"><a href="/">Início</a></div>
-            <div class="row menuOption"><a href="mercado">Ofertas mercado</a></div>
-            <div class="row menuOption"><a href="admin">Gestão</a></div>
+            <div class="row menuOption">
+                <a href="/" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Início</a></div>
+            <div class=" row menuOption">
+                    <a href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a></div>
+            <div class=" row menuOption">
+                        <a href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a></div>
         </MenuOptions>
     </StandDigital.Components.Components.FloatingButton>
 }

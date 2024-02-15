@@ -1,4 +1,6 @@
-﻿namespace StandDigital_Shared.Persistence;
+﻿using Dapper;
+
+namespace StandDigital_Shared.Persistence;
 
 public interface IDatabase : IDisposable
 {
@@ -7,5 +9,28 @@ public interface IDatabase : IDisposable
     void CommitTransaction();
     Task<bool> InsertAsync<T>(string query, T entity) where T : class;
     Task<IEnumerable<T>> GetAsync<T>(string query, Dictionary<string, object>? dynamicParameters = null) where T : class;
+
+    /// <summary>
+    /// Use when want to run multiple queries with same connection
+    /// </summary>
+    /// <param name="queries"></param>
+    /// <param name="dynamicParameters"></param>
+    /// <returns></returns>
+    Task<SqlMapper.GridReader> GetAsync(
+        string[] queries,
+        Dictionary<string, object>? dynamicParameters = null);
+
+    /// <summary>
+    /// Use when want to split the results from on property forward and map it into a new object, creating a nested list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="splitOn"></param>
+    /// <param name="mapFunction"></param>
+    /// <param name="dynamicParameters"></param>
+    /// <returns></returns>
+    Task<IEnumerable<T>> GetAsync<T,T1>(string query, string splitOn, Func<T,T1,T> mapFunction,
+        Dictionary<string, object>? dynamicParameters = null) where T : class where T1: class;
     Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject, CancellationToken cancellationToken);
 }
