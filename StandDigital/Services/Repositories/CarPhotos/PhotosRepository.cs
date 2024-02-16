@@ -8,11 +8,11 @@ public class PhotosRepository(IDatabase database) : IPhotosRepository
 {
     private readonly IDatabase _dbcontext = database;
 
-    public async Task<ErrorOr<int>> CreateAsync(CarPhoto value, CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> CreateAsync(CarPhotoEntity value, CancellationToken cancellationToken)
     {
         try
         {
-            var createdCarPhotoId = await _dbcontext.InsertAsyncAndGetIdAsync<CarPhoto, int>(
+            var createdCarPhotoId = await _dbcontext.InsertAsyncAndGetIdAsync<CarPhotoEntity, int>(
                      """
             INSERT INTO 
             CarrosFotos
@@ -24,7 +24,7 @@ public class PhotosRepository(IDatabase database) : IPhotosRepository
             """, value, cancellationToken);
 
             if (createdCarPhotoId == 0)
-                throw new Exception($"{nameof(CarPhoto)} not created");
+                throw new Exception($"{nameof(CarPhotoEntity)} not created");
 
             return createdCarPhotoId;
         }
@@ -34,8 +34,8 @@ public class PhotosRepository(IDatabase database) : IPhotosRepository
         }
     }
 
-    public async Task<IEnumerable<CarPhoto>> GetAllAsync()
-     => await _dbcontext.GetAsync<CarPhoto>("""
+    public async Task<IEnumerable<CarPhotoEntity>> GetAllAsync()
+     => await _dbcontext.GetAsync<CarPhotoEntity>("""
             Select * from CarrosFotos
             """);
 }

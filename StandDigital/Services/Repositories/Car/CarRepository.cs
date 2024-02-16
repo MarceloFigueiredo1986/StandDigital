@@ -61,7 +61,30 @@ public class CarRepository(IDatabase database) : ICarRepository
     public async Task<CarWithExtrasAndImagesDto?> GetCompleteCarAsync(int carroId)
     {
         var queryCarDetails = """
-            SELECT * FROM Carros WHERE CarroId = @carroId;
+            SELECT 
+            c.CarroId,
+            Bateria,
+            TipoCarregamento,
+            Cilindrada,
+            Caixa,
+            Combustivel,
+            Marca,
+            Modelo,
+            Kms,
+            MesRegisto,
+            Ano,
+            Danos,
+            ProblemasMotor,
+            ImageMin,
+            Nacional,
+            DataInicioAnuncio,
+            PrecisaPneus,
+            Comentarios,
+            Matricula,
+            Lotacao 
+            FROM Carros c 
+            INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
+            WHERE c.CarroId = @carroId;
             """;
 
         var queryCarExtras = """
@@ -72,20 +95,32 @@ public class CarRepository(IDatabase database) : ICarRepository
             SELECT Data FROM CarrosFotos WHERE CarroId = @carroId;
             """;
 
+        var querySellHistory = """
+            select MAX(Valor) as BiggestBid,count(CarroId) as TotalBids,Name as Bidder 
+            from HistoricoNegocios hn
+            inner join Users u on hn.VendedorId = u.UserId
+            where CarroId = @carroId
+            group by CarroId,Name
+            order by BiggestBid desc;
+            """;
+
+
         var dynamicParms = new Dictionary<string, object>
         {
             { "carroId", carroId }
         };
 
         var multipleResults = await _dbcontext.GetAsync(
-            queries: [queryCarDetails,queryCarExtras, queryCarPhotos], 
+            queries: [queryCarDetails,queryCarExtras, queryCarPhotos, querySellHistory], 
             dynamicParameters: dynamicParms);
 
         var carDetails = multipleResults.ReadFirst<CarCompleteModel>();
         var carExtras = await multipleResults.ReadAsync<string>();
         var carPhotosBA = await multipleResults.ReadAsync<byte[]>();
+        var carSellHistory = await multipleResults.ReadSingleAsync<CarSellingPurposes>();
+
         var carPhotosBase64 = carPhotosBA.Select(a => Convert.ToBase64String(a)).ToHashSet();
 
-        return new(Car: carDetails, Extras : carExtras.ToHashSet(), Photos : carPhotosBase64);
+        return new(Car: carDetails, Extras : carExtras.ToHashSet(), Photos : carPhotosBase64, CarSellHistory : carSellHistory);
     }
 }

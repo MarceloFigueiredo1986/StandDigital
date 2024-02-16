@@ -28,4 +28,5 @@ public class CarEntity
     public string? ProblemasMotor { get; set; }
     public ushort TemRevisao { get; set; }
     public ushort Nacional { get; set; }
+    public decimal PrecoBase { get; set; }
 }

@@ -45,7 +45,7 @@ public class CarUoW(
 
             foreach (var pht in photos)
             {
-                var newPhoto = new CarPhoto(carCreationResult.Value, pht.Key, pht.Value);
+                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Key, pht.Value);
 
                 var photosCreationResul = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
 
@@ -55,7 +55,7 @@ public class CarUoW(
 
             foreach (var extra in extras)
             {
-                var newExtra = new CarExtra(extra, carCreationResult.Value);
+                var newExtra = new CarExtraEntity(extra, carCreationResult.Value);
 
                 var photosCreationResul = await _carExtrasRepository.CreateAsync(newExtra, cancellationToken);
 

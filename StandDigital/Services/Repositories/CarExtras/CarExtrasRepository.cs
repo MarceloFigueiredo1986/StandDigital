@@ -8,11 +8,11 @@ public sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasReposit
 {
     private readonly IDatabase _dbContext = dbContext;
 
-    public async Task<ErrorOr<int>> CreateAsync(CarExtra value, CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> CreateAsync(CarExtraEntity value, CancellationToken cancellationToken)
     {
         try
         {
-            var createdCarExtraId = await _dbContext.InsertAsyncAndGetIdAsync<CarExtra, int>(
+            var createdCarExtraId = await _dbContext.InsertAsyncAndGetIdAsync<CarExtraEntity, int>(
                      """
             INSERT INTO 
             CarrosExtras
@@ -23,7 +23,7 @@ public sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasReposit
             """, value, cancellationToken);
 
             if (createdCarExtraId == 0)
-                throw new Exception($"{nameof(CarExtra)} not created");
+                throw new Exception($"{nameof(CarExtraEntity)} not created");
 
             return createdCarExtraId;
         }
@@ -33,8 +33,8 @@ public sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasReposit
         }
     }
 
-    public async Task<IEnumerable<CarExtra>> GetAllAsync()
-     => await _dbContext.GetAsync<CarExtra>("""
+    public async Task<IEnumerable<CarExtraEntity>> GetAllAsync()
+     => await _dbContext.GetAsync<CarExtraEntity>("""
             Select * from CarrosExtras
             """);
 }
