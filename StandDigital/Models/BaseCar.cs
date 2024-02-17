@@ -28,7 +28,7 @@ public class BaseCar
 
             var timeLeft = (DateTimeOffset.Parse(DataInicioAnuncio).AddDays(14) - DateTimeOffset.Now);
 
-            if (timeLeft.Days < 2) return $"{timeLeft.Hours} horas";
+            if (timeLeft.Days < 2) return $"{timeLeft.Hours}:{timeLeft.Minutes} horas";
 
             return $"{timeLeft.Days} dias";
         }

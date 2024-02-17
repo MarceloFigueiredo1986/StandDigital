@@ -4,6 +4,8 @@
 @inject ICarRepository carRepository
 @inject ILogger<DetalhesNegocio> _logger
 
+@attribute [Authorize(Roles = "admin,stand")]
+
 <StandDigital.Components.Components.ComponentLoader LoadingObj="_detalhesCarro">
     <Fragment>
         <div class="maindiv">

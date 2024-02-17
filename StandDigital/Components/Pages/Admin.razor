@@ -4,6 +4,8 @@
 @inject ICarRepository carRepo
 @inject NavigationManager navman
 
+@attribute [Authorize(Roles = "admin,stand")]
+
 <div class="row" style="padding:145px 2px 5px 2px;color:white">
     <h3>Stock de viaturas</h3>
     <Virtualize Items="@Cars" Context="Car">

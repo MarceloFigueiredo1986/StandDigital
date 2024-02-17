@@ -1,10 +1,18 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Blazored.Toast
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Web
+@using StandDigital.Auth
+@using StandDigital.Components.Pages
+
 @inherits LayoutComponentBase
 @inject IJSRuntime js
+@inject SessionSettings _session;
 @attribute [StreamRendering]
+@inject AuthenticationStateProvider _authenticator;
 
 <PageTitle>Paraíso automóvel</PageTitle>
 
+<BlazoredToasts />
 <div class="page" style="background-color:black;overflow-x:hidden">
         <header class="header-area header-sticky">
             <div class="container">
@@ -15,9 +23,16 @@
                                 <span style="font-size:16pt">Paraíso automóvel</span>
                             </a>
                             <ul class="nav">
-                                <li><a href="/">Início</a></li>
-                                <li><a href="mercado">Ofertas mercado</a></li>
-                                <li><a href="admin">Gestão conta</a></li>
+                            <li><a href="/">Início</a></li>
+                            <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+                                <Authorized>
+                                    <li><a href="mercado">Ofertas mercado</a></li>
+                                    <li><a href="admin">Gestão conta</a></li>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <li><a href="login">Login</a></li>
+                                </NotAuthorized>
+                            </Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
                             </ul>
                         </nav>
                     </div>
@@ -56,10 +71,21 @@
         <MenuOptions>
             <div class="row menuOption">
                 <a href="/" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Início</a></div>
-            <div class=" row menuOption">
-                    <a href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a></div>
-            <div class=" row menuOption">
-                        <a href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a></div>
+            <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+                <Authorized>
+                    <div class=" row menuOption">
+                        <a href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a>
+                    </div>
+                    <div class=" row menuOption">
+                        <a href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a>
+                    </div>
+                </Authorized>
+                <NotAuthorized>
+                    <div class=" row menuOption">
+                        <a href="login" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Login</a>
+                    </div>
+                </NotAuthorized>
+            </Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
         </MenuOptions>
     </StandDigital.Components.Components.FloatingButton>
 }
@@ -152,6 +178,17 @@
                 WindowWidth = await js.InvokeAsync<int>("GetWidth");
                 await InvokeAsync(StateHasChanged);
             }
+
+            var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            if (session_already_started == null) return;
+            if (session_already_started.ExpirationDate < DateTime.UtcNow)
+            {
+                ((Authentication)_authenticator).SignOut();
+                await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
+                return;
+            }
+
+            ((Authentication)_authenticator).AuthenticateUser(session_already_started);
         }
         catch (Exception ex)
         {

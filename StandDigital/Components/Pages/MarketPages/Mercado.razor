@@ -2,6 +2,8 @@
 
 @layout MainLayout
 
+@attribute [Authorize(Roles = "admin,stand")]
+
 <div style="padding:150px 2px 5px 2px">
     <ul class="nav nav-tabs">
         @foreach (var tab in _tabs)

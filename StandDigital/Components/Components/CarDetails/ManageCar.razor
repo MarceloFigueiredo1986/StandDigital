@@ -4,8 +4,6 @@
 
 @inherits CarDetailsService
 
-@attribute [Authorize(Roles = Roles.CreateCar)]
-@attribute [Authorize(Roles = Roles.UpdateCar)]
 
 @attribute [StreamRendering]
 
@@ -168,13 +166,13 @@
                     {
                         <button class="btn btn-primary" type="button" disabled>
                             <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                            A gravar...
+                            A guardar...
                         </button>
                     }
                     else
                     {
                         <div class="row">
-                            <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Save</button>
+                            <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Guardar</button>
                         </div>
                         <span style="color:red;margin:2px">@error</span>
                     }

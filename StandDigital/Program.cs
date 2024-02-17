@@ -1,15 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
+using StandDigital.Bootstrapping;
 using StandDigital.Components;
-using StandDigital.HostedServices;
-using StandDigital.Services.Repositories.Car;
-using StandDigital.Services.Repositories.CarExtras;
-using StandDigital.Services.Repositories.CarMetadata;
-using StandDigital.Services.Repositories.CarPhotos;
-using StandDigital.Services.UnitsOfWork.Car;
-using StandDigital_HttpClient;
-using StandDigital_Shared.Bootstrapping;
-using StandDigital_Shared.Persistence;
 
 namespace StandDigital;
 
@@ -27,18 +19,22 @@ public class Program
 
 
             // Add services to the container.
-            builder.Services.AddRazorComponents()
+            builder.Services
+                .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddScoped<IDatabase, Database>();
-            builder.Services.AddScoped<ICarRepository, CarRepository>();
-            builder.Services.AddScoped<ICarMetadataRepository, CarMetadataRepository>();
-            builder.Services.AddScoped<IPhotosRepository, PhotosRepository>();
-            builder.Services.AddScoped<ICarExtrasRepository, CarExtrasRepository>();
-            builder.Services.AddScoped<ICarUoW, CarUoW>();
-            builder.Services.InstallHttpClient();
-            builder.Services.InstallSharedProject();
-            builder.Services.AddHostedService<DatabaseUpdate>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = "/Login";
+            });
+
+
+            builder.Services.InitializeSettings(builder.Configuration);
 
             var app = builder.Build();
 
@@ -57,6 +53,8 @@ public class Program
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAntiforgery();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();

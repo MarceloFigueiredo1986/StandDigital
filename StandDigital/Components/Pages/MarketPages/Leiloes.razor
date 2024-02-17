@@ -1,4 +1,6 @@
-﻿<div style="padding:5px">
+﻿@attribute [Authorize(Roles = "admin,stand")]
+
+<div style="padding:5px">
  <CascadingValue Name="InvokingEndpoint" Value="CaminhosComponentes.Leilao">
         <StandDigital.Components.Components.CarCarrosselComponent Combustivel="Combustivel.Gasolina">
         </StandDigital.Components.Components.CarCarrosselComponent>
