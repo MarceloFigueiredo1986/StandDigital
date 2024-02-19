@@ -8,7 +8,7 @@
     @if(Cars is null)
     {
         <section class="our-courses" id="courses">
-            <span style="font-size:25pt;font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;margin:5px 50px 50px 110px;color:white">Viaturas @Combustivel</span>
+            <span style="font-size:25pt;font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;margin:5px 50px 50px 110px;color:white"></span>
             <div class="container">
                 <div class="row">
                     <span style="color:white;font-size:22pt">A carregar...</span>
@@ -26,16 +26,19 @@
                     <CarCard Carro="car" />
                 }
             </div>
+        }else
+        {
+            <p style="color:white;font-size:18pt;margin:15px">Sem viaturas</p>
         }
     }
 }
 
 @code {
     [Parameter]
-    public Combustivel Combustivel { get; set; }
+    public EnumTiposNegocios TipoNegocio { get; set; }
 
     private IEnumerable<CarCardModel>? Cars;
 
     protected override async Task OnInitializedAsync()
-        => Cars = await carRepository.GetTop5CarsByFuelAsync(Combustivel);
+        => Cars = await carRepository.GetOpenDealsAsync(TipoNegocio);
 }

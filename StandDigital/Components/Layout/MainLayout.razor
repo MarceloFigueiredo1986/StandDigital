@@ -6,13 +6,14 @@
 
 @inherits LayoutComponentBase
 @inject IJSRuntime js
-@inject SessionSettings _session;
+@inject SessionSettings _session
 @attribute [StreamRendering]
-@inject AuthenticationStateProvider _authenticator;
+@inject AuthenticationStateProvider _authenticator
 
 <PageTitle>Paraíso automóvel</PageTitle>
 
 <BlazoredToasts />
+
 <div class="page" style="background-color:black;overflow-x:hidden">
         <header class="header-area header-sticky">
             <div class="container">
@@ -177,18 +178,18 @@
             {
                 WindowWidth = await js.InvokeAsync<int>("GetWidth");
                 await InvokeAsync(StateHasChanged);
-            }
 
-            var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
-            if (session_already_started == null) return;
-            if (session_already_started.ExpirationDate < DateTime.UtcNow)
-            {
-                ((Authentication)_authenticator).SignOut();
-                await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
-                return;
-            }
+                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+                if (session_already_started == null) return;
+                if (session_already_started.ExpirationDate < DateTime.UtcNow)
+                {
+                    ((Authentication)_authenticator).SignOut();
+                    await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
+                    return;
+                }
 
-            ((Authentication)_authenticator).AuthenticateUser(session_already_started);
+                ((Authentication)_authenticator).AuthenticateUser(session_already_started);
+            }
         }
         catch (Exception ex)
         {

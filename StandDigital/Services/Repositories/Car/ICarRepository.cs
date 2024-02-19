@@ -7,6 +7,6 @@ namespace StandDigital.Services.Repositories.Car;
 
 public interface ICarRepository : IBaseRepository<CarEntity>
 {
-    Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(Combustivel fuel);
+    Task<IEnumerable<CarCardModel>> GetOpenDealsAsync(EnumTiposNegocios tipoNegocio);
     Task<CarWithExtrasAndImagesDto?> GetCompleteCarAsync(int carroId);
 }

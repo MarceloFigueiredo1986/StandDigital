@@ -15,6 +15,7 @@ public class BaseCar
     public ushort Nacional { get; set; }
     public ushort PrimeiroDono { get; set; }
     public string DataInicioAnuncio { get; set; }
+    public string DataFimAnuncio { get; set; }
     public int PrecisaPneus { get;set; }
     public string Comentarios { get;set; }
     public string Matricula { get;set; }
@@ -24,9 +25,9 @@ public class BaseCar
     {
         get
         {
-            if (DataInicioAnuncio is null) return "";
+            if (DataFimAnuncio is null) return "";
 
-            var timeLeft = (DateTimeOffset.Parse(DataInicioAnuncio).AddDays(14) - DateTimeOffset.Now);
+            var timeLeft = DateTimeOffset.Parse(DataFimAnuncio) - DateTime.UtcNow;
 
             if (timeLeft.Days < 2) return $"{timeLeft.Hours}:{timeLeft.Minutes} horas";
 

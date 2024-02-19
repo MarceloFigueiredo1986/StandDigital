@@ -9,11 +9,18 @@ namespace StandDigital.Services.Repositories.Car;
 public class CarRepository(IDatabase database) : ICarRepository
 {
     private readonly IDatabase _dbcontext = database;
-    public async Task<IEnumerable<CarCardModel>> GetTop5CarsByFuelAsync(Combustivel fuel)
+    public async Task<IEnumerable<CarCardModel>> GetOpenDealsAsync(EnumTiposNegocios tipoNegocio)
          => await _dbcontext.GetAsync<CarCardModel>("""
-            Select * from Carros c inner join CarrosMetadata cm on c.CarroId = cm.CarroId where Combustivel = @combustivel and cm.Ativo = 'true'
-            """,
-            new Dictionary<string, object>() { { "combustivel", fuel.GetDescription() } });
+            Select * 
+            FROM Carros c 
+            INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId 
+            INNER JOIN TipoNegocios tn on c.TipoNegocioId = tn.TipoNegocioId
+            WHERE strftime('%Y-%m-%d %H:%M:%S', DataFimAnuncio) > datetime('now')
+            and Name = @tiponegocio;
+            """, new Dictionary<string, object>() { 
+             {
+                 "@tiponegocio", tipoNegocio.GetDescription() 
+             } });
 
     public async Task<IEnumerable<CarEntity>> GetAllAsync()
      => await _dbcontext.GetAsync<CarEntity>("""
@@ -78,6 +85,7 @@ public class CarRepository(IDatabase database) : ICarRepository
             ImageMin,
             Nacional,
             DataInicioAnuncio,
+            DataFimAnuncio,
             PrecisaPneus,
             Comentarios,
             Matricula,

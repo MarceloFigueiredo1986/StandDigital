@@ -10,13 +10,16 @@ namespace StandDigital.Services;
 public class LoginComponent : ComponentBase
 {
     [Inject]
-    private SessionSettings _session { get; init; }
+    protected ILogger<LoginComponent> _logger { get; init; }
+
+    [Inject]
+    protected SessionSettings _session { get; init; }
 
     [Inject]
     private IUserRepository _loginService { get; init; }
 
     [Inject]
-    public NavigationManager _navigate { get; init; }
+    protected NavigationManager _navigate { get; init; }
 
     [Inject]
     public AuthenticationStateProvider _authenticator { get; init; }

@@ -48,7 +48,7 @@
 @code {
     string passwordutilizador;
     string utilizador;
-    string Erro = null;
+    string? Erro;
     bool FinishedTask = false;
     bool isSaving = false;
 
@@ -79,6 +79,27 @@
                 FinishedTask = true;
                 StateHasChanged();
             }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            Erro = null;
+            if (firstRender)
+            {
+
+                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+                if (session_already_started == null) return;
+                if (session_already_started.ExpirationDate >= DateTimeOffset.UtcNow)
+                    _navigate.NavigateTo(_navigate.Uri.Replace("Login?ReturnUrl=%2F",""));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Login.OnAfterRenderAsync");
+            Erro = ex.Message;
         }
     }
 }

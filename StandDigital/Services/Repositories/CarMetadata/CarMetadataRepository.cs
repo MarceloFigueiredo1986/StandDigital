@@ -18,10 +18,9 @@ public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
             VALUES
             (
             @CarroId,
-            @DataMatricula,
             @DataVenda,
-            @Ativo,
-            @CliquesAnuncio
+            @DataInicioAnuncio,
+            @DataFimAnuncio
             )
             """, value, cancellationToken);
 

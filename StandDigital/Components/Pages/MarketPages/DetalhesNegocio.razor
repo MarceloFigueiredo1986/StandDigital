@@ -1,8 +1,12 @@
 ﻿@page "/detalhesnegocio/{tiponegocio}/{carroid:int}"
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Data.Sqlite
+@using StandDigital.Auth
 
 @inject ICarRepository carRepository
 @inject ILogger<DetalhesNegocio> _logger
+@inject AuthenticationStateProvider _authenticator
+@inject SessionSettings _session 
 
 @attribute [Authorize(Roles = "admin,stand")]
 
@@ -52,7 +56,10 @@
                         type="button" class="btn btn-primary" value="@extra" />
                     }
                 </div>
-                <input type="button" class="btn btn-success comprarbutton" value="Licitar" />
+                @if(_detalhesCarro.CarSellHistory.TotalBids == 0 || _detalhesCarro.CarSellHistory.Bidder != _sessionUser)
+                {
+                    <input type="button" class="btn btn-success comprarbutton" value="Licitar" />
+                }
             </div>
         </div>
     </Fragment>
@@ -88,7 +95,7 @@
     }
 </style>
 
-@code {
+    @code {
     [Parameter]
     public string TipoNegocio { get; set; }
 
@@ -96,6 +103,8 @@
     public int? CarroId { get; set; }
 
     CarWithExtrasAndImagesDto? _detalhesCarro;
+
+    string _sessionUser = string.Empty;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -105,6 +114,8 @@
             {
                 _detalhesCarro = await carRepository.GetCompleteCarAsync(CarroId.Value);
                 _detalhesCarro.Photos.Add(_detalhesCarro.Car.ImageMin);
+                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+                _sessionUser = session_already_started.Name;
             }
         }
         catch(SqliteException sqlex)
