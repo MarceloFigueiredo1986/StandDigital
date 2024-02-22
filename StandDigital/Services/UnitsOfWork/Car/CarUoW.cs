@@ -24,6 +24,7 @@ public class CarUoW(
     public async Task SaveNewCarAsync(
         CarEntity car,
         Dictionary<string, byte[]> photos,
+        string primaryPhoto,
         HashSet<int> extras,
         CarMetadataEntity carMetadataEntity,
         CancellationToken cancellationToken)
@@ -45,12 +46,20 @@ public class CarUoW(
 
             foreach (var pht in photos)
             {
-                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Key, pht.Value);
+                var isPrimaryPhoto = pht.Key == primaryPhoto;
+                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Key, pht.Value, isPrimaryPhoto);
 
-                var photosCreationResul = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
+                var photoCreationResult = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
 
-                if (photosCreationResul.IsError)
-                    throw new Exception($"Car photos creation proccess:{photosCreationResul.FirstError.Description}");
+                if (photoCreationResult.IsError)
+                    throw new Exception($"Car photos creation proccess:{photoCreationResult.FirstError.Description}");
+            
+                if(isPrimaryPhoto)
+                {
+                    var updated = await _carRepository.SetPrimaryPhotoAsync(car.CarroId, photoCreationResult.Value, cancellationToken);
+                    if (updated == 0)
+                        throw new Exception($"Set primary photo failed");
+                }
             }
 
             foreach (var extra in extras)

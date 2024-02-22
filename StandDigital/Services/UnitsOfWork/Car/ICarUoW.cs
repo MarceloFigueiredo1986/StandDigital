@@ -7,6 +7,7 @@ public interface ICarUoW
     Task SaveNewCarAsync(
         CarEntity car,
         Dictionary<string, byte[]> photos,
+        string primaryPhoto,
         HashSet<int> extras,
         CarMetadataEntity carMetadataEntity,
         CancellationToken cancellationToken);

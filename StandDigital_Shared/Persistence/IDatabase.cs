@@ -32,5 +32,8 @@ public interface IDatabase : IDisposable
     /// <returns></returns>
     Task<IEnumerable<T>> GetAsync<T,T1>(string query, string splitOn, Func<T,T1,T> mapFunction,
         Dictionary<string, object>? dynamicParameters = null) where T : class where T1: class;
+
     Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject, CancellationToken cancellationToken);
+
+    Task<int> UpdateAsync<TIn>(string query, TIn obj, CancellationToken cancellationToken);
 }

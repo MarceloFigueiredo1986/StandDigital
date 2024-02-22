@@ -9,4 +9,5 @@ public interface ICarRepository : IBaseRepository<CarEntity>
 {
     Task<IEnumerable<CarCardModel>> GetOpenDealsAsync(EnumTiposNegocios tipoNegocio);
     Task<CarWithExtrasAndImagesDto?> GetCompleteCarAsync(int carroId);
+    Task<int> SetPrimaryPhotoAsync(int carroId, int fotoId, CancellationToken cancellationToken);
 }

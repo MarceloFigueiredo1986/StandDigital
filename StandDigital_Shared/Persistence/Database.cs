@@ -60,4 +60,10 @@ public sealed class Database(IConfiguration configuration) : IDatabase
              $"{string.Join(' ',queries)}",
              dynamicParameters,
              transaction);
+
+    public Task<int> UpdateAsync<TIn>(string query, TIn obj, CancellationToken cancellationToken)
+        => _dbConnection.ExecuteAsync(new CommandDefinition(
+            commandText: query,
+            parameters: obj,
+            cancellationToken: cancellationToken));
 }

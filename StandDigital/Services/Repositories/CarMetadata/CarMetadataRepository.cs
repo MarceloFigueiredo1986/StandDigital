@@ -21,7 +21,8 @@ public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
             @DataVenda,
             @DataInicioAnuncio,
             @DataFimAnuncio
-            )
+            );
+            SELECT CAST(SCOPE_IDENTITY() as int);
             """, value, cancellationToken);
 
             if (createdCarMetadataId == 0)

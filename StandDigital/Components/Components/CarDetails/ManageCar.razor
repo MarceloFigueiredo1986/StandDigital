@@ -1,14 +1,12 @@
 ﻿@page "/managecar/{carid:int}"
 @page "/managecar"
 
-
 @inherits CarDetailsService
-
 
 @attribute [StreamRendering]
 
 <EditForm Model="Car" OnSubmit="ManageCommandToApply">
-        <div class="edit-form-container">
+    <div class="edit-form-container" style="background-color:white;width:90%;margin-top:150px">
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="mb-12">
@@ -121,7 +119,7 @@
                    <div class="mb-3" style="height:70px" disabled>
                         <div class="form-outline" style="width:180px;float:left">
                             <label for="firstName" class="form-label">Preço</label>
-                            <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.Preco" />
+                            <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Car.PrecoBase" />
                         </div>
                         <div class="slidecontainer" style="width:180px;float:left">
                             <label for="firstName" class="form-label" >Ano registo</label>
@@ -129,14 +127,6 @@
                         </div>
                     </div>
                     
-                    <!--Carro novo e Anúncio ativo-->
-                    <div class="mb-3" disabled>
-                        <div class="form-check form-check-inline">
-                            <label for="firstName" class="form-label">Carro novo</label>
-                            <input class="form-check-input" type="checkbox" name="inlineRadioOptions" @bind-value="Car.Condicao" />
-                        </div>
-                    </div>
-
                     <!--Data matrícula e Data Venda-->
                     <div class="mb-3" disabled>
                         <label style="width:180px"  for="firstName" class="form-label">Data Venda</label>
@@ -176,7 +166,7 @@
                 </div>
             </div>
         </div>
-    </EditForm>
+</EditForm>
 
 <style type="text/css">
 

@@ -24,7 +24,9 @@ public class CarRepository(IDatabase database) : ICarRepository
 
     public async Task<IEnumerable<CarEntity>> GetAllAsync()
      => await _dbcontext.GetAsync<CarEntity>("""
-            Select * from Carros
+            SELECT c.*,cf.Data as Photo
+            FROM Carros c
+            LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
             """);
 
     public async Task<ErrorOr<int>> CreateAsync(CarEntity value, CancellationToken cancellationToken)
@@ -38,19 +40,28 @@ public class CarRepository(IDatabase database) : ICarRepository
             @Marca,
             @Modelo,
             @Combustivel,
-            @ImageMin,
+            @FotoId,
             @Kms,
-            @Cvs,
+            @Cv,
             @Bateria,
             @TipoCarregamento,
             @Cilindrada,
             @Portas,
             @Cor,
-            @Preco,
             @MesRegisto,
             @Lotacao,
             @Caixa,
-            @Condicao)
+            @Ano,
+            @Matricula,
+            @Comentarios,
+            @PrecisaPneus,
+            @PrimeiroDono,
+            @Danos,
+            @ProblemasMotor,
+            @Nacional,
+            @PrecoBase,
+            @TipoNegocioId);
+            SELECT CAST(SCOPE_IDENTITY() as int);
             """,
             value, cancellationToken);
 
@@ -131,4 +142,16 @@ public class CarRepository(IDatabase database) : ICarRepository
 
         return new(Car: carDetails, Extras : carExtras.ToHashSet(), Photos : carPhotosBase64, CarSellHistory : carSellHistory);
     }
+
+    public async Task<int> SetPrimaryPhotoAsync(int carroId, int fotoId, CancellationToken cancellationToken)
+        => await _dbcontext.UpdateAsync("""
+            UPDATE Carros
+            SET FotoId = @fotoId
+            WHERE carroId = @carroId
+            """,
+            new Dictionary<string, object> {
+                { "@carroId", carroId },
+                { "@fotoId", fotoId}
+            },
+            cancellationToken);
 }

@@ -11,7 +11,7 @@ namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
 public class CarDetailsService : ComponentBase
 {
     protected Dictionary<string, string>? TemporaryPhotos { get; set; } = new();
-    protected CarEntity Car { get; set; } = new();
+    protected CarEntity Car { get; set; } = new() { Marca = default, Combustivel = default, Modelo = default};
     protected CarMetadataEntity CarMetadata { get; set; } = new();
 
     /// <summary>
@@ -21,22 +21,22 @@ public class CarDetailsService : ComponentBase
 
     #region DI
     [Inject]
-    public NavigationManager navMan { get; set; }
+    protected NavigationManager navMan { get; set; }
 
     [Inject]
-    public ICarUoW _carRepo { get; set; }
+    protected ICarUoW _carRepo { get; set; }
 
     [Inject]
-    public IWebHostEnvironment _env { get; set; }
+    protected IWebHostEnvironment _env { get; set; }
 
     [Inject]
-    public IHttpService _httpClient { get; set; }
+    protected IHttpService _httpClient { get; set; }
 
     [Inject]
-    public IConfiguration _configuration { get; set; }
+    protected IConfiguration _configuration { get; set; }
 
     [Inject]
-    public ILogging _logger { get; set; }
+    protected ILogging _logger { get; set; }
 
     #endregion
 
@@ -76,7 +76,7 @@ public class CarDetailsService : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{ex}");
+            _logger.Log(ex);
             error = "Não foi possível guardar a alteração dos dados.";
         }
         finally
@@ -85,7 +85,7 @@ public class CarDetailsService : ComponentBase
         }
     }
     protected async Task CreateCar()
-        => await _carRepo.SaveNewCarAsync(Car, await GetPhotos(), default!, CarMetadata, cts.Token);
+        => await _carRepo.SaveNewCarAsync(Car, await GetPhotos(),"1.jpg", default!, CarMetadata, cts.Token);
 
     async Task<Dictionary<string, byte[]>> GetPhotos()
     {
