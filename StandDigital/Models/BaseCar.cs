@@ -1,4 +1,5 @@
-﻿namespace StandDigital.Models;
+﻿
+namespace StandDigital.Models;
 
 public class BaseCar
 {
@@ -11,12 +12,11 @@ public class BaseCar
     public int Ano { get; set; }
     public string Danos { get; set; }
     public string ProblemasMotor { get; set; }
-    public string ImageMin { get; set; }
+    public byte[] MainImage { get; set; }
     public ushort Nacional { get; set; }
     public ushort PrimeiroDono { get; set; }
     public string DataInicioAnuncio { get; set; }
     public string DataFimAnuncio { get; set; }
-    public int PrecisaPneus { get;set; }
     public string Comentarios { get;set; }
     public string Matricula { get;set; }
     public int Lotacao { get;set; }

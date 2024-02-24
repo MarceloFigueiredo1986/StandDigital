@@ -16,9 +16,12 @@ public sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasReposit
                      """
             INSERT INTO 
             CarrosExtras
+            (CarroId,
+            Extra)
             VALUES
             (
             @CarroId,
+            @Extra
             )
             """, value, cancellationToken);
 

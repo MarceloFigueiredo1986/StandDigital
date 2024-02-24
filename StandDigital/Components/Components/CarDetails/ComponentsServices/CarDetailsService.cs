@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using StandDigital.Entities;
+using StandDigital.Models;
 using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital_HttpClient.HttpService;
 using StandDigital_Shared.Entities;
@@ -10,14 +12,14 @@ namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
 
 public class CarDetailsService : ComponentBase
 {
-    protected Dictionary<string, string>? TemporaryPhotos { get; set; } = new();
+    protected List<ImageUpload> TemporaryPhotos { get; set; } = new();
     protected CarEntity Car { get; set; } = new() { Marca = default, Combustivel = default, Modelo = default};
     protected CarMetadataEntity CarMetadata { get; set; } = new();
 
     /// <summary>
     /// Key- extra name
     /// </summary>
-    public HashSet<string> Extras { get; set; } = new();
+    public HashSet<string> Extras { get; set; } = [];
 
     #region DI
     [Inject]
@@ -38,6 +40,9 @@ public class CarDetailsService : ComponentBase
     [Inject]
     protected ILogging _logger { get; set; }
 
+    [Inject]
+    protected IToastService _toaster { get; set; }
+
     #endregion
 
     protected string? error;
@@ -55,6 +60,8 @@ public class CarDetailsService : ComponentBase
     [Parameter]
     public string? Componente { get; set; }
 
+    string? _primaryPhoto;
+
     protected async Task ManageCommandToApply(EditContext editContext)
     {
         try
@@ -69,10 +76,15 @@ public class CarDetailsService : ComponentBase
 
             Car = null!;
             CarMetadata = null!;
-            TemporaryPhotos = null;
+            TemporaryPhotos = [];
             Extras.Clear();
 
+            foreach (var photo in TemporaryPhotos)
+                File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles", photo.AbsoluteName));
+
             navMan.NavigateTo(Path.Combine(navMan.BaseUri, "admin"), true);
+
+            _toaster.ShowSuccess("Anúncio criado!");
         }
         catch (Exception ex)
         {
@@ -85,23 +97,25 @@ public class CarDetailsService : ComponentBase
         }
     }
     protected async Task CreateCar()
-        => await _carRepo.SaveNewCarAsync(Car, await GetPhotos(),"1.jpg", default!, CarMetadata, cts.Token);
+        => await _carRepo.SaveNewCarAsync(Car, await GetPhotos(), _primaryPhoto, Extras, CarMetadata, cts.Token);
 
     async Task<Dictionary<string, byte[]>> GetPhotos()
     {
         var resultDic = new Dictionary<string, byte[]>();
         foreach (var photo in TemporaryPhotos)
         {
-            using var ms = new MemoryStream();
-            var path = Path.Combine(_env.ContentRootPath, "temporaryfiles", photo.Key);
-            await using FileStream fs = new(path, FileMode.Open);
-            await fs.CopyToAsync(ms);
-            ms.Position = 0;
-            resultDic.Add(photo.Value, ms.ToArray());
-            File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles",
-                    photo.Key));
-        }
+            using (var ms = new MemoryStream())
+            {
+                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles", photo.AbsoluteName);
+                await using FileStream fs = new(path, FileMode.Open);
+                await fs.CopyToAsync(ms);
+                ms.Position = 0;
+                resultDic.Add(photo.ImageName, ms.ToArray());
+            }
 
+            if (photo.MainImage)
+                _primaryPhoto = photo.ImageName;
+        }
         return resultDic;
     }
 

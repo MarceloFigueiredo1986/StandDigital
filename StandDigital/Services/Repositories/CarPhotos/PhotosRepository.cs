@@ -12,21 +12,22 @@ public class PhotosRepository(IDatabase database) : IPhotosRepository
     {
         try
         {
-            var createdCarPhotoId = await _dbcontext.InsertAsyncAndGetIdAsync<CarPhotoEntity, int>(
+            var CarPhotoId = await _dbcontext.InsertAsyncAndGetIdAsync<CarPhotoEntity, int>(
                      """
-            INSERT INTO 
-            CarrosFotos
-            VALUES
-            (
-            @CarroId,
-            @Name,
-            @Data)
-            """, value, cancellationToken);
+                    INSERT INTO 
+                    CarrosFotos
+                    (CarroId,
+                    Data)
+                    VALUES
+                    (
+                    @CarroId,
+                    @Data);
+                    """, value, cancellationToken);
 
-            if (createdCarPhotoId == 0)
+            if (CarPhotoId == 0)
                 throw new Exception($"{nameof(CarPhotoEntity)} not created");
 
-            return createdCarPhotoId;
+            return CarPhotoId;
         }
         catch (Exception ex)
         {

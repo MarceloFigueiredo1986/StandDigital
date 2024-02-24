@@ -15,6 +15,10 @@ public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
                      """
             INSERT INTO 
             CarrosMetadata
+            (CarroId,
+            DataVenda,
+            DataInicioAnuncio,
+            DataFimAnuncio)
             VALUES
             (
             @CarroId,
@@ -22,7 +26,6 @@ public class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
             @DataInicioAnuncio,
             @DataFimAnuncio
             );
-            SELECT CAST(SCOPE_IDENTITY() as int);
             """, value, cancellationToken);
 
             if (createdCarMetadataId == 0)

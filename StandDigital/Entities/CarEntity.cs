@@ -27,12 +27,4 @@ public class CarEntity
     public ushort Nacional { get; set; }
     public decimal PrecoBase { get; set; }
     public int TipoNegocioId { get; set; }
-    public byte[] Photo { get; set; }
-
-    public Image ImageFromByteArray()
-    {
-        using var ms = new MemoryStream(Photo);
-        ms.Position = 0;
-        return Image.FromStream(ms);
-    }
 }

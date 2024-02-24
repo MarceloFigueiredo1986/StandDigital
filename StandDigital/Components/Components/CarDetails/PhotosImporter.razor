@@ -2,25 +2,48 @@
 
 @inject IWebHostEnvironment _env;
 @implements IDisposable
+@inject ILogger<PhotosImporter> _logger;
 
 <div class="row">
     <div class="mb-3">
-        <label for="firstName" class="form-label">Fotos</label>
-        <InputFile id="inputDrop" OnChange="OnChangeCarPhotoDrop" multiple />
-
+        <label for="firstName" class="form-label" style="float:left">Fotos</label>
+        <InputFile id="inputDrop" OnChange="HandleImageSelected" multiple style="float:left" />
+        
         @if (isLoading)
         {
             <Loader />
         }
         else
         {
-            @foreach (var foto in Files)
-            {
-                <div style="height:15px;font-size:10pt">
-                    <span style="font-size:10pt">@foto.Value</span><span style="cursor:pointer;color:red;font-weight:bolder" @onclick="() => RemoveImage(foto.Key)">X</span>
-                </div>
-            }
-            <span style="color:red">@errorLoadingImages</span>
+            <div class="row">
+                <p style="color:forestgreen">Escolha a imagem a usar como principal</p>
+                @foreach (var foto in Files)
+                {
+                    <div style="height:15px;font-size:10pt;float:left;margin:5px;margin-bottom:20px;max-width:300px">
+                        <span>@foto.ImageName</span>
+                        @if(foto.ImageBa is null)
+                        {
+                            <span style="cursor:pointer;color:gray;font-weight:bolder">A carregar</span>
+                        }
+                        else
+                        {
+                            <span style="cursor:pointer;color:red;font-weight:bolder;margin-right:15px" @onclick="() => RemoveImage(foto)">X</span>
+
+                            @if (!foto.MainImage)
+                            {
+                                <span style="cursor:pointer;color:forestgreen;font-weight:bolder"
+                                      @onclick="() => ManageMainImage(foto)">definir</span>
+                            }
+                            else
+                            {
+                                <span style="cursor:pointer;color:darkolivegreen;font-weight:bolder">principal</span>
+                            }
+                        }
+                      
+                        </div>
+                }
+                <span style="color:red">@GetMessage()</span>
+            </div>
         }
     </div>
 </div>
@@ -28,60 +51,128 @@
 
 @code {
 
-    [Parameter]
-    public Dictionary<string, string> Files { get; set; }
+        [Parameter]
+        public List<ImageUpload> Files { get; set; }
 
-    [Parameter]
-    public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
+        [Parameter]
+        public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
 
     private long maxFileSize = 1024 * 7000;
-    private int maxAllowedFiles = 30;
+    private int maxAllowedFiles = 10;
     private bool isLoading;
     private decimal progressPercent;
     private string? errorLoadingImages;
+    private string folderPath => Path.Combine(_env.ContentRootPath, "temporaryfiles");
+    private string[] imageExtensions = [".jpg",".png",".jpeg"];
 
-    private async Task OnChangeCarPhotoDrop(InputFileChangeEventArgs e)
-    {
-        isLoading = true;
-        Files.Clear();
-        errorLoadingImages = null;
-
-        if(e.FileCount > maxAllowedFiles)
-        {
-            errorLoadingImages = $"Maximum number of images is {e.FileCount}";
-            return;
-        }
-
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
-        {
-            try
-            {
-                var filename = $"{file.Name}__{Guid.NewGuid()}";
-                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles",filename);
-                await using FileStream fs = new(path, FileMode.Create);
-                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
-                Files.Add(filename,file.Name);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("File: {Filename} Error: {Error}", file.Name, ex.Message);
-            }
-        }
-
-        isLoading = false;
-    }
-    protected void RemoveImage(string imageName)
+    private string? GetMessage()
     {
         try
         {
-            File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles",
-                    imageName));
-
-            Files.Remove(imageName);
+            return errorLoadingImages != null ?
+            string.Join(" ", errorLoadingImages.Split(';').ToList().Select(a => $"{a} {System.Environment.NewLine}")) :
+        null;
         }
         catch (Exception ex)
         {
-            Console.WriteLine("File: {Filename} Error: {Error}", imageName, ex.Message);
+            _logger.LogError(ex, "Erro ao carregar imagens;");
+        }
+
+        return null;
+    }
+
+    private void ManageMainImage(ImageUpload image)
+    {
+        Files.ForEach(a => a.MainImage = false);
+        image.MainImage = true;
+    }
+    private async Task HandleImageSelected(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            isLoading = true;
+            Files.Clear();
+            errorLoadingImages = null;
+
+            if(e.FileCount > maxAllowedFiles)
+            {
+                errorLoadingImages = $"Maximum number of images is {e.FileCount};";
+                return;
+            }
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var imagens = e.GetMultipleFiles(maxAllowedFiles);
+
+            foreach (var file in imagens)
+            {
+                try
+                {
+                    if (!imageExtensions.Contains(file.Name.Substring(file.Name.LastIndexOf('.'))))
+                    {
+                        errorLoadingImages += $"file {file.Name} extensions is invalid;";
+                        continue;
+                    }
+
+                    if(file.Size > (2048*2048))
+                    {
+                        errorLoadingImages += $"file {file.Name} must have less than 2MB size;";
+                        continue;
+                    }
+
+                    Files.Add(new() { AbsoluteName = file.Name, ImageName = file.Name });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex,"File: {Filename} failed upload;", file.Name);
+                    errorLoadingImages += ex.Message.Substring(0, 100);
+                }
+            }
+
+            LoadImagesData(imagens).ConfigureAwait(false);
+
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao carregar imagens;");
+        }
+    }
+
+    private async Task LoadImagesData(IReadOnlyList<IBrowserFile> files)
+    {
+        await Parallel.ForEachAsync(files, async (IBrowserFile file, CancellationToken cancellationToken) =>
+        {
+            try
+            {
+                var memoryFile = Files.FirstOrDefault(a => a.ImageName == file.Name);
+                if (memoryFile is null) return;
+
+                var path = Path.Combine(folderPath, file.Name);
+                using var ms = new MemoryStream();
+                await file.OpenReadStream(maxFileSize, cancellationToken).CopyToAsync(ms, cancellationToken);
+                ms.Position = 0;
+                await InvokeAsync(StateHasChanged);
+                memoryFile.ImageBa = ms.ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LoadImagesData image {name};",file.Name);
+            }
+        });
+    }
+
+    protected void RemoveImage(ImageUpload image)
+    {
+        try
+        {
+            File.Delete(Path.Combine(folderPath,image.AbsoluteName));
+            Files.Remove(image);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro removing image with absolute name {Image}", image.AbsoluteName);
         }
     }
     public void Dispose()
@@ -90,8 +181,7 @@
              {
                  Files.ToList().ForEach(a =>
                  {
-                     File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles",
-                            a.Key));
+                     File.Delete(Path.Combine(folderPath, a.AbsoluteName));
                  });
              });
         tsk.Start();

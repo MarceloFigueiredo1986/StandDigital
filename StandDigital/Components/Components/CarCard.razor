@@ -1,9 +1,9 @@
-﻿@using StandDigital.Models
+﻿
 @attribute [StreamRendering]
 @inject NavigationManager navMan
 
 <div class="CardMain" style="width:@_viewWidthStr">
-    <img src="@Carro.ImageMin" height="250">
+    <img src="@Carro.MainImage.ImageStringBase64()" height="250">
     <div class="down-content">
         <h4>@Carro.Marca @Carro.Modelo</h4>
         <h6>
@@ -12,10 +12,10 @@
             <span style="float:right">@Carro.MesRegisto.ToString().PadLeft(2, '0') / @Carro.Ano</span>
         </h6>
         <p>
-            <span>@(string.IsNullOrEmpty(Carro.Danos) ? "Tem marcas de uso na carroceria" : "Sem danos externos")</span>
+            <span>@(!string.IsNullOrEmpty(Carro.Danos) ? "Tem marcas de uso na carroceria" : "Sem danos externos")</span>
         </p>
         <p>
-            <span>@(string.IsNullOrEmpty(Carro.ProblemasMotor) ? "Precisa de validação interior e/ou motor" : "Sem danos de interior e/ou motor")</span>
+            <span>@(!string.IsNullOrEmpty(Carro.ProblemasMotor) ? "Precisa de validação interior e/ou motor" : "Sem danos de interior e/ou motor")</span>
         </p>
         <div class="row">
             <div class="col-3">

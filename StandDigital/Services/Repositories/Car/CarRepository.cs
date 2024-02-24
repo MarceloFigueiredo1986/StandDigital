@@ -3,6 +3,7 @@ using ErrorOr;
 using StandDigital_Shared.Persistence;
 using StandDigital.Entities;
 using StandDigital.Enums;
+using StandDigital.Extensions;
 
 namespace StandDigital.Services.Repositories.Car;
 
@@ -11,17 +12,20 @@ public class CarRepository(IDatabase database) : ICarRepository
     private readonly IDatabase _dbcontext = database;
     public async Task<IEnumerable<CarCardModel>> GetOpenDealsAsync(EnumTiposNegocios tipoNegocio)
          => await _dbcontext.GetAsync<CarCardModel>("""
-            Select * 
+            SELECT 
+            c.*,
+            cf.Data as MainImage,
+            cm.DataFimAnuncio
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId 
             INNER JOIN TipoNegocios tn on c.TipoNegocioId = tn.TipoNegocioId
+            INNER JOIN CarrosFotos cf on c.FotoId = cf.FotoId
             WHERE strftime('%Y-%m-%d %H:%M:%S', DataFimAnuncio) > datetime('now')
             and Name = @tiponegocio;
             """, new Dictionary<string, object>() { 
              {
                  "@tiponegocio", tipoNegocio.GetDescription() 
              } });
-
     public async Task<IEnumerable<CarEntity>> GetAllAsync()
      => await _dbcontext.GetAsync<CarEntity>("""
             SELECT c.*,cf.Data as Photo
@@ -33,8 +37,30 @@ public class CarRepository(IDatabase database) : ICarRepository
     {
         try
         {
-            var createdCarId = await _dbcontext.InsertAsyncAndGetIdAsync<CarEntity, int>("""
+            var createdCarId = await _dbcontext.InsertAsyncAndGetIdAsync<CarEntity,int>("""
             INSERT INTO Carros
+            (Marca,
+            Modelo,
+            Combustivel,
+            FotoId,
+            Kms,
+            Cv,
+            Bateria,
+            TipoCarregamento,
+            Cilindrada,
+            Portas,
+            MesRegisto,
+            Lotacao,
+            Caixa,
+            Ano,
+            Matricula,
+            Comentarios,
+            PrimeiroDono,
+            Danos,
+            ProblemasMotor,
+            Nacional,
+            PrecoBase,
+            TipoNegocioId)
             VALUES 
             (
             @Marca,
@@ -47,23 +73,19 @@ public class CarRepository(IDatabase database) : ICarRepository
             @TipoCarregamento,
             @Cilindrada,
             @Portas,
-            @Cor,
             @MesRegisto,
             @Lotacao,
             @Caixa,
             @Ano,
             @Matricula,
             @Comentarios,
-            @PrecisaPneus,
             @PrimeiroDono,
             @Danos,
             @ProblemasMotor,
             @Nacional,
             @PrecoBase,
             @TipoNegocioId);
-            SELECT CAST(SCOPE_IDENTITY() as int);
-            """,
-            value, cancellationToken);
+            """, value, cancellationToken);
 
             if (createdCarId == 0)
                 return Error.Failure(description: "Car not created");
@@ -93,11 +115,9 @@ public class CarRepository(IDatabase database) : ICarRepository
             Ano,
             Danos,
             ProblemasMotor,
-            ImageMin,
             Nacional,
             DataInicioAnuncio,
             DataFimAnuncio,
-            PrecisaPneus,
             Comentarios,
             Matricula,
             Lotacao 
@@ -136,9 +156,9 @@ public class CarRepository(IDatabase database) : ICarRepository
         var carDetails = multipleResults.ReadFirst<CarCompleteModel>();
         var carExtras = await multipleResults.ReadAsync<string>();
         var carPhotosBA = await multipleResults.ReadAsync<byte[]>();
-        var carSellHistory = await multipleResults.ReadSingleAsync<CarSellingPurposes>();
+        var carSellHistory = await multipleResults.ReadSingleOrDefaultAsync<CarSellingPurposes>();
 
-        var carPhotosBase64 = carPhotosBA.Select(a => Convert.ToBase64String(a)).ToHashSet();
+        var carPhotosBase64 = carPhotosBA?.Select(a => a.ImageStringBase64()!).ToArray();
 
         return new(Car: carDetails, Extras : carExtras.ToHashSet(), Photos : carPhotosBase64, CarSellHistory : carSellHistory);
     }
@@ -147,7 +167,7 @@ public class CarRepository(IDatabase database) : ICarRepository
         => await _dbcontext.UpdateAsync("""
             UPDATE Carros
             SET FotoId = @fotoId
-            WHERE carroId = @carroId
+            WHERE CarroId = @carroId
             """,
             new Dictionary<string, object> {
                 { "@carroId", carroId },

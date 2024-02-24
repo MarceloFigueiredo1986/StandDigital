@@ -25,13 +25,13 @@ public class CarUoW(
         CarEntity car,
         Dictionary<string, byte[]> photos,
         string primaryPhoto,
-        HashSet<int> extras,
+        HashSet<string> extras,
         CarMetadataEntity carMetadataEntity,
         CancellationToken cancellationToken)
     {
         try
         {
-            _database.OpenTransaction();
+            await _database.OpenTransactionAsync();
 
             var carCreationResult = await _carRepository.CreateAsync(car, cancellationToken);
 
@@ -47,7 +47,7 @@ public class CarUoW(
             foreach (var pht in photos)
             {
                 var isPrimaryPhoto = pht.Key == primaryPhoto;
-                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Key, pht.Value, isPrimaryPhoto);
+                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Value, isPrimaryPhoto);
 
                 var photoCreationResult = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
 
@@ -56,7 +56,7 @@ public class CarUoW(
             
                 if(isPrimaryPhoto)
                 {
-                    var updated = await _carRepository.SetPrimaryPhotoAsync(car.CarroId, photoCreationResult.Value, cancellationToken);
+                    var updated = await _carRepository.SetPrimaryPhotoAsync(carCreationResult.Value, photoCreationResult.Value, cancellationToken);
                     if (updated == 0)
                         throw new Exception($"Set primary photo failed");
                 }
@@ -64,7 +64,7 @@ public class CarUoW(
 
             foreach (var extra in extras)
             {
-                var newExtra = new CarExtraEntity(extra, carCreationResult.Value);
+                var newExtra = new CarExtraEntity(0, carCreationResult.Value, extra);
 
                 var photosCreationResul = await _carExtrasRepository.CreateAsync(newExtra, cancellationToken);
 

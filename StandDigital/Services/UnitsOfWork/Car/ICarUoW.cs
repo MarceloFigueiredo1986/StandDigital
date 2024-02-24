@@ -8,7 +8,7 @@ public interface ICarUoW
         CarEntity car,
         Dictionary<string, byte[]> photos,
         string primaryPhoto,
-        HashSet<int> extras,
+        HashSet<string> extras,
         CarMetadataEntity carMetadataEntity,
         CancellationToken cancellationToken);
 

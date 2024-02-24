@@ -14,15 +14,18 @@
     <Fragment>
         <div class="maindiv">
             <div class="row details">
-                <div style="width:370px">
-                    <StandDigital.Components.Components.ImageCarousel />
-                    <h5 style="color:white"><b>Termina em:</b> @_detalhesCarro.Car.DiasParaFimAnuncio</h5>
-                    <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.CarSellHistory.BiggestBid €</span></b></h4>
-                    <h4><b>Propostas feitas: <span style="color:darkorange">@_detalhesCarro.CarSellHistory.TotalBids</span></b></h4>
-                    <h4><b>Licitador na frente: <span style="color:darkorange">@_detalhesCarro.CarSellHistory.Bidder</span></b></h4>
+                <div style="width:@_WidthStr">
+                    <div style="height:430px">
+                        <StandDigital.Components.Components.ImageCarousel Photos="_detalhesCarro.Photos" />
+                    </div>
+                    <h5 style="color:white;"><b>Termina em:</b> @_detalhesCarro.Car.DiasParaFimAnuncio</h5>
+                    <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.BiggestBid €</span></b></h4>
+                    <h4><b>Propostas feitas: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.TotalBids</span></b></h4>
+                    <h4><b>Licitador na frente: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.Bidder</span></b></h4>
                     <br />
                 </div>
                 <div style="width:350px;">
+                    <h1 style="color:white">Detalhes</h1>
                     <p><b>Marca / Modelo:</b> @_detalhesCarro.Car.Marca / @_detalhesCarro.Car.Modelo</p>
                     <p><b>Mês/Ano:</b> @_detalhesCarro.Car.MesRegisto.ToString().PadLeft(2,'0')/@_detalhesCarro.Car.Ano</p>
                     <p><b>Combustível:</b> @_detalhesCarro.Car.Combustivel</p>
@@ -38,27 +41,36 @@
                     }
                     <p><b>Registos:</b> @(_detalhesCarro.Car.PrimeiroDono == 0 ? "2 ou + donos" : "1")</p>
                     <p><b>Origem:</b> @(_detalhesCarro.Car.Nacional == 0 ? "Importado" : "Nacional")</p>
-                    <p><b>Problemas motor:</b> 
-                        @(string.IsNullOrEmpty(_detalhesCarro.Car.ProblemasMotor) ? "Sem danos" : _detalhesCarro.Car.ProblemasMotor)
-                    </p>
-                    <p><b>Danos carroceria:</b> 
-                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Danos) ? "Sem danos" : _detalhesCarro.Car.Danos)
-                    </p>
-                    <p>
-                        <b>Precisa Pneus:</b> @(_detalhesCarro.Car.PrecisaPneus == 1 ? "Sim" : "Não")
-                    </p>
                     <p>
                         <b>Lotação:</b> @_detalhesCarro.Car.Lotacao
                     </p>
-                    @foreach (var extra in _detalhesCarro.Extras)
-                    {
-                        <input style="margin:0.5px;font-size:8pt;height:20px;padding:2px" 
-                        type="button" class="btn btn-primary" value="@extra" />
-                    }
+                    <br />
+                    <h1 style="color:white">Extras</h1>
+                    <div style="margin-bottom:25px">
+                        @foreach (var extra in _detalhesCarro.Extras)
+                        {
+                            <input style="margin:0.5px;font-size:8pt;height:20px;padding:2px"
+                                   type="button" class="btn btn-primary" value="@extra" />
+                        }
+                    </div>
+                    <h1 style="color:white">Estado Viatura</h1>
+                    <p>
+                        <b>Problemas motor:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.ProblemasMotor) ? "Sem danos" : _detalhesCarro.Car.ProblemasMotor)
+                    </p>
+                    <p>
+                        <b>Danos carroceria:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Danos) ? "Sem danos" : _detalhesCarro.Car.Danos)
+                    </p>
+                    <p>
+                        <b>Comentários:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Comentarios) ? "Sem comentários" : _detalhesCarro.Car.Comentarios)
+                    </p>
+
                 </div>
-                @if(_detalhesCarro.CarSellHistory.TotalBids == 0 || _detalhesCarro.CarSellHistory.Bidder != _sessionUser)
+                @if(_detalhesCarro.CarSellHistory?.TotalBids == 0 || _detalhesCarro.CarSellHistory?.Bidder != _sessionUser)
                 {
-                    <input type="button" class="btn btn-success comprarbutton" value="Licitar" />
+                    <input type="button" class="btn btn-success comprarbutton" value="Licitar" style="margin-top:15px" />
                 }
             </div>
         </div>
@@ -83,16 +95,6 @@
     p{
         color:white;
     }
-
-    .imgconfig{
-        width:350px;
-        height:350px;
-    }
-
-    .carouselstyle{
-        height:350px;
-        width:350px;
-    }
 </style>
 
     @code {
@@ -104,6 +106,11 @@
 
     CarWithExtrasAndImagesDto? _detalhesCarro;
 
+    [CascadingParameter]
+    public int WindowWidth { get; set; }
+
+    string? _WidthStr;
+
     string _sessionUser = string.Empty;
 
     protected override async Task OnParametersSetAsync()
@@ -113,7 +120,6 @@
             if (CarroId != null)
             {
                 _detalhesCarro = await carRepository.GetCompleteCarAsync(CarroId.Value);
-                _detalhesCarro.Photos.Add(_detalhesCarro.Car.ImageMin);
                 var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
                 _sessionUser = session_already_started.Name;
             }
@@ -126,5 +132,21 @@
         {
             _logger.LogError(ex, "GetCompleteCarAsync");
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (WindowWidth == 0 || _WidthStr is not null) return;
+
+        _WidthStr = WindowWidth switch
+        {
+            0 => $"{400}px",
+            >= 560 => $"{530}px",
+            (> 350 and < 560) => $"{WindowWidth - 30}px",
+            < 350 => $"{(WindowWidth - 10)}px",
+            _ => $"{400}px",
+        };
+
+        await InvokeAsync(StateHasChanged);
     }
 }

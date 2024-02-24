@@ -7,10 +7,17 @@ namespace StandDigital_Shared.Persistence;
 
 public sealed class Database(IConfiguration configuration) : IDatabase
 {
-    private readonly IDbConnection _dbConnection = new SqliteConnection(configuration.GetValue<string>("DatabaseName"));
+    private readonly SqliteConnection _dbConnection = new SqliteConnection(configuration.GetValue<string>("DatabaseName"));
     private IDbTransaction? transaction;
 
-    public void OpenTransaction() => transaction = _dbConnection.BeginTransaction();
+    public async Task OpenTransactionAsync()
+    {
+        if(_dbConnection.State == ConnectionState.Closed)
+           await _dbConnection.OpenAsync();
+
+       transaction = await _dbConnection.BeginTransactionAsync();
+    }
+     
     public void RollbackTransaction() => transaction?.Rollback();
     public void CommitTransaction() => transaction?.Commit();
 
@@ -30,10 +37,12 @@ public sealed class Database(IConfiguration configuration) : IDatabase
          param: dynamicParameters,
          splitOn: splitOn);
 
-    public async Task<TOut> InsertAsyncAndGetIdAsync<TIn, TOut>(string query, TIn newObject,CancellationToken cancellationToken) =>
+    public async Task<TOut> InsertAsyncAndGetIdAsync<TInt,TOut>(string query, 
+        TInt value,
+        CancellationToken cancellationToken) =>
         await _dbConnection.QuerySingleAsync<TOut>(new CommandDefinition(
-            commandText : $"{query};SELECT CAST(SCOPE_IDENTITY() AS INT);",
-            parameters: newObject,
+            commandText : $"{query};select last_insert_rowid();",
+            parameters: GetParameters(value),
             transaction: transaction,
             cancellationToken: cancellationToken));
 
@@ -46,6 +55,9 @@ public sealed class Database(IConfiguration configuration) : IDatabase
 
         return changedValues == 1;
     }
+
+    private Dictionary<string, object?> GetParameters<T>(T obj)
+        => obj!.GetType().GetProperties().ToDictionary(a => $"@{a.Name}", a => a.GetValue(obj,null));
 
     public void Dispose()
     {

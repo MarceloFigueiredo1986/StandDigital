@@ -71,19 +71,20 @@
         </FloatButton>
         <MenuOptions>
             <div class="row menuOption">
-                <a href="/" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Início</a></div>
+                <a href="/" style="color:darkolivegreen" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Início</a>
+            </div>
             <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
                 <Authorized>
                     <div class=" row menuOption">
-                        <a href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a>
+                        <a style="color:darkolivegreen" href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a>
                     </div>
                     <div class=" row menuOption">
-                        <a href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a>
+                        <a style="color:darkolivegreen" href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a>
                     </div>
                 </Authorized>
                 <NotAuthorized>
                     <div class=" row menuOption">
-                        <a href="login" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Login</a>
+                        <a style="color:darkolivegreen" href="login" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Login</a>
                     </div>
                 </NotAuthorized>
             </Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
