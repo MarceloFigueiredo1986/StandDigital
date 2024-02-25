@@ -7,7 +7,7 @@
 <div class="row">
     <div class="mb-3">
         <label for="firstName" class="form-label" style="float:left">Fotos</label>
-        <InputFile id="inputDrop" OnChange="HandleImageSelected" multiple style="float:left" />
+        <InputFile id="inputDrop" OnChange="HandleImageSelected" OnError= style="float:left" />
         
         @if (isLoading)
         {
@@ -21,26 +21,18 @@
                 {
                     <div style="height:15px;font-size:10pt;float:left;margin:5px;margin-bottom:20px;max-width:300px">
                         <span>@foto.ImageName</span>
-                        @if(foto.ImageBa is null)
+                        <span style="cursor:pointer;color:red;font-weight:bolder;margin-right:15px" @onclick="() => RemoveImage(foto)">X</span>
+
+                        @if (!foto.MainImage)
                         {
-                            <span style="cursor:pointer;color:gray;font-weight:bolder">A carregar</span>
+                            <span style="cursor:pointer;color:forestgreen;font-weight:bolder"
+                                  @onclick="() => ManageMainImage(foto)">definir</span>
                         }
                         else
                         {
-                            <span style="cursor:pointer;color:red;font-weight:bolder;margin-right:15px" @onclick="() => RemoveImage(foto)">X</span>
-
-                            @if (!foto.MainImage)
-                            {
-                                <span style="cursor:pointer;color:forestgreen;font-weight:bolder"
-                                      @onclick="() => ManageMainImage(foto)">definir</span>
-                            }
-                            else
-                            {
-                                <span style="cursor:pointer;color:darkolivegreen;font-weight:bolder">principal</span>
-                            }
+                            <span style="cursor:pointer;color:darkolivegreen;font-weight:bolder">principal</span>
                         }
-                      
-                        </div>
+                    </div>
                 }
                 <span style="color:red">@GetMessage()</span>
             </div>
@@ -51,14 +43,14 @@
 
 @code {
 
-        [Parameter]
-        public List<ImageUpload> Files { get; set; }
+    [Parameter]
+    public List<ImageUpload> Files { get; set; }
 
-        [Parameter]
-        public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
+    [Parameter]
+    public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
 
-    private long maxFileSize = 1024 * 7000;
-    private int maxAllowedFiles = 10;
+    private long maxFileSize = 1024 * 3072; //3MB max
+    private int maxAllowedFiles = 1;
     private bool isLoading;
     private decimal progressPercent;
     private string? errorLoadingImages;
@@ -91,21 +83,18 @@
         try
         {
             isLoading = true;
-            Files.Clear();
             errorLoadingImages = null;
 
             if(e.FileCount > maxAllowedFiles)
             {
-                errorLoadingImages = $"Maximum number of images is {e.FileCount};";
+                errorLoadingImages = $"Escolha apenas {e.FileCount} de cada vez;";
                 return;
             }
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var imagens = e.GetMultipleFiles(maxAllowedFiles);
-
-            foreach (var file in imagens)
+            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
             {
                 try
                 {
@@ -115,13 +104,16 @@
                         continue;
                     }
 
-                    if(file.Size > (2048*2048))
-                    {
-                        errorLoadingImages += $"file {file.Name} must have less than 2MB size;";
-                        continue;
-                    }
+                    var trustedFileName = Path.GetRandomFileName();
+                    var path = Path.Combine(folderPath, trustedFileName);
 
-                    Files.Add(new() { AbsoluteName = file.Name, ImageName = file.Name });
+                    await using FileStream fs = new(path, FileMode.Create);
+                    await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                    var image = new ImageUpload() { AbsoluteNameWithPath = path, ImageName = file.Name };
+
+                    _logger.LogInformation("Image created with details {imagedetails};", image);
+
+                    Files.Add(image);
                 }
                 catch (Exception ex)
                 {
@@ -129,50 +121,28 @@
                     errorLoadingImages += ex.Message.Substring(0, 100);
                 }
             }
-
-            LoadImagesData(imagens).ConfigureAwait(false);
-
-            isLoading = false;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao carregar imagens;");
+            errorLoadingImages += ex.Message.Substring(0, 100);
         }
-    }
-
-    private async Task LoadImagesData(IReadOnlyList<IBrowserFile> files)
-    {
-        await Parallel.ForEachAsync(files, async (IBrowserFile file, CancellationToken cancellationToken) =>
+        finally
         {
-            try
-            {
-                var memoryFile = Files.FirstOrDefault(a => a.ImageName == file.Name);
-                if (memoryFile is null) return;
-
-                var path = Path.Combine(folderPath, file.Name);
-                using var ms = new MemoryStream();
-                await file.OpenReadStream(maxFileSize, cancellationToken).CopyToAsync(ms, cancellationToken);
-                ms.Position = 0;
-                await InvokeAsync(StateHasChanged);
-                memoryFile.ImageBa = ms.ToArray();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "LoadImagesData image {name};",file.Name);
-            }
-        });
+            isLoading = false;
+        }
     }
 
     protected void RemoveImage(ImageUpload image)
     {
         try
         {
-            File.Delete(Path.Combine(folderPath,image.AbsoluteName));
+            File.Delete(image.AbsoluteNameWithPath);
             Files.Remove(image);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro removing image with absolute name {Image}", image.AbsoluteName);
+            _logger.LogError(ex, "Erro removing image with absolute name {Image}", image.AbsoluteNameWithPath);
         }
     }
     public void Dispose()
@@ -181,7 +151,7 @@
              {
                  Files.ToList().ForEach(a =>
                  {
-                     File.Delete(Path.Combine(folderPath, a.AbsoluteName));
+                     File.Delete(a.AbsoluteNameWithPath);
                  });
              });
         tsk.Start();

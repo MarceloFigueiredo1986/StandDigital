@@ -1,7 +1,10 @@
 ﻿using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using StandDigital.Entities;
+using StandDigital.Extensions;
 using StandDigital.Models;
 using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital_HttpClient.HttpService;
@@ -80,7 +83,7 @@ public class CarDetailsService : ComponentBase
             Extras.Clear();
 
             foreach (var photo in TemporaryPhotos)
-                File.Delete(Path.Combine(_env.ContentRootPath, "temporaryfiles", photo.AbsoluteName));
+                File.Delete(photo.AbsoluteNameWithPath);
 
             navMan.NavigateTo(Path.Combine(navMan.BaseUri, "admin"), true);
 
@@ -97,27 +100,14 @@ public class CarDetailsService : ComponentBase
         }
     }
     protected async Task CreateCar()
-        => await _carRepo.SaveNewCarAsync(Car, await GetPhotos(), _primaryPhoto, Extras, CarMetadata, cts.Token);
+        => await _carRepo.SaveNewCarAsync(
+            Car, 
+            await TemporaryPhotos.ResizePhotos(), 
 
-    async Task<Dictionary<string, byte[]>> GetPhotos()
-    {
-        var resultDic = new Dictionary<string, byte[]>();
-        foreach (var photo in TemporaryPhotos)
-        {
-            using (var ms = new MemoryStream())
-            {
-                var path = Path.Combine(_env.ContentRootPath, "temporaryfiles", photo.AbsoluteName);
-                await using FileStream fs = new(path, FileMode.Open);
-                await fs.CopyToAsync(ms);
-                ms.Position = 0;
-                resultDic.Add(photo.ImageName, ms.ToArray());
-            }
-
-            if (photo.MainImage)
-                _primaryPhoto = photo.ImageName;
-        }
-        return resultDic;
-    }
+            _primaryPhoto??throw new ArgumentNullException("Escolha a foto principal do anúncio"), 
+            Extras, 
+            CarMetadata, 
+            cts.Token);
 
     protected Task EditCar()
     {
