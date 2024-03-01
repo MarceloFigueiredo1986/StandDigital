@@ -1,11 +1,10 @@
 ﻿using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using StandDigital.Entities;
 using StandDigital.Extensions;
 using StandDigital.Models;
+using StandDigital.Services.Repositories.TiposNegocios;
 using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital_HttpClient.HttpService;
 using StandDigital_Shared.Entities;
@@ -19,6 +18,8 @@ public class CarDetailsService : ComponentBase
     protected CarEntity Car { get; set; } = new() { Marca = default, Combustivel = default, Modelo = default};
     protected CarMetadataEntity CarMetadata { get; set; } = new();
 
+    protected IEnumerable<TipoNegocioEntity> TiposNegocios { get; set; } = [];
+
     /// <summary>
     /// Key- extra name
     /// </summary>
@@ -27,6 +28,9 @@ public class CarDetailsService : ComponentBase
     #region DI
     [Inject]
     protected NavigationManager navMan { get; set; }
+
+    [Inject]
+    protected ITiposNegociosRepository _tiposNegociosRepository { get; set; }
 
     [Inject]
     protected ICarUoW _carRepo { get; set; }
@@ -70,6 +74,7 @@ public class CarDetailsService : ComponentBase
         try
         {
             error = null;
+            _primaryPhoto = TemporaryPhotos.FirstOrDefault(a => a.MainImage)?.ImageName;
 
             isSaving = true;
             if (Carid is null)
@@ -103,17 +108,14 @@ public class CarDetailsService : ComponentBase
         => await _carRepo.SaveNewCarAsync(
             Car, 
             await TemporaryPhotos.ResizePhotos(), 
-
-            _primaryPhoto??throw new ArgumentNullException("Escolha a foto principal do anúncio"), 
+            _primaryPhoto, 
             Extras, 
             CarMetadata, 
             cts.Token);
-
     protected Task EditCar()
     {
         throw new NotImplementedException();
     }
-
     protected async Task InitialLoadAsync()
     {
         try
@@ -142,6 +144,7 @@ public class CarDetailsService : ComponentBase
             if (resultExtras.Value!.Any())
                 DefaultExtras = resultExtras.Value;
 
+            TiposNegocios = await _tiposNegociosRepository.GetTiposNegociosAsync(cts.Token);
         }
         catch (Exception ex)
         {

@@ -8,6 +8,7 @@ using StandDigital.Services.Repositories.Car;
 using StandDigital.Services.Repositories.CarExtras;
 using StandDigital.Services.Repositories.CarMetadata;
 using StandDigital.Services.Repositories.CarPhotos;
+using StandDigital.Services.Repositories.TiposNegocios;
 using StandDigital.Services.Repositories.User;
 using StandDigital.Services.UnitsOfWork.Car;
 using StandDigital.Settings;
@@ -30,6 +31,7 @@ public static class BoostrappServices
         services.AddScoped<ICarMetadataRepository, CarMetadataRepository>();
         services.AddScoped<IPhotosRepository, PhotosRepository>();
         services.AddScoped<ICarExtrasRepository, CarExtrasRepository>();
+        services.AddScoped<ITiposNegociosRepository, TiposNegociosRepository>();
         services.AddScoped<ICarUoW, CarUoW>();
         services.InstallHttpClient();
         services.InstallSharedProject();

@@ -1,4 +1,5 @@
-﻿using StandDigital.Entities;
+﻿using ErrorOr;
+using StandDigital.Entities;
 using StandDigital.Services.Repositories.Car;
 using StandDigital.Services.Repositories.CarExtras;
 using StandDigital.Services.Repositories.CarMetadata;
@@ -21,7 +22,7 @@ public class CarUoW(
 
     private readonly ICarMetadataRepository _carMetadataRepository = carMetadataRepository;
 
-    public async Task SaveNewCarAsync(
+    public async Task<ErrorOr<Created>> SaveNewCarAsync(
         CarEntity car,
         Dictionary<string, byte[]> photos,
         string primaryPhoto,
@@ -36,13 +37,13 @@ public class CarUoW(
             var carCreationResult = await _carRepository.CreateAsync(car, cancellationToken);
 
             if (carCreationResult.IsError)
-                throw new Exception($"Car creation proccess:{carCreationResult.FirstError.Description}");
+                return Error.Failure(description: $"Car creation proccess:{carCreationResult.FirstError.Description}");
 
             carMetadataEntity.CarroId = carCreationResult.Value;
             var carMetadataCreationResult = await _carMetadataRepository.CreateAsync(carMetadataEntity, cancellationToken);
 
             if (carMetadataCreationResult.IsError)
-                throw new Exception($"Car metadata creation proccess:{carMetadataCreationResult.FirstError.Description}");
+                return Error.Failure(description: $"Car metadata creation proccess:{carMetadataCreationResult.FirstError.Description}");
 
             foreach (var pht in photos)
             {
@@ -52,13 +53,13 @@ public class CarUoW(
                 var photoCreationResult = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
 
                 if (photoCreationResult.IsError)
-                    throw new Exception($"Car photos creation proccess:{photoCreationResult.FirstError.Description}");
+                    return photoCreationResult.FirstError;
             
                 if(isPrimaryPhoto)
                 {
                     var updated = await _carRepository.SetPrimaryPhotoAsync(carCreationResult.Value, photoCreationResult.Value, cancellationToken);
                     if (updated == 0)
-                        throw new Exception($"Set primary photo failed");
+                        return Error.Failure(description: $"Set photo {pht.Key} as primary failed");
                 }
             }
 
@@ -69,7 +70,7 @@ public class CarUoW(
                 var photosCreationResul = await _carExtrasRepository.CreateAsync(newExtra, cancellationToken);
 
                 if (photosCreationResul.IsError)
-                    throw new Exception($"Car extra creation proccess:{photosCreationResul.FirstError.Description}");
+                    return photosCreationResul.FirstError;
             }
 
             _database.CommitTransaction();
@@ -79,9 +80,11 @@ public class CarUoW(
             _database.RollbackTransaction();
             throw;
         }
+
+        return Result.Created;
     }
 
-    public Task UpdateCarAsync(CarEntity car, Dictionary<string, byte[]> newPhotos, HashSet<string> deletedPhotos, CarMetadataEntity carMetadataEntity, CancellationToken cancellationToken)
+    public Task<ErrorOr<Updated>> UpdateCarAsync(CarEntity car, Dictionary<string, byte[]> newPhotos, HashSet<string> deletedPhotos, CarMetadataEntity carMetadataEntity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

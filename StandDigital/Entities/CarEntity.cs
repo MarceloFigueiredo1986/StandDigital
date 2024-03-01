@@ -1,30 +1,18 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StandDigital.Entities;
 
-public class CarEntity
+public record CarEntity(string Marca, string Modelo, string Combustivel, int Kms, short Cv, short Portas, short MesRegisto, short Lotacao,
+    short Ano, string Matricula, short PrimeiroDono, short Nacional, int TipoNegocioId)
 {
     public int CarroId { get; set; }
-    public required string Marca { get; set; }
-    public required string Modelo { get; set; }
-    public required string Combustivel { get; set; }
     public int? FotoId { get; set; }
-    public uint Kms { get; set; }
-    public ushort Cv { get; set; }
-    public ushort? Bateria { get; set; }
+    public short? Bateria { get; set; }
     public string? TipoCarregamento { get; set; }
-    public ushort? Cilindrada { get; set; }
-    public ushort Portas { get; set; }
-    public ushort MesRegisto { get; set; }
-    public ushort Lotacao { get; set; }
+    public short? Cilindrada { get; set; }
     public string? Caixa { get; set; }
-    public ushort Ano { get; set; }
-    public string Matricula { get; set; }
     public string? Comentarios { get; set; }
-    public ushort PrimeiroDono { get; set; }
     public string? Danos { get; set; }
     public string? ProblemasMotor { get; set; }
-    public ushort Nacional { get; set; }
-    public decimal PrecoBase { get; set; }
-    public int TipoNegocioId { get; set; }
+    public decimal? PrecoBase { get; set; }
 }

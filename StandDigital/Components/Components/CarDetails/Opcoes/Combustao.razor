@@ -5,19 +5,16 @@
 <div class="inputValuesStyleDiv">
     <label for="firstName" class="form-label">Combustível</label>
     @{
-        int incr = 0;
-        string flexRadioDefault;
 
         foreach (var caixa in CaixasVelocidade)
         {
-            flexRadioDefault = $"flexRadioDefault{incr}";
+            string flexRadioDefault = $"flexRadioCaixa{Random.Shared.Next()}";
             <div class="form-check" style="float:left">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" @onchange="() => {Carro.Caixa = caixa;}" id="@flexRadioDefault">
+                <input class="form-check-input" type="radio" name="flexRadioCaixa" @onchange="() => {Carro.Caixa = caixa;}" id="@flexRadioDefault">
                 <label class="form-check-label" for="@flexRadioDefault">
                     @caixa
                 </label>
             </div>
-            incr++;
         }
     }
 </div>

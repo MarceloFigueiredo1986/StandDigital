@@ -1,23 +1,24 @@
-﻿using System.ComponentModel;
+﻿using StandDigital.Constants;
+using System.ComponentModel;
 
 namespace StandDigital.Enums;
 
 public enum Combustivel : ushort
 {
-    [Description("Gasóleo")]
+    [Description(Multiton.Gasoleo)]
     Gasoleo = 0,
-    [Description("Gasolina")]
+    [Description(Multiton.Gasolina)]
     Gasolina = 1,
-    [Description("Híbrido Gasóleo")]
+    [Description(Multiton.HibridoGasoleo)]
     HibridoGasoleo = 2,
-    [Description("Eléctrico")]
+    [Description(Multiton.Eletrico)]
     Electrico = 3,
-    [Description("GPL")]
+    [Description(Multiton.GPL)]
     GPL = 4,
-    [Description("Hidrogénio")]
+    [Description(Multiton.Hidrogenio)]
     Hidrogenio = 5,
-    [Description("Híbrido Gasolina")]
+    [Description(Multiton.HibridoGasolina)]
     HibridoGasolina = 6,
-    [Description("GNC")]
+    [Description(Multiton.GNC)]
     GNC
 }
