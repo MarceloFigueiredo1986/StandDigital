@@ -1,11 +1,10 @@
-﻿@attribute [StreamRendering]
+﻿@using Newtonsoft.Json
+@attribute [StreamRendering]
 
 @inject IWebHostEnvironment _env;
-@implements IDisposable
 @inject ILogger<PhotosImporter> _logger;
 
 <div class="row">
-    <div class="mb-3">
         <label for="firstName" class="form-label" style="float:left">Fotos</label>
         <InputFile id="inputDrop" OnChange="HandleImageSelected" OnError= style="float:left" />
         
@@ -15,8 +14,9 @@
         }
         else
         {
+            <p style="color:forestgreen;float:left">Escolha a imagem a usar como principal</p>
+            <span style="color:red">@GetMessage()</span>
             <div class="row" style="float:left">
-                <p style="color:forestgreen;float:left">Escolha a imagem a usar como principal</p>
                 @foreach (var foto in Files)
                 {
                     <div style="height:15px;font-size:10pt;float:left;margin:5px;margin-bottom:20px;max-width:300px">
@@ -34,10 +34,8 @@
                         }
                     </div>
                 }
-                <span style="color:red">@GetMessage()</span>
             </div>
         }
-    </div>
 </div>
 
 
@@ -100,7 +98,13 @@
                 {
                     if (!imageExtensions.Contains(file.Name.Substring(file.Name.LastIndexOf('.'))))
                     {
-                        errorLoadingImages += $"file {file.Name} extensions is invalid;";
+                        errorLoadingImages += $"Ficheiro {file.Name} com extensão invalida;";
+                        continue;
+                    }
+
+                    if(file.Size > maxFileSize)
+                    {
+                        errorLoadingImages += $"Ficheiro deve ter menos de 3.14 MB";
                         continue;
                     }
 
@@ -111,21 +115,21 @@
                     await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
                     var image = new ImageUpload() { AbsoluteNameWithPath = path, ImageName = file.Name };
 
-                    _logger.LogInformation("Image created with details {imagedetails};", image);
+                    _logger.LogInformation("Image created with details {imagedetails};",  JsonConvert.SerializeObject(image));
 
                     Files.Add(image);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogWarning(ex,"File: {Filename} failed upload;", file.Name);
-                    errorLoadingImages += ex.Message.Substring(0, 100);
+                    errorLoadingImages += $"{ex.Message.Substring(0, 100)};";
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao carregar imagens;");
-            errorLoadingImages += ex.Message.Substring(0, 100);
+            errorLoadingImages += $"{ex.Message.Substring(0, 100)};";
         }
         finally
         {
@@ -139,21 +143,11 @@
         {
             File.Delete(image.AbsoluteNameWithPath);
             Files.Remove(image);
+            _logger.LogDebug("Foto {Photo} apagada", image.AbsoluteNameWithPath);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro removing image with absolute name {Image}", image.AbsoluteNameWithPath);
         }
-    }
-    public void Dispose()
-    {
-        var tsk = new Thread(a => 
-             {
-                 Files.ToList().ForEach(a =>
-                 {
-                     File.Delete(a.AbsoluteNameWithPath);
-                 });
-             });
-        tsk.Start();
     }
 }

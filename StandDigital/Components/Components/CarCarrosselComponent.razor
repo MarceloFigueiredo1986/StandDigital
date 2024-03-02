@@ -1,8 +1,4 @@
-﻿@using StandDigital.Models
-@using StandDigital.Services.Repositories;
-@using StandDigital.Services.Repositories.Car;
-
-@inject ICarRepository carRepository
+﻿@inject IMediator _mediator;
 
 @{
     @if(Cars is null)
@@ -40,5 +36,5 @@
     private IEnumerable<CarCardModel>? Cars;
 
     protected override async Task OnInitializedAsync()
-        => Cars = await carRepository.GetOpenDealsAsync(TipoNegocio);
+        => Cars = await _mediator.Send(new GetOpenDealsRequest(TipoNegocio.GetDescription()));
 }

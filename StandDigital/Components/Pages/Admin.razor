@@ -1,10 +1,11 @@
 ﻿@page "/admin"
-@using System.Drawing
 
 @attribute [StreamRendering]
-@inject ICarRepository carRepo
+
 @inject NavigationManager navman
 @inject ILogger<Admin> _logger
+@inject IMediator _mediator;
+@inject SessionSettings _session
 
 @attribute [Authorize(Roles = "admin,stand")]
 
@@ -53,13 +54,14 @@
 </style>
 
 @code {
-    ICollection<CarEntity> Cars;
+    ICollection<CarEntity> Cars = [];
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            Cars = (await carRepo.GetAllAsync()).ToArray();
+            var session = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            Cars = (await _mediator.Send(new UserOpenDealsRequest(session.IdUser))).ToArray();
         }
         catch (Exception ex)
         {

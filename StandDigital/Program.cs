@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
 using StandDigital.Bootstrapping;
 using StandDigital.Components;
+using StandDigital.Core;
 
 namespace StandDigital;
 
@@ -23,6 +24,8 @@ public class Program
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.InstallCoreDependencies();
+                     
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

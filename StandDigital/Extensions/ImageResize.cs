@@ -3,7 +3,7 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
-using StandDigital.Models;
+using StandDigital.Core.Models;
 using System.Collections.Concurrent;
 
 namespace StandDigital.Extensions;

@@ -4,24 +4,31 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Data.Sqlite
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using System.Collections.Immutable
 @using Blazored.Typeahead
 @using Microsoft.AspNetCore.Authorization
+@using MediatR
 
 @using StandDigital_Shared
 @using StandDigital.Enums
-@using StandDigital.Services.Repositories.Car
-@using StandDigital.Services.UnitsOfWork
 @using StandDigital.Components.Components.CarDetails.Opcoes
-@using StandDigital.Services.UnitsOfWork.Car
-@using StandDigital.Entities
-@using StandDigital.Services.Repositories
-@using StandDigital.Models
 @using StandDigital
 @using StandDigital.Components
 @using StandDigital.Components.Components.CarDetails.ComponentsServices
 @using StandDigital.Components.Layout
 @using StandDigital.Extensions
+@using StandDigital.Core.CarAdvertisement
+@using StandDigital.Core.Extensions;
+@using StandDigital.Core.RequestHandlers.CompleteCar
+@using StandDigital.Core.RequestHandlers.OpenDeals
+@using StandDigital.Core.RequestHandlers.UserOpenDeals
+
+@using StandDigital.Core.Models
+@using System.Drawing
+@using StandDigital.Core.Entities
+@using StandDigital.Auth

@@ -1,21 +1,21 @@
-﻿using Blazored.Toast.Services;
+﻿using ErrorOr;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using StandDigital.Entities;
+using StandDigital.Core.CarAdvertisement;
+using StandDigital.Core.Entities;
+using StandDigital.Core.Models;
+using StandDigital.Core.RequestHandlers.NewCarDeal;
+using StandDigital.Core.RequestHandlers.TiposNegocios;
+using StandDigital.Core.RequestHandlers.UpdateCarDeal;
 using StandDigital.Extensions;
-using StandDigital.Models;
-using StandDigital.Services.Repositories.TiposNegocios;
-using StandDigital.Services.UnitsOfWork.Car;
-using StandDigital_HttpClient.HttpService;
 using StandDigital_Shared.Entities;
-using StandDigital_Shared.Services.Logging;
 
 namespace StandDigital.Components.Components.CarDetails.ComponentsServices;
 
-public class CarDetailsService : ComponentBase
+public class CarDetailsService : AbstractComponent<CarDetailsService>
 {
     protected List<ImageUpload> TemporaryPhotos { get; set; } = new();
-    protected CarEntity Car { get; set; } = new() { Marca = default, Combustivel = default, Modelo = default};
+    protected CarAdvertisementCrudModel Car { get; set; } = new();
     protected CarMetadataEntity CarMetadata { get; set; } = new();
 
     protected IEnumerable<TipoNegocioEntity> TiposNegocios { get; set; } = [];
@@ -24,33 +24,6 @@ public class CarDetailsService : ComponentBase
     /// Key- extra name
     /// </summary>
     public HashSet<string> Extras { get; set; } = [];
-
-    #region DI
-    [Inject]
-    protected NavigationManager navMan { get; set; }
-
-    [Inject]
-    protected ITiposNegociosRepository _tiposNegociosRepository { get; set; }
-
-    [Inject]
-    protected ICarUoW _carRepo { get; set; }
-
-    [Inject]
-    protected IWebHostEnvironment _env { get; set; }
-
-    [Inject]
-    protected IHttpService _httpClient { get; set; }
-
-    [Inject]
-    protected IConfiguration _configuration { get; set; }
-
-    [Inject]
-    protected ILogging _logger { get; set; }
-
-    [Inject]
-    protected IToastService _toaster { get; set; }
-
-    #endregion
 
     protected string? error;
     protected bool isSaving;
@@ -77,10 +50,11 @@ public class CarDetailsService : ComponentBase
             _primaryPhoto = TemporaryPhotos.FirstOrDefault(a => a.MainImage)?.ImageName;
 
             isSaving = true;
+
             if (Carid is null)
-                await CreateCar();
+                await CreateNewAdvertisement();
             else
-                await EditCar();
+                await UpdateAdvertisement();
 
             Car = null!;
             CarMetadata = null!;
@@ -88,15 +62,18 @@ public class CarDetailsService : ComponentBase
             Extras.Clear();
 
             foreach (var photo in TemporaryPhotos)
+            {
                 File.Delete(photo.AbsoluteNameWithPath);
+                _logger.LogDebug("Foto {Photo} apagada", photo.AbsoluteNameWithPath);
+            }
 
             navMan.NavigateTo(Path.Combine(navMan.BaseUri, "admin"), true);
 
-            _toaster.ShowSuccess("Anúncio criado!");
+            _toaster.ShowSuccess("Sucesso!");
         }
         catch (Exception ex)
         {
-            _logger.Log(ex);
+            _logger.LogError(ex,nameof(ManageCommandToApply));
             error = "Não foi possível guardar a alteração dos dados.";
         }
         finally
@@ -104,18 +81,42 @@ public class CarDetailsService : ComponentBase
             isSaving = false;
         }
     }
-    protected async Task CreateCar()
-        => await _carRepo.SaveNewCarAsync(
-            Car, 
-            await TemporaryPhotos.ResizePhotos(), 
-            _primaryPhoto, 
-            Extras, 
-            CarMetadata, 
-            cts.Token);
-    protected Task EditCar()
+
+    async Task CreateNewAdvertisement()
     {
-        throw new NotImplementedException();
+        var result = await _mediatr.Send(new NewCarDealRequest(
+             Car,
+             await TemporaryPhotos.ResizePhotos(),
+             _primaryPhoto,
+             Extras,
+             CarMetadata,
+             cts.Token));
+
+        if (result.IsError)
+            throw new Exception(result.FirstError.Description);
+
+        if(result.Value != Result.Created)
+            throw new Exception("Anúncio não foi criado.");
     }
+
+    async Task UpdateAdvertisement()
+    {
+        var result = await _mediatr.Send(new UpdateCarDealRequest(
+             Carid!.Value,
+             Car,
+             await TemporaryPhotos.ResizePhotos(),
+             _primaryPhoto,
+             Extras,
+             CarMetadata,
+             cts.Token));
+
+        if (result.IsError)
+            throw new Exception(result.FirstError.Description);
+
+        if (result.Value != Result.Updated)
+            throw new Exception("Anúncio não foi alterado.");
+    }
+
     protected async Task InitialLoadAsync()
     {
         try
@@ -144,11 +145,11 @@ public class CarDetailsService : ComponentBase
             if (resultExtras.Value!.Any())
                 DefaultExtras = resultExtras.Value;
 
-            TiposNegocios = await _tiposNegociosRepository.GetTiposNegociosAsync(cts.Token);
+            TiposNegocios = await _mediatr.Send(new GetTiposNegociosRequest());
         }
         catch (Exception ex)
         {
-            _logger.Log(ex);
+            _logger.LogError(ex,nameof(InitialLoadAsync));
         }
     }
     protected async Task LoadModelsAsync()
@@ -179,7 +180,7 @@ public class CarDetailsService : ComponentBase
         }
         catch (Exception ex)
         {
-            _logger.Log(ex);
+            _logger.LogError(ex,nameof(LoadModelsAsync));
         }
     }
 }

@@ -1,40 +1,16 @@
-﻿using Blazored.Toast.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using StandDigital.Auth;
-using StandDigital.Services.Repositories.User;
-using StandDigital.Settings;
+﻿using StandDigital.Auth;
+using StandDigital.Components;
+using StandDigital.Core.RequestHandlers.ValidateLogin;
 
 namespace StandDigital.Services;
 
-public class LoginComponent : ComponentBase
+public class LoginComponent : AbstractComponent<LoginComponent>
 {
-    [Inject]
-    protected ILogger<LoginComponent> _logger { get; init; }
-
-    [Inject]
-    protected SessionSettings _session { get; init; }
-
-    [Inject]
-    private IUserRepository _loginService { get; init; }
-
-    [Inject]
-    protected NavigationManager _navigate { get; init; }
-
-    [Inject]
-    public AuthenticationStateProvider _authenticator { get; init; }
-
-    [Inject]
-    public IToastService _toaster { get; init; }
-
-    [Inject]
-    public AppSettings _settings { get; init; }
 
     protected async Task<bool> ValidateLogin(string username,string password, 
         Authentication SignOutManager)
     {
-        var result = await _loginService.ValidateLogin(username, password);
-
+        var result = await _mediatr.Send(new ValidateLoginRequest(username, password));
 
         if (result == null) return false;
            

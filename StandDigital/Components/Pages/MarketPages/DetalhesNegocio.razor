@@ -1,12 +1,8 @@
 ﻿@page "/detalhesnegocio/{tiponegocio}/{carroid:int}"
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.Data.Sqlite
-@using StandDigital.Auth
 
-@inject ICarRepository carRepository
 @inject ILogger<DetalhesNegocio> _logger
-@inject AuthenticationStateProvider _authenticator
 @inject SessionSettings _session 
+@inject IMediator _mediator
 
 @attribute [Authorize(Roles = "admin,stand")]
 
@@ -119,7 +115,7 @@
         {
             if (CarroId != null)
             {
-                _detalhesCarro = await carRepository.GetCompleteCarAsync(CarroId.Value);
+                _detalhesCarro = await _mediator.Send(new GetCompleteCarRequest(CarroId.Value));
                 var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
                 _sessionUser = session_already_started.Name;
             }

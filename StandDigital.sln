@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_Shared", "Stan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_HttpClient", "StandDigital_HttpClient\StandDigital_HttpClient.csproj", "{2C8EBF7C-6616-4F36-BE0E-738DA6669072}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandDigital.Core", "StandDigital.Core\StandDigital.Core.csproj", "{969826FF-57E5-41A8-8E8A-8B9D30134F9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2C8EBF7C-6616-4F36-BE0E-738DA6669072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C8EBF7C-6616-4F36-BE0E-738DA6669072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C8EBF7C-6616-4F36-BE0E-738DA6669072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{969826FF-57E5-41A8-8E8A-8B9D30134F9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{969826FF-57E5-41A8-8E8A-8B9D30134F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{969826FF-57E5-41A8-8E8A-8B9D30134F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{969826FF-57E5-41A8-8E8A-8B9D30134F9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

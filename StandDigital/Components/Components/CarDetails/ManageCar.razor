@@ -7,7 +7,6 @@
 
 <EditForm Model="Car" OnValidSubmit="ManageCommandToApply">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="edit-form-container" style="background-color:white;width:90%;margin-top:150px">
         <ul class="nav nav-tabs">
@@ -46,7 +45,6 @@
                                     </ComponentLoader>
                                 </div>
 
-                                <!--Combustível-->
                                 <div class="mb-3" style="margin-top:15px">
                                     <p>
                                         <label for="firstName" class="form-label">Combustível</label>
@@ -57,7 +55,7 @@
                                             foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
                                             {
                                                 string flexRadioDefault = $"flexRadioCombustivel{Random.Shared.Next()}";
-                                                <div class="form-check" style="float:left;width:170px;">
+                                                <div class="form-check" style="float:left;width:fit-content">
                                                     <input class="form-check-input" type="radio" name="flexRadioCombustivel" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
                                                     <label class="form-check-label" for="@flexRadioDefault">
                                                         @tipoCombustivel.GetDescription()
@@ -69,7 +67,6 @@
                                     </div>
                                 </div>
 
-                                <!--Modelo-->
                                 <div class="mb-3" disabled>
                                     <ComponentLoader LoadingObj="DefaultModelos">
                                         <Fragment>
@@ -90,9 +87,9 @@
 
                                 <div class="mb-3" style="height:70px">
                                     <div class="form-outline inputValuesStyleDiv">
-                                        <div class="slidecontainer">
+                                        <div>
                                             <label for="firstName" class="form-label">Mês registo</label>
-                                            <InputSelect style="font-size:11pt;padding:1px;text-align:left;max-width:110px" id="department" @bind-Value="Car.MesRegisto">
+                                            <InputSelect style="font-size:11pt;padding:1px;text-align:left;max-width:110px;height:38px;margin:0px" id="department" @bind-Value="Car.MesRegisto">
                                                 @foreach (var dept in MesesAno)
                                                 {
                                                     <option value="@dept.Key">@dept.Value</option>
@@ -101,49 +98,62 @@
                                             <ValidationMessage For="@(() => Car.MesRegisto)" />
                                         </div>
                                     </div>
-                                    <div class="form-outline inputValuesStyleDiv sliderDiv">
+                                    <div class="form-outline inputValuesStyleDiv">
                                         <label for="firstName" class="form-label">Portas</label>
-                                        <div class="slidecontainer">
-                                            <input type="range" class="form-range sliderStyle" min="1" max="5" id="customRange232" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Portas">
-                                            <output>@Car.Portas</output>
-                                            <ValidationMessage For="@(() => Car.Portas)" />
-                                        </div>
+                                        <InputNumber id="typeNumberKms" style="width:120px" class="form-control" @bind-Value="Car.Portas" />
+                                        <ValidationMessage For="@(() => Car.Portas)" />
                                     </div>
-                                    <div class="form-outline inputValuesStyleDiv sliderDiv">
-                                        <div class="slidecontainer">
-                                            <label for="firstName" class="form-label">Lotação</label>
-                                            <input type="range" class="form-range sliderStyle" min="1" max="10" id="customRange22" oninput="this.nextElementSibling.value = this.value" @bind-value="Car.Lotacao">
-                                            <output>@Car.Lotacao</output>
-                                            <ValidationMessage For="@(() => Car.Lotacao)" />
-                                        </div>
+                                    <div class="form-outline inputValuesStyleDiv">
+                                        <label for="firstName" class="form-label">Lotação</label>
+                                        <InputNumber id="typeNumberKms" style="width:120px" class="form-control" @bind-Value="Car.Lotacao" />
+                                        <ValidationMessage For="@(() => Car.Lotacao)" />
                                     </div>
                                     <div class="form-outline inputValuesStyleDiv">
                                         <label for="firstName" class="form-label">Quilómetros</label>
-                                        <InputNumber id="typeNumberKms" style="width:150px" class="form-control" @bind-Value="Car.Kms" />
+                                        <InputNumber id="typeNumberKms" style="width:120px" class="form-control" @bind-Value="Car.Kms" />
                                         <ValidationMessage For="@(() => Car.Kms)" />
                                     </div>
                                     <div class="inputValuesStyleDiv">
                                         <label for="firstName" class="form-label">Potência (Cv)</label>
-                                        <input type="number" id="typeNumberCv" style="width:150px" class="form-control" @bind-value="Car.Cv" />
+                                        <InputNumber type="number" id="typeNumberCv" style="width:120px" class="form-control" @bind-Value="Car.Cv" />
                                         <ValidationMessage For="@(() => Car.Cv)" />
                                     </div>
                                     <div class="inputValuesStyleDiv">
                                         <label for="matricula" class="form-label">Matrícula</label>
-                                        <input type="text"
+                                        <InputText type="text"
                                                style="background-color:white;border-color:lightgray;border-width:0.5pt;margin:0px;height:38px;padding-left:1px;padding-right:1px"
                                                id="txtMatricula"
-                                               class="form-control" @bind-value="Car.Matricula" />
+                                               class="form-control" @bind-Value="Car.Matricula" />
                                         <ValidationMessage For="@(() => Car.Matricula)" />
                                     </div>
                                     <div class="inputValuesStyleDiv">
-                                        <label for="firstName" class="form-label">Preço</label>
-                                        <input type="number" id="typeNumberPrecoBase" style="width:150px" class="form-control" @bind-value="Car.PrecoBase" />
-                                        <ValidationMessage For="@(() => Car.PrecoBase)" />
-                                    </div>
-                                    <div class="inputValuesStyleDiv">
                                         <label for="firstName" class="form-label">Ano registo</label>
-                                        <input type="number" id="typeNumberAno" style="width:150px" class="form-control" @bind-value="Car.Ano" />
+                                        <InputNumber type="number" id="typeNumberAno" style="width:120px" class="form-control" @bind-Value="Car.Ano" />
                                         <ValidationMessage For="@(() => Car.Ano)" />
+                                    </div>
+                                    <div class="form-outline inputValuesStyleDiv">
+                                        <div>
+                                            <label for="firstName" class="form-label">1 Dono?</label>
+                                            <InputSelect @bind-Value="Car.PrimeiroDono"
+                                                         style="font-size:11pt;padding:1px;text-align:left;max-width:110px;height:38px;margin:0px" id="primeirodono">
+                                                <option value="null">Escolher</option>
+                                                <option value="1">Sim</option>
+                                                <option value="0">Não</option>
+                                            </InputSelect>
+                                            <ValidationMessage For="@(() => Car.PrimeiroDono)" />
+                                        </div>
+                                    </div>
+                                    <div class="form-outline inputValuesStyleDiv">
+                                        <div>
+                                            <label for="firstName" class="form-label">Nacional?</label>
+                                            <InputSelect @bind-Value="Car.Nacional" DisplayName="Escolher"
+                                                         style="font-size:11pt;padding:1px;text-align:left;max-width:110px;height:38px;margin:0px" id="primeirodono">
+                                                <option value="null">Escolher</option>
+                                                <option value="1">Sim</option>
+                                                <option value="0">Não</option>
+                                            </InputSelect>
+                                            <ValidationMessage For="@(() => Car.Nacional)" />
+                                        </div>
                                     </div>
                                     @if (MenuOpcoesTipoCombustivel is not null)
                                     {
@@ -194,48 +204,51 @@
                         </div>
                         break;
                     case Tab.TipoNegocio:
-                        <div class="mb-3" style="margin-top:15px">
-                            <p>
-                                <label for="firstName" class="form-label">Tipo de anúncio</label>
-                            </p>
-                            <div class="row" style="margin:0px 10px 20px 10px">
-                                @{
-                                    foreach (var tipoNegocio in TiposNegocios)
-                                    {
-                                        string flexRadioDefault = $"flexRadioTipoNegocio{Random.Shared.Next()}";
-                                        <div class="form-check" style="float:left;width:170px;">
-                                            <input class="form-check-input" type="radio" name="flexRadioCombustivel"
-                                                   @onchange="() => Car.TipoNegocioId = tipoNegocio.TipoNegocioId" id="@flexRadioDefault">
-                                            <label class="form-check-label" for="@flexRadioDefault">
-                                                @tipoNegocio.Name
-                                            </label>
-                                        </div>
+                        <div class="mb-12" style="height:230px">
+                            <div style="margin-top:15px">
+                                <p>
+                                    <label for="firstName" class="form-label">Tipo de anúncio</label>
+                                </p>
+                                <div class="row" style="margin:0px 10px 20px 10px">
+                                    @{
+                                        foreach (var tipoNegocio in TiposNegocios)
+                                        {
+                                            string flexRadioDefault = $"flexRadioTipoNegocio{Random.Shared.Next()}";
+                                            <div class="form-check" style="float:left;width:170px;">
+                                                <input class="form-check-input" type="radio" name="flexRadioTipoNegocio"
+                                                       @onchange="() => Car.TipoNegocioId = tipoNegocio.TipoNegocioId" id="@flexRadioDefault">
+                                                <label class="form-check-label" for="@flexRadioDefault">
+                                                    @tipoNegocio.Name
+                                                </label>
+                                            </div>
+                                        }
                                     }
-                                }
-                            </div>
-                            <div class="form-outline inputValuesStyleDiv">
-                                <label for="firstName" class="form-label">Preço base</label>
-                                <input type="number" id="typeNumberKms" style="width:150px" class="form-control" @bind-value="Car.PrecoBase" />
+                                </div>
+                                <div class="form-outline inputValuesStyleDiv">
+                                    <label for="firstName" class="form-label">Preço base</label>
+                                    <input type="number" id="typeNumberKms" style="width:150px" class="form-control" @bind-value="Car.PrecoBase" />
+                                </div>
                             </div>
                         </div>
-
                         break;
                 }
-
-                @if (isSaving)
-                {
-                    <button class="btn btn-primary" type="button" disabled>
-                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                        A guardar...
-                    </button>
-                }
-                else
-                {
-                    <div class="row">
-                        <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Guardar</button>
-                    </div>
-                    <span style="color:red;margin:2px">@error</span>
-                }
+                
+                <div class="row">
+                    @if (isSaving)
+                    {
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            A guardar...
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Guardar</button>
+                        </div>
+                        <span style="color:red;margin:2px">@error</span>
+                    }
+                </div>
             }
         </div>    
     </div>
@@ -255,7 +268,7 @@
     }
 
     .inputValuesStyleDiv{
-        width: 150px;
+        width: 120px;
         float: left;
         margin-right: 15px;
         margin-bottom:20px;
@@ -288,6 +301,7 @@
     Tab _tabuladorEscolhido;
 
     static Dictionary<int, string> MesesAno = new() {
+        { 0, "Escolher"},
         { 1, "Janeiro" },
         { 2, "Fevereiro" },
         { 3, "Março" },

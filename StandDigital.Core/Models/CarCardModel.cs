@@ -1,0 +1,7 @@
+﻿    namespace StandDigital.Core.Models;
+
+public class CarCardModel : BaseCar
+{
+    public int? Cilindrada { get; set; }
+    public string Caixa { get; set; }
+}

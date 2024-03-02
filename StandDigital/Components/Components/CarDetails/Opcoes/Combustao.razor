@@ -1,9 +1,9 @@
 ﻿<div class="inputValuesStyleDiv">
     <label for="firstName" class="form-label">Cilindrada</label>
-    <input type="number" id="typeNumber" style="width:150px" class="form-control" @bind-value="Carro.Cilindrada" />
+    <input type="number" id="typeNumber" style="width:120px" class="form-control" @bind-value="Carro.Cilindrada" />
 </div>
 <div class="inputValuesStyleDiv">
-    <label for="firstName" class="form-label">Combustível</label>
+    <label for="firstName" class="form-label">Caixa</label>
     @{
 
         foreach (var caixa in CaixasVelocidade)
@@ -21,7 +21,7 @@
 
 @code {
     [Parameter]
-    public CarEntity? Carro { get; set; }
+    public CarAdvertisementCrudModel? Carro { get; set; }
 
     private string[] CaixasVelocidade => ["Manual", "Automática"];
 }

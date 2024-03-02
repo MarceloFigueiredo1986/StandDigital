@@ -65,7 +65,7 @@
                 return;
             }
 
-            _navigate.NavigateTo(_navigate.BaseUri);
+            navMan.NavigateTo(navMan.BaseUri);
         }catch(Exception ex)
         {
             Erro = ex.Message;
@@ -93,7 +93,7 @@
                 var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
                 if (session_already_started == null) return;
                 if (session_already_started.ExpirationDate >= DateTimeOffset.UtcNow)
-                    _navigate.NavigateTo(_navigate.Uri.Replace("Login?ReturnUrl=%2F",""));
+                    navMan.NavigateTo(navMan.Uri.Replace("Login?ReturnUrl=%2F", ""));
             }
         }
         catch (Exception ex)
