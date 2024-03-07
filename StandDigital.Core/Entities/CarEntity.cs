@@ -3,7 +3,7 @@
 public record CarEntity(string Marca, string Modelo, string Combustivel, int Kms, short Cv, short Portas, short MesRegisto, short Lotacao,
     short Ano, string Matricula, short PrimeiroDono, short Nacional, int TipoNegocioId)
 {
-    public CarEntity() : this(default, default, default, default, default, default, default, default, default, default, default
+    public CarEntity() : this(default!, default!, default!, default, default, default, default, default, default, default!, default
         , default, default)
     {
         

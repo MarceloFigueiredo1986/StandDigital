@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
-using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
+using StandDigital.Core.RequestHandlers.CarAdvertisement;
 
 namespace StandDigital.Core.RequestHandlers.UpdateCarDeal;
 

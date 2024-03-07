@@ -1,5 +1,5 @@
-﻿using StandDigital.Core.CarAdvertisement;
-using StandDigital.Core.Entities;
+﻿using StandDigital.Core.Entities;
+using StandDigital.Core.RequestHandlers.CarAdvertisement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

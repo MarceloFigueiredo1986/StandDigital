@@ -1,0 +1,16 @@
+﻿<EditForm Model="user" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <h3>Registo</h3>
+    <InputText DisplayName="Nome" Value="@user.Name" />
+    <ValidationMessage For="@(() => user.Name)" />
+</EditForm>
+
+@code {
+    UserEntity user;
+
+    private void Save(EditContext editContext)
+    {
+    }
+}

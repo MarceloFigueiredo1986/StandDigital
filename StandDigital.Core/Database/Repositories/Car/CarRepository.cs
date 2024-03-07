@@ -25,14 +25,26 @@ internal class CarRepository(IDatabase database) : ICarRepository
              {
                  "@tiponegocio", tipoNegocio
              } });
-    public async Task<IEnumerable<CarEntity>> GetUserDealsAsync(int userId)
-     => await _dbcontext.GetAsync<CarEntity>("""
-            SELECT c.*,cf.Data as Photo
-            FROM Carros c
+    public async Task<IEnumerable<CarCompleteModel>> GetUserDealsAsync(int userId)
+     => await _dbcontext.GetAsync<CarCompleteModel>("""
+            SELECT 
+            c.CarroId,
+            Bateria,
+            TipoCarregamento,
+            Cilindrada,
+            Caixa,
+            Combustivel,
+            Marca,
+            Modelo,
+            Kms,
+            Cv,
+            cf.Data as MainImage,
+            cm.DataFimAnuncio
+            FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
             LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
             WHERE cm.VendedorId = @userId
-            """,new Dictionary<string, object>{ { "@userId", userId } });
+            """, new Dictionary<string, object>{ { "@userId", userId } });
     public async Task<ErrorOr<int>> CreateAsync(CarEntity value, CancellationToken cancellationToken)
     {
         try

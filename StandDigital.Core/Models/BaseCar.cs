@@ -8,6 +8,7 @@ public class BaseCar
     public string Marca { get; set; }
     public string Modelo { get; set; }
     public int Kms { get; set; }
+    public int Cv { get; set; }
     public int MesRegisto { get; set; }
     public int Ano { get; set; }
     public string Danos { get; set; }

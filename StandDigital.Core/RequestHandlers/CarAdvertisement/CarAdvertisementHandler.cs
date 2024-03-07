@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 
-namespace StandDigital.Core.CarAdvertisement;
+namespace StandDigital.Core.RequestHandlers.CarAdvertisement;
 
 internal sealed class CarAdvertisementHandler : IRequestHandler<CarAdvertisementCrudModel, ErrorOr<bool>>
 {

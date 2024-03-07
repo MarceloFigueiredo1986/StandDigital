@@ -1,0 +1,80 @@
+﻿@page "/admin"
+
+@layout MainLayout
+
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "admin,stand")]
+
+<div style="padding:150px 2px 5px 2px">
+    <ul class="nav nav-tabs">
+        @foreach (var tab in _tabs)
+        {
+            var currentSelectedTab = tab.Key == _selectedTab ? "active" : "";
+
+            <li class="nav-item">
+                <span class="nav-link tabulador @currentSelectedTab" aria-current="page" @onclick="() => {_selectedTab = tab.Key;_menu = tab.Value;}">@tab.Key</span>
+            </li>
+        }
+    </ul>
+
+    @if (_menu != null)
+    {
+        <DynamicComponent Type="@_menu" />
+    }
+
+</div>
+
+<style type="text/css">
+    .card {
+        cursor:pointer;
+        margin-bottom: 15px;
+        height: 150px;
+        width: 260px;
+        background-color: whitesmoke;
+        width: 250px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        transition: all .2s ease-in-out;
+    }
+
+    .card:hover
+    {
+        transform: scale(1.1);
+    }
+
+    .floatingmenu{
+        position:absolute;
+        bottom:15px;
+        right:15px;
+    }
+
+    .tabulador {
+        color: white;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .tabulador:hover {
+            color: white;
+            font-weight: bolder;
+            border-style: none;
+        }
+
+    .leftdiv{
+    font-size:10pt;
+    min-height:25px;
+    min-width: 190px;
+    margin: 2px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+</style>
+
+@code {
+    private Type? _menu;
+    string _selectedTab = null!;
+
+    Dictionary<string, Type> _tabs = new()
+    {
+        {"Admin", typeof(ChangePasswordForm)},
+        {"Negócios", typeof(PersonalOpenDeals) },
+    };
+}

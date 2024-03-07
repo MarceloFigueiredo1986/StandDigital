@@ -1,0 +1,75 @@
+﻿@attribute [StreamRendering]
+
+@inject ILogger<PersonalOpenDeals> _logger
+@inject IMediator _mediator;
+@inject SessionSettings _session
+@inject NavigationManager navman
+
+<div class="row" style="padding:15px;">
+    <h3 style="color:white">Viaturas para venda ativas</h3>
+    <input type="button" value="+" class="btn btn-success" style="max-width:35px;margin-left:15px;border-radius:25px"
+           @onclick="() => GotoCarDetails()" />
+    <Virtualize Items="@Cars" Context="Car">
+        <div style="margin:@_marginStr;float:@_float" class="card">
+            <div class="row">
+                <div class="leftdiv"><a><b>@Car.Marca</b></a></div>
+                <div class="leftdiv"><a>@Car.Modelo </a></div>
+                <div class="leftdiv"><a>@Car.Kms km <span style="position:absolute;right:110px">@Car.Cv cv</span></a></div>
+                <div class="leftdiv"><a>@Car.Combustivel</a></div>
+                <div class="leftdiv"><a><b>@Car.DiasParaFimAnuncio para terminar</b></a></div>
+                @if (Car.Combustivel == Combustivel.Electrico.GetDescription() ||
+                Car.Combustivel == Combustivel.HibridoGasolina.GetDescription() ||
+                Car.Combustivel == Combustivel.HibridoGasoleo.GetDescription())
+                {
+                    <div class="leftdiv"><a>@Car.TipoCarregamento <span style="position:absolute;right:110px">@Car.Bateria Kw</span></a></div>
+                }
+                else
+                {
+                    <div class="leftdiv"><a>@Car.Cilindrada cc <span style="position:absolute;right:110px">@Car.Caixa</span></a></div>
+                }
+                <div style="max-width:100px;position:absolute;right:2px">
+                    <img src="@Car.MainImage.ImageStringBase64()" height="93" style="position:absolute;right:0px;border-radius:45px" />
+                </div>
+            </div>
+        </div>
+    </Virtualize>
+</div>
+
+@code {
+    ICollection<CarCompleteModel> Cars = [];
+
+    [CascadingParameter]
+    public int WindowWidth { get; set; }
+
+    string? _marginStr;
+    string? _float;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var session = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            Cars = (await _mediator.Send(new UserOpenDealsRequest(session.IdUser))).ToArray();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, null);
+        }
+    }
+
+    protected void GotoCarDetails(int? carid = null) => navman.NavigateTo($"managecar/{carid}");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (WindowWidth == 0 || _marginStr is not null) return;
+
+        (_marginStr, _float) = WindowWidth switch
+        {
+            > 560 => ($"{15}px", "left"),
+            <= 560 => ($"auto", "none")
+        };
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+}

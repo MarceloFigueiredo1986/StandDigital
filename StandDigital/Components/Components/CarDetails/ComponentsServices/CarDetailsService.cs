@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
 using StandDigital.Core.Models;
+using StandDigital.Core.RequestHandlers.CarAdvertisement;
 using StandDigital.Core.RequestHandlers.NewCarDeal;
 using StandDigital.Core.RequestHandlers.TiposNegocios;
 using StandDigital.Core.RequestHandlers.UpdateCarDeal;
