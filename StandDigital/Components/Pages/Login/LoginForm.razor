@@ -1,0 +1,112 @@
+﻿@using Blazored.Toast.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using StandDigital.Auth
+@using StandDigital.Settings
+@using static StandDigital.Components.Pages.Login.Login
+
+@inherits StandDigital.Services.LoginComponent
+
+@if (!string.IsNullOrEmpty(Erro))
+{
+    <label style="color:red">@Erro</label>
+}
+<div id="formContent">
+    <div id="formHeader" style="background-color:white">
+        @if (!string.IsNullOrEmpty(_settings.LogoPath))
+        {
+            <img src="@_settings.LogoPath" height="60" width="100" style="border-radius:5px;margin-top:10px" />
+        }
+    </div>
+    <div style="padding-top:15px;padding-bottom:15px">
+        <input type="text" class="fadeIn second" name="login" @bind-value="utilizador" placeholder="Utilizador" required>
+        <label></label>
+        <input type="password" class="form-control" id="exampleInputPassword1" @bind-value="passwordutilizador" placeholder="Password">
+        <div>
+            @if (isSaving)
+            {
+                <button class="btn btn-primary" type="button" style="margin:auto" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    A validar...
+                </button>
+            }
+            else
+            {
+                <div class="row">
+                    <button type="submit" style="margin:auto;width:100px" @onclick="ValidaLogin" class="btn btn-primary">Entrar</button>
+                </div>
+                <span style="color:red;margin:2px">@Erro</span>
+            }
+        </div>
+        <a @onclick="() => { 
+            ChoosedMenu = MenusLogin.CriarConta; 
+            ChoosedMenuChanged.InvokeAsync(ChoosedMenu);
+            }">Criar conta</a>
+    </div>
+</div>
+
+@code {
+    string? passwordutilizador;
+    string? utilizador;
+    string? Erro;
+    bool FinishedTask = false;
+    bool isSaving = false;
+
+    [Parameter]
+    public MenusLogin ChoosedMenu { get; set; }
+
+    [Parameter]
+    public EventCallback<MenusLogin> ChoosedMenuChanged { get; set; }
+
+
+    public async void ValidaLogin()
+    {
+        bool RunButtonReset = false;
+        try
+        {
+            var validLogin = await ValidateLogin(utilizador, passwordutilizador, ((Authentication)_authenticator));
+            if (!validLogin)
+            {
+                _toaster.ShowWarning("Invalid Credentials");
+                RunButtonReset = true;
+                return;
+            }
+
+            navMan.NavigateTo(navMan.BaseUri);
+        }
+        catch (Exception ex)
+        {
+            Erro = ex.Message;
+            Console.WriteLine("Login.ValidaLogin:" + ex.Message);
+            RunButtonReset = true;
+        }
+        finally
+        {
+            if (RunButtonReset)
+            {
+                FinishedTask = true;
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            Erro = null;
+            if (firstRender)
+            {
+
+                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+                if (session_already_started == null) return;
+                if (session_already_started.ExpirationDate >= DateTimeOffset.UtcNow)
+                    navMan.NavigateTo(navMan.Uri.Replace("Login?ReturnUrl=%2F", ""));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Login.OnAfterRenderAsync");
+            Erro = ex.Message;
+        }
+    }
+}

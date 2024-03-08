@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using StandDigital.Core.CarAdvertisement;
 
 namespace StandDigital.Core.RequestHandlers.CarAdvertisement;
 

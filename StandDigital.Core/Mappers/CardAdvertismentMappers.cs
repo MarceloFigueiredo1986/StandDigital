@@ -1,10 +1,5 @@
-﻿using StandDigital.Core.Entities;
-using StandDigital.Core.RequestHandlers.CarAdvertisement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StandDigital.Core.CarAdvertisement;
+using StandDigital.Core.Entities;
 
 namespace StandDigital.Core.Mappers;
 

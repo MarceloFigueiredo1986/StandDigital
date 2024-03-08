@@ -1,0 +1,81 @@
+﻿@using static StandDigital.Components.Pages.Login.Login
+@inject ILogger<CriarContaForm> _logger
+
+
+<EditForm Model="_user" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <h3>Criar Conta</h3>
+
+    <InputText DisplayName="Nome" @bind-Value="_user.Name" />
+    <ValidationMessage For="@(() => _user.Name)" />
+
+    <InputText DisplayName="Address" @bind-Value="_user.Address" />
+    <ValidationMessage For="@(() => _user.Address)" />
+
+    <InputText DisplayName="Username" @bind-Value="_user.Username" />
+    <ValidationMessage For="@(() => _user.Username)" />
+
+    <InputText DisplayName="Email" @bind-Value="_user.Email" />
+    <ValidationMessage For="@(() => _user.Email)" />
+
+    <InputNumber DisplayName="Mobile" @bind-Value="_user.Mobile" />
+    <ValidationMessage For="@(() => _user.Mobile)" />
+
+    <InputText DisplayName="NIF" @bind-Value="_user.NIF" />
+    <ValidationMessage For="@(() => _user.NIF)" />
+
+    <InputText DisplayName="Password" @bind-Value="_user.Password" />
+    <ValidationMessage For="@(() => _user.Password)" />
+
+    <InputText DisplayName="ConfirmPassword" @bind-Value="_user.ConfirmPassword" />
+    <ValidationMessage For="@(() => _user.ConfirmPassword)" />
+
+    <div class="row">
+        @if (_isSaving)
+        {
+            <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                A guardar...
+            </button>
+        }
+        else
+        {
+            <div class="row">
+                <button type="submit" style="margin:15px;width:100px" class="btn btn-primary">Guardar</button>
+            </div>
+            <span style="color:red;margin:2px">@_error</span>
+        }
+    </div>
+</EditForm>
+<a @onclick="() => { ChoosedMenu = MenusLogin.CriarConta; ChoosedMenuChanged.InvokeAsync(ChoosedMenu);}">Criar conta</a>
+
+@code {
+    UserRequest _user = new();
+    bool _isSaving;
+    string? _error;
+
+    [Parameter]
+    public MenusLogin ChoosedMenu { get; set; }
+
+    [Parameter]
+    public EventCallback<MenusLogin> ChoosedMenuChanged{ get; set; }
+
+    private void Save(EditContext editContext)
+    {
+        try
+        {
+            _isSaving = true;
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao registar utilizador");
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+}
