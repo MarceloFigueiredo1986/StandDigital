@@ -37,7 +37,7 @@
                 <span style="color:red;margin:2px">@Erro</span>
             }
         </div>
-        <a @onclick="() => { 
+        <a style="cursor:pointer" @onclick="() => { 
             ChoosedMenu = MenusLogin.CriarConta; 
             ChoosedMenuChanged.InvokeAsync(ChoosedMenu);
             }">Criar conta</a>

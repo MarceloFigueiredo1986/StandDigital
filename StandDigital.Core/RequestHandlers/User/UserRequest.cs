@@ -17,12 +17,15 @@ public class UserRequest : IRequest<ErrorOr<bool>>
     [Required(ErrorMessage = "Insira um número de contribuinte")]
     [VatAttributeValidator]
     public string? NIF { get; set; }
+ 
     [Required(ErrorMessage = "Preencha o email")]
     [EmailAddress(ErrorMessage = "Insira um email válido")]
     public string? Email { get; set; }
+    
     [Required(ErrorMessage = "Preencha o número de telefone")]
-    [Phone(ErrorMessage = "Insira um telefone válido")]
+    [RegularExpression(@"^(\+[0-9]{9})$", ErrorMessage = "Insira um telefone válido")] 
     public long? Mobile { get; set; }
+
     [Required(ErrorMessage = "Preencha o nome de utilizador")]
     public string? Username { get; set; }
    

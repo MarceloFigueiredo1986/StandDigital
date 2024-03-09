@@ -8,6 +8,9 @@ public class VatAttributeValidator : ValidationAttribute
     public override bool IsValid(object? value)
     {
         var countryValidator = new CountryValidator();
-        return countryValidator.ValidateVAT(value?.ToString(), Country.PT).IsValid;
+        var valid = countryValidator.ValidateIndividualTaxCode(value?.ToString(), Country.PT).IsValid;
+        return !valid ?
+            countryValidator.ValidateVAT(value?.ToString(), Country.PT).IsValid :
+            valid;
     }
 }
