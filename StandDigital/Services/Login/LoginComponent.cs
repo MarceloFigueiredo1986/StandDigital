@@ -25,6 +25,7 @@ public class LoginComponent : AbstractComponent<LoginComponent>
         var userData = new Authentication.AuthenticationData { 
             Name = result.Name is null ? result.UserId.ToString() : result.Name,
             ExpirationDate = expirationDate, 
+            Role = "default",
             IdUser = result.UserId
         };
             

@@ -14,12 +14,14 @@ internal sealed class UserRepository(IDatabase database) : IUserRepository
     {
         try
         {
+            var de = new DataEncryption();
+
             value.Address = DataEncryption.Encrypt(value.Address);
             value.NIF = DataEncryption.Encrypt(value.NIF);
             value.Email = DataEncryption.Encrypt(value.Email);
             value.Mobile = DataEncryption.Encrypt(value.Mobile);
-            value.Password = DataEncryption.Encrypt(value.Password);
-            value.Username = DataEncryption.Encrypt(value.Username);
+            value.Password = de.Hash(value.Password);
+            value.Username = de.Hash(value.Username);
 
             var createdBrandId = await _dbcontext.InsertAsyncAndGetIdAsync<UserEntity, int>(
                      """

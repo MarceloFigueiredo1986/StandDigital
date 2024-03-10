@@ -69,11 +69,18 @@
 </style>
 
 @code {
-    private Type? _menu;
     string _selectedTab = null!;
 
     Dictionary<string, Type> _tabs = new()
     {
         {"Negócios", typeof(PersonalOpenDeals) }
     };
+
+    private Type _menu;
+
+    protected override void OnInitialized()
+    {
+        _selectedTab = _tabs.First().Key;
+        _menu = _tabs.First().Value;
+    }
 }
