@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using StandDigital.Auth;
 using StandDigital.Settings;
 using StandDigital_HttpClient.HttpService;
-using StandDigital_Shared.Services.Logging;
 
 namespace StandDigital.Components;
 

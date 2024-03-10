@@ -1,0 +1,124 @@
+﻿@using static StandDigital.Components.Pages.Login.Login
+
+@attribute [StreamRendering]
+
+@inherits CriarContaComponent;
+
+<div id="formContent">
+    <div style="padding-top:15px;padding-bottom:15px">
+        <div class="row justify-content-center">
+            <EditForm Model="_user" OnValidSubmit="Save" OnInvalidSubmit="() => _isSaving = false">
+                <DataAnnotationsValidator />
+                <h4 style="color:gray">Criar Conta</h4>
+
+                <div class="row inputValuesStyleDiv">
+                    <div style="width:150px;float:left;margin-right:5px">
+                        <label class="form-label" style="font-size:9pt">Nome</label>
+                        <InputText class="form-control elementStyle elementTextStyle" style="width:140px" @bind-Value="_user.Name" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.Name)" class="validationfieldstyle" />
+                    </div>
+                    <div style="width:150px;float:left">
+                        <label class="form-label" style="font-size:9pt">Nome utilizador</label>
+                        <InputText class="form-control elementStyle elementTextStyle" style="width:140px" @bind-Value="_user.Username" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.Username)" class="validationfieldstyle" />
+                    </div>
+                </div>
+
+                <div class="row inputValuesStyleDiv">
+                    <div style="width:150px;float:left;margin-right:5px">
+                        <label class="form-label" style="font-size:9pt">NIF</label>
+                        <InputText class="form-control elementStyle elementTextStyle" @bind-Value="_user.NIF" style="width:140px" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.NIF)" class="validationfieldstyle" />
+                    </div>
+                    <div style="width:150px;float:left;margin-right:5px">
+                        <label class="form-label" style="font-size:9pt">Telefone</label>
+                        <InputNumber class="form-control elementStyle elementTextStyle" @bind-Value="_user.Mobile" style="width:140px" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.Mobile)" class="validationfieldstyle" />
+                    </div>
+                </div>
+
+                <div class="row inputValuesStyleDiv">
+                    <div style="width:150px;float:left;margin-right:5px">
+                        <label class="form-label" style="font-size:9pt">Password</label>
+                        <InputText type="password" class="form-control elementStyle elementTextStyle" @bind-Value="_user.Password" style="width:140px" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.Password)" class="validationfieldstyle" />
+                    </div>
+                    <div style="width:150px;float:left;margin-right:5px">
+                        <label class="form-label" style="font-size:9pt">Confirmar Password</label>
+                        <InputText type="password" class="form-control elementStyle elementTextStyle" @bind-Value="_user.ConfirmPassword" style="width:140px" tabindex="1" />
+                        <ValidationMessage For="@(() => _user.ConfirmPassword)" class="validationfieldstyle" />
+                    </div>
+                </div>
+
+                <div class="row inputValuesStyleDiv" style="margin-left:15px">
+                    <label class="form-label labelStyle">Morada</label>
+                    <InputText style="width:300px" class="form-control elementTextStyle" @bind-Value="_user.Address" tabindex="1" />
+                    <ValidationMessage For="@(() => _user.Address)" class="validationfieldstyle" />
+                </div>
+
+                <div class="row inputValuesStyleDiv" style="margin-left:15px">
+                    <label class="form-label labelStyle">Email</label>
+                    <InputText style="width:300px" class="form-control elementTextStyle" @bind-Value="_user.Email" tabindex="1" />
+                    <ValidationMessage For="@(() => _user.Email)" class="validationfieldstyle" />
+                </div>
+
+                <div class="row inputValuesStyleDiv">
+                    @if (_isSaving)
+                    {
+                        <button class="btn btn-primary" type="button" style="margin:15px;width:150px" disabled>
+                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            A criar...
+                        </button>
+                    }
+                    else
+                    {
+                    <div class="row">
+                        <button type="submit" style="margin:15px;width:100px" class="btn btn-primary" @onclick="() => {_isSaving = true;}">Criar</button>
+                        </div>
+                        <span style="color:red;margin:2px">@_error</span>
+                    }
+                </div>
+                <a style="cursor:pointer;color:cornflowerblue;text-underline-position:from-font" @onclick="() => { ChoosedMenu = MenusLogin.Login; ChoosedMenuChanged.InvokeAsync(ChoosedMenu);}">Login</a>
+
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+
+    .validationfieldstyle{
+       font-size:8pt;
+       color:salmon";
+    }
+
+    .inputValuesStyleDiv {
+        width: 330px;
+        float: left;
+        margin: 10px 0 0px 0;
+    }
+
+    .labelStyle{
+        float: left;
+        width: 100px;
+        text-align: left;
+        height: 10px;
+        font-size:9pt;
+    }
+    
+    .elementStyle{
+        background-color: white;
+        border-color: lightgray;
+        border-width: 0.5pt;
+        margin: 0px;
+        height: 38px;
+        padding-left: 1px;
+        padding-right: 1px;
+        float: left;
+    }
+    
+    .elementTextStyle{
+        font-size: 9pt;
+        text-align: center;
+    }
+</style>

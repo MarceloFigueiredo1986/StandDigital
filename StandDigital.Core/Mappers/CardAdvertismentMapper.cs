@@ -3,7 +3,7 @@ using StandDigital.Core.Entities;
 
 namespace StandDigital.Core.Mappers;
 
-public static class CardAdvertismentMappers
+public static class CardAdvertismentMapper
 {
     public static CarEntity ToCardEntity(this CarAdvertisementCrudModel car)
         => new CarEntity()
