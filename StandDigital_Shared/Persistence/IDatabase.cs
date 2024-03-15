@@ -33,6 +33,8 @@ public interface IDatabase : IDisposable
     Task<IEnumerable<T>> GetAsync<T,T1>(string query, string splitOn, Func<T,T1,T> mapFunction,
         Dictionary<string, object>? dynamicParameters = null) where T : class where T1: class;
 
+    Task<T?> GetSingleAsync<T>(string query, Dictionary<string, object> parameters);
+
     Task<TOut> InsertAsyncAndGetIdAsync<TIn,TOut>(string query,TIn value, CancellationToken cancellationToken);
 
     Task<int> UpdateAsync<TIn>(string query, TIn obj, CancellationToken cancellationToken);

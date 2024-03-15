@@ -73,9 +73,13 @@ public sealed class Database(IConfiguration configuration) : IDatabase
              dynamicParameters,
              transaction);
 
+    public async Task<T?> GetSingleAsync<T>(string query, Dictionary<string,object> parameters)
+        => await _dbConnection.QuerySingleOrDefaultAsync<T>(sql: query,param: parameters);
+
     public Task<int> UpdateAsync<TIn>(string query, TIn obj, CancellationToken cancellationToken)
         => _dbConnection.ExecuteAsync(new CommandDefinition(
             commandText: query,
             parameters: obj,
             cancellationToken: cancellationToken));
+
 }

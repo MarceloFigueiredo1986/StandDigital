@@ -131,7 +131,8 @@ internal class CarRepository(IDatabase database) : ICarRepository
             DataFimAnuncio,
             Comentarios,
             Matricula,
-            Lotacao 
+            Lotacao,
+            PrecoBase
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
             WHERE c.CarroId = @carroId;
@@ -146,11 +147,12 @@ internal class CarRepository(IDatabase database) : ICarRepository
             """;
 
         var querySellHistory = """
-            select MAX(Valor) as BiggestBid,count(CarroId) as TotalBids,Name as Bidder 
+            select MAX(Valor) as BiggestBid,count(hn.CarroId) as TotalBids,Name as Bidder 
             from HistoricoNegocios hn
-            inner join Users u on hn.VendedorId = u.UserId
-            where CarroId = @carroId
-            group by CarroId,Name
+            inner join CarrosMetadata cm on hn.CarroId = cm.CarroId
+            inner join Users u on hn.CompradorId = u.UserId
+            where hn.CarroId = @carroId
+            group by hn.CarroId,Name
             order by BiggestBid desc;
             """;
 

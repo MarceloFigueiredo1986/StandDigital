@@ -21,6 +21,7 @@ public class BaseCar
     public string Comentarios { get;set; }
     public string Matricula { get;set; }
     public int Lotacao { get;set; }
+    public decimal PrecoBase { get;set; }
 
     public string DiasParaFimAnuncio
     {

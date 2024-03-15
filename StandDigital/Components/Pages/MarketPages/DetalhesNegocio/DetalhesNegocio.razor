@@ -1,0 +1,110 @@
+﻿@page "/detalhesnegocio/{tiponegocio}/{carroid:int}"
+
+@attribute [StreamRendering]
+@attribute [Authorize]
+
+@inherits DetalhesNegocioService
+
+<StandDigital.Components.Components.ComponentLoader LoadingObj="_detalhesCarro">
+    <Fragment>
+        <div class="maindiv">
+            <div class="row details">
+                <div style="width:@_WidthStr;margin-left:5px">
+                    <div style="height:430px">
+                        <StandDigital.Components.Components.ImageCarousel Photos="_detalhesCarro.Photos" />
+                    </div>
+                    <h5 style="color:white;"><b>Termina em:</b> @_detalhesCarro.Car.DiasParaFimAnuncio</h5>
+                    <h4><b>Preço base: <span style="color:darkorange">@_detalhesCarro.Car.PrecoBase €</span></b></h4>
+                    <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.BiggestBid €</span></b></h4>
+                    <h4><b>Propostas feitas: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.TotalBids</span></b></h4>
+                    <h4><b>Licitador na frente: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.Bidder</span></b></h4>
+                    <br />
+                    @if (ShowLicitationButton())
+                    {
+                        <div style="width:170px">
+                            <h5 style="color:white;float:left;padding-top:5px">Licitar:</h5>
+                            <InputNumber id="inputidnewbid" 
+                                style="width:100px;float:right;text-align:right;padding-right:0px" class="form-control" @bind-Value="_newBid" />
+                            @if(isSaving)
+                        {
+                                <button class="btn btn-primary" type="button" style="width:100px;float:lef" disabled>
+                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                    A licitar...
+                                </button>
+                        }
+                            else
+                        {
+                                <input type="button" class="btn btn-success comprarbutton" value="Licitar"
+                                       style="margin-top:15px" @onclick="Bid" />
+                        }
+                        </div>
+                    }
+                </div>
+                <div style="width:350px;">
+                    <h1 style="color:white">Detalhes</h1>
+                    <p class="pStyle"><b>Marca / Modelo:</b> @_detalhesCarro.Car.Marca / @_detalhesCarro.Car.Modelo</p>
+                    <p class="pStyle"><b>Mês/Ano:</b> @_detalhesCarro.Car.MesRegisto.ToString().PadLeft(2,'0')/@_detalhesCarro.Car.Ano</p>
+                    <p class="pStyle"><b>Combustível:</b> @_detalhesCarro.Car.Combustivel</p>
+                    <p class="pStyle"><b>Kms:</b> @_detalhesCarro.Car.Kms</p>
+                    <p class="pStyle"><b>Origem:</b> @(_detalhesCarro.Car.Nacional == 1 ? "Nacional" : "Importado")</p>
+                    @if (_detalhesCarro.Car.Combustivel != Combustivel.Electrico.GetDescription())
+                    {
+                        <p class="pStyle"><b>Cilindrada:</b> @_detalhesCarro.Car.Cilindrada</p>
+                        <p class="pStyle"><b>Caixa:</b> @_detalhesCarro.Car.Caixa</p>
+                    }else{
+                        <p class="pStyle"><b>Capacidade bateria:</b> @_detalhesCarro.Car.Bateria</p>
+                        <p class="pStyle"><b>Tipo carregamento:</b> @_detalhesCarro.Car.TipoCarregamento</p>
+                    }
+                    <p class="pStyle"><b>Registos:</b> @(_detalhesCarro.Car.PrimeiroDono == 0 ? "2 ou + donos" : "1")</p>
+                    <p class="pStyle"><b>Origem:</b> @(_detalhesCarro.Car.Nacional == 0 ? "Importado" : "Nacional")</p>
+                    <p class="pStyle">
+                        <b>Lotação:</b> @_detalhesCarro.Car.Lotacao
+                    </p>
+                    <br />
+                    <h1 style="color:white">Extras</h1>
+                    <div style="margin-bottom:25px">
+                        @foreach (var extra in _detalhesCarro.Extras)
+                        {
+                            <input style="margin:0.5px;font-size:8pt;height:20px;padding:2px"
+                                   type="button" class="btn btn-primary" value="@extra" />
+                        }
+                    </div>
+                    <h1 style="color:white">Estado Viatura</h1>
+                    <p class="pStyle">
+                        <b>Problemas motor:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.ProblemasMotor) ? "Sem danos" : _detalhesCarro.Car.ProblemasMotor)
+                    </p>
+                    <p class="pStyle">
+                        <b>Danos carroceria:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Danos) ? "Sem danos" : _detalhesCarro.Car.Danos)
+                    </p>
+                    <p class="pStyle">
+                        <b>Comentários:</b>
+                        @(string.IsNullOrEmpty(_detalhesCarro.Car.Comentarios) ? "Sem comentários" : _detalhesCarro.Car.Comentarios)
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </Fragment>
+</StandDigital.Components.Components.ComponentLoader>
+
+<style type="text/css">
+
+    .comprarbutton{
+        width:120px;
+        margin:auto;
+    }
+
+    .maindiv{
+        margin:145px 5px;
+    }
+
+    b{
+        color:gray;
+    }
+
+    .pStyle{
+        color:white;
+    }
+</style>

@@ -3,6 +3,7 @@ using StandDigital.Core.Database.Repositories.Car;
 using StandDigital.Core.Database.Repositories.CarExtras;
 using StandDigital.Core.Database.Repositories.CarMetadata;
 using StandDigital.Core.Database.Repositories.CarPhotos;
+using StandDigital.Core.Database.Repositories.DealBidding;
 using StandDigital.Core.Database.Repositories.TiposNegocios;
 using StandDigital.Core.Database.Repositories.User;
 using StandDigital.Core.Database.UnitsOfWork.Car;
@@ -21,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<ITiposNegociosRepository, TiposNegociosRepository>();
         services.AddScoped<ICarUoW, CarUoW>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IDealRepository, DealRepository>();
 
         return services;
     }
