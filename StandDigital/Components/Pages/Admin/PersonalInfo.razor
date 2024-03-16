@@ -1,5 +1,18 @@
-﻿<input type="button" class="btn btn-danger" value="Logout" />
+﻿@inject SessionSettings _session
+@inject AuthenticationStateProvider _authenticator
+@inject NavigationManager _navMan;
 
-@code {
+<div class="row" style="padding:15px">
+    <input type="button" class="btn btn-danger" value="Logout" @onclick="Logout" />
+</div>
 
+@code 
+{
+    protected async Task Logout()
+    {
+        await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
+        var signOutManager = (Authentication)_authenticator;
+        signOutManager.SignOut();
+        _navMan.NavigateTo("/", true);
+    }
 }
