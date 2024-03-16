@@ -13,11 +13,14 @@
                     <div style="height:430px">
                         <StandDigital.Components.Components.ImageCarousel Photos="_detalhesCarro.Photos" />
                     </div>
+                    @if(_detalhesCarro.CarSellHistory.Seller != _sessionUser)
+                    {
+                        <h4><b>Preço base: <span style="color:darkorange">@_detalhesCarro.Car.PrecoBase €</span></b></h4>
+                        <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.BiggestBid €</span></b></h4>
+                        <h4><b>Licitador na frente: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.Bidder</span></b></h4>
+                    }
                     <h5 style="color:white;"><b>Termina em:</b> @_detalhesCarro.Car.DiasParaFimAnuncio</h5>
-                    <h4><b>Preço base: <span style="color:darkorange">@_detalhesCarro.Car.PrecoBase €</span></b></h4>
-                    <h4><b>Licitação atual: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.BiggestBid €</span></b></h4>
                     <h4><b>Propostas feitas: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.TotalBids</span></b></h4>
-                    <h4><b>Licitador na frente: <span style="color:darkorange">@_detalhesCarro.CarSellHistory?.Bidder</span></b></h4>
                     <br />
                     @if (ShowLicitationButton())
                     {

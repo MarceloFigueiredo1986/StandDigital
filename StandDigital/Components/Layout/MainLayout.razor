@@ -12,7 +12,7 @@
 @attribute [StreamRendering]
 @inject AuthenticationStateProvider _authenticator
 
-<PageTitle>Paraíso automóvel</PageTitle>
+<PageTitle>Venda Motor</PageTitle>
 
 <BlazoredToasts />
 
@@ -23,14 +23,14 @@
                     <div class="col-12">
                         <nav class="main-nav">
                             <a href="/" class="logo">
-                                <span style="font-size:16pt">Paraíso automóvel</span>
+                                <span style="font-size:16pt">Venda Motor</span>
                             </a>
                             <ul class="nav">
                             <li><a href="/">Início</a></li>
                             <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
                                 <Authorized>
                                     <li><a href="/mercado">Ofertas mercado</a></li>
-                                    <li><a href="/admin">Gestão conta</a></li>
+                                    <li><a href="/admin"><img src="https://ik.imagekit.io/da113ycvp/StandDigital/user.png?updatedAt=1710594407921" style="width:30px" /><b>@_userName</b></a></li>
                                 </Authorized>
                                 <NotAuthorized>
                                     <li><a href="login">Login</a></li>
@@ -172,6 +172,7 @@
 @code{
     private int WindowWidth = 0;
     private bool floatingButtonClicked;
+    private string? _userName;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -181,18 +182,22 @@
             {
                 WindowWidth = await js.InvokeAsync<int>("GetWidth");
                 await InvokeAsync(StateHasChanged);
+            }
 
-                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
-                if (session_already_started == null) return;
-                if (session_already_started.ExpirationDate < DateTime.UtcNow)
-                {
-                    ((Authentication)_authenticator).SignOut();
-                    await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
-                    return;
-                }
+            var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            if (session_already_started == null) return;
+
+
+            if (firstRender && session_already_started.ExpirationDate < DateTime.UtcNow)
+            {
+                ((Authentication)_authenticator).SignOut();
+                await _session.RemoveKey(SessionSettings.SessionKeys.UserLoggedData);
+                return;
+            }
 
                 ((Authentication)_authenticator).AuthenticateUser(session_already_started);
-            }
+            _userName = session_already_started.Name;
+
         }
         catch (Exception ex)
         {

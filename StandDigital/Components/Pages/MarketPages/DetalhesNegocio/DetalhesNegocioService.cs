@@ -128,9 +128,8 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
     }
 
     protected bool SelfAdvertisement()
-        => _detalhesCarro.CarSellHistory?.Bidder == _sessionUser;
+        => _detalhesCarro.CarSellHistory?.Seller == _sessionUser;
 
     protected bool ShowLicitationButton() =>
-        _detalhesCarro.CarSellHistory?.TotalBids == 0 ||
-        (_sessionUser != default && _detalhesCarro.CarSellHistory?.Bidder == _sessionUser);
+        _detalhesCarro.CarSellHistory?.TotalBids == 0 || !SelfAdvertisement();
 }

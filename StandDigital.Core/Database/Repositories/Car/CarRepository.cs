@@ -147,12 +147,13 @@ internal class CarRepository(IDatabase database) : ICarRepository
             """;
 
         var querySellHistory = """
-            select MAX(Valor) as BiggestBid,count(hn.CarroId) as TotalBids,Name as Bidder 
-            from HistoricoNegocios hn
-            inner join CarrosMetadata cm on hn.CarroId = cm.CarroId
-            inner join Users u on hn.CompradorId = u.UserId
-            where hn.CarroId = @carroId
-            group by hn.CarroId,Name
+            select MAX(Valor) as BiggestBid,count(hn.CarroId) as TotalBids,u.Name as Bidder,u2.Name as Seller 
+            from CarrosMetadata cm
+            left join HistoricoNegocios hn on hn.CarroId = cm.CarroId
+            left join Users u on hn.CompradorId = u.UserId
+            left join Users u2 on cm.VendedorId = u2.UserId
+            where cm.CarroId = @carroId
+            group by hn.CarroId,u.Name
             order by BiggestBid desc;
             """;
 
