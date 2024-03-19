@@ -25,7 +25,7 @@ internal class CarRepository(IDatabase database) : ICarRepository
              {
                  "@tiponegocio", tipoNegocio
              } });
-    public async Task<IEnumerable<CarCompleteModel>> GetUserDealsAsync(int userId)
+    public async Task<IEnumerable<CarCompleteModel>> GetUserOpenDealsAsync(int userId)
      => await _dbcontext.GetAsync<CarCompleteModel>("""
             SELECT 
             c.CarroId,
@@ -43,7 +43,7 @@ internal class CarRepository(IDatabase database) : ICarRepository
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
             LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
-            WHERE cm.VendedorId = @userId
+            WHERE cm.VendedorId = @userId and cm.DataFimAnuncio == null
             """, new Dictionary<string, object>{ { "@userId", userId } });
     public async Task<ErrorOr<int>> CreateAsync(CarEntity value, CancellationToken cancellationToken)
     {
@@ -188,4 +188,9 @@ internal class CarRepository(IDatabase database) : ICarRepository
             },
             cancellationToken);
     public Task<IEnumerable<CarEntity>> GetAllAsync() => throw new NotImplementedException();
+
+    public Task<IEnumerable<CarCompleteModel>> GetUserClosedDealsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
 }

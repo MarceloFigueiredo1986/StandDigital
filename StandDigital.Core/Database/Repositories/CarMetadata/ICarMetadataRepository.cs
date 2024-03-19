@@ -3,6 +3,7 @@ using StandDigital_Shared.Repositories;
 
 namespace StandDigital.Core.Database.Repositories.CarMetadata;
 
-internal interface ICarMetadataRepository : IBaseRepository<CarMetadataEntity>
+public interface ICarMetadataRepository : IBaseRepository<CarMetadataEntity>
 {
+    Task CloseFinishedDealsAsync(CancellationToken cancellationToken);
 }

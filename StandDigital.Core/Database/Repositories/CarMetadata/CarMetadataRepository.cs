@@ -7,6 +7,14 @@ namespace StandDigital.Core.Database.Repositories.CarMetadata;
 internal class CarMetadataRepository(IDatabase database) : ICarMetadataRepository
 {
     private readonly IDatabase _dbcontext = database;
+
+    public async Task CloseFinishedDealsAsync(CancellationToken cancellationToken)
+        => await _dbcontext.UpdateAsync("""
+            UPDATE CarrosMetadata 
+            SET DataFimAnuncio = datetime('now')
+            WHERE DataFimAnuncio is null and datetime(DataInicioAnuncio, '+14 days') < datetime('now')
+            """, cancellationToken);
+
     public async Task<ErrorOr<int>> CreateAsync(CarMetadataEntity value, CancellationToken cancellationToken)
     {
         try

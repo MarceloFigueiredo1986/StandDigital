@@ -38,4 +38,6 @@ public interface IDatabase : IDisposable
     Task<TOut> InsertAsyncAndGetIdAsync<TIn,TOut>(string query,TIn value, CancellationToken cancellationToken);
 
     Task<int> UpdateAsync<TIn>(string query, TIn obj, CancellationToken cancellationToken);
+
+    Task<int> UpdateAsync(string query, CancellationToken cancellationToken);
 }

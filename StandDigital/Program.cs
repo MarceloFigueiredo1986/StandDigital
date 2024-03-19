@@ -62,8 +62,6 @@ public class Program
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
-            Log.Logger.Information("--------------------App started");
-
             app.Run();
         }
         catch (Exception ex)

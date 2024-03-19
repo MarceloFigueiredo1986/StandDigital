@@ -82,4 +82,8 @@ public sealed class Database(IConfiguration configuration) : IDatabase
             parameters: obj,
             cancellationToken: cancellationToken));
 
+    public Task<int> UpdateAsync(string query, CancellationToken cancellationToken)
+        => _dbConnection.ExecuteAsync(new CommandDefinition(
+            commandText: query,
+            cancellationToken: cancellationToken));
 }

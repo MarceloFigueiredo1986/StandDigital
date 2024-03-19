@@ -22,6 +22,7 @@ public static class BoostrappServices
         services.InstallHttpClient();
         services.InstallSharedProject();
         services.AddHostedService<DatabaseUpdate>();
+        services.AddHostedService<CloseFinishedDeals>();
         services.AddAuthorizationCore();
         services.AddBlazoredLocalStorage();
         services.AddBlazoredToast();

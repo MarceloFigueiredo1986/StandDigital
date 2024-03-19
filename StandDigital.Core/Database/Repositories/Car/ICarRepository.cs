@@ -9,5 +9,6 @@ internal interface ICarRepository : IBaseRepository<CarEntity>
     Task<IEnumerable<CarCardModel>> GetOpenDealsByBusinessTypeAsync(string tipoNegocio);
     Task<CarWithExtrasAndImagesDto?> GetCompleteCarAsync(int carroId);
     Task<int> SetPrimaryPhotoAsync(int carroId, int fotoId, CancellationToken cancellationToken);
-    Task<IEnumerable<CarCompleteModel>> GetUserDealsAsync(int userId);
+    Task<IEnumerable<CarCompleteModel>> GetUserOpenDealsAsync(int userId);
+    Task<IEnumerable<CarCompleteModel>> GetUserClosedDealsAsync(int userId);
 }

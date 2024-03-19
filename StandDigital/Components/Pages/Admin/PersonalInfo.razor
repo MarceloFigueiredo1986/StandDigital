@@ -2,8 +2,10 @@
 @inject AuthenticationStateProvider _authenticator
 @inject NavigationManager _navMan;
 
+@attribute [StreamRendering]
+
 <div class="row" style="padding:15px">
-    <input type="button" class="btn btn-danger" value="Logout" @onclick="Logout" />
+    <input type="button" class="btn btn-danger" style="width:100px" value="Logout" @onclick="Logout" />
 </div>
 
 @code 

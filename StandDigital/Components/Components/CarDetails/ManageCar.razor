@@ -5,10 +5,11 @@
 
 @attribute [StreamRendering]
 
+<input type="button" class="btn btn-outline-info" value="Voltar" style="margin-top:150px;margin-left:30px" @onclick="GoBack" />
 <EditForm Model="Car" OnValidSubmit="ManageCommandToApply">
     <DataAnnotationsValidator />
 
-    <div class="edit-form-container" style="background-color:white;width:90%;margin-top:150px">
+    <div class="edit-form-container" style="background-color:white;width:90%">
         <ul class="nav nav-tabs">
             @foreach(var tab in Enum.GetValues<Tab>())
             {
@@ -308,6 +309,8 @@
         Fotos,
         TipoNegocio
     }
+
+    protected void GoBack() => navMan.NavigateTo("/admin");
 
     private Type? MenuOpcoesTipoCombustivel;
     private Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "Carro", Car } };
