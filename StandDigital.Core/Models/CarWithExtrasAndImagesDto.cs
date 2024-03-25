@@ -4,4 +4,4 @@ public record CarWithExtrasAndImagesDto(
     CarCompleteModel Car,
     HashSet<string>? Extras, 
     string[]? Photos,
-    CarSellingPurposes? CarSellHistory);
+    CarSellingPurposes CarSellHistory);

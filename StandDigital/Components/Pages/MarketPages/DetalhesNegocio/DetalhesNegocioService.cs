@@ -40,14 +40,12 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
                 _detalhesCarro = await _mediatr.Send(new GetCompleteCarRequest(CarroId.Value));
 
                 if (_detalhesCarro is not null)
-                    if (_detalhesCarro.CarSellHistory is not null)
+                    if (_detalhesCarro.CarSellHistory.BiggestBid > 0)
                         _newBid = _detalhesCarro.CarSellHistory.BiggestBid + 1;
                     else
                         _newBid = _detalhesCarro.Car.PrecoBase + 1;
 
-                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
-                _sessionUser = session_already_started.Name;
-                _sessionUserId = session_already_started.IdUser;
+                (_sessionUser, _sessionUserId) = await GetUserSessionDataAsync();
             }
         }
         catch (SqliteException sqlex)

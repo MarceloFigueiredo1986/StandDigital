@@ -1,5 +1,4 @@
 ﻿using StandDigital.Core.Database.Repositories.CarMetadata;
-using System.Threading;
 
 namespace StandDigital.HostedServices;
 
@@ -28,12 +27,10 @@ public class CloseFinishedDeals(
                 await Task.Delay(TimeSpan.FromSeconds(30));
                 _logger.LogInformation("Deals Finish Service wake up.");
             }
-
         }
         catch (Exception ex)
         {
-
-            throw;
+            _logger.LogError(ex,nameof(CloseFinishedDeals));
         }
     }
 }

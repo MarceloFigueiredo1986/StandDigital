@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using StandDigital.Auth;
 using StandDigital.Core.Models;
+using StandDigital.Core.RequestHandlers.UserClosedDeals;
 using StandDigital.Core.RequestHandlers.UserOpenDeals;
 
 namespace StandDigital.Components.Pages.Admin.DealsArea;
 
-public class PersonalOpenDealsComponent : AbstractComponent<PersonalOpenDealsComponent>
+public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
 {
     protected ICollection<CarCompleteModel> OpenDeals = [];
-    protected ICollection<CarCompleteModel> ClosedDeals = [];
+    protected ICollection<ClosedDeals> ClosedDeals = [];
 
     [CascadingParameter]
     public int WindowWidth { get; set; }
@@ -20,8 +21,9 @@ public class PersonalOpenDealsComponent : AbstractComponent<PersonalOpenDealsCom
     {
         try
         {
-            var session = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            var session = await GetSessionKeyAsync<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
             OpenDeals = (await _mediatr.Send(new UserOpenDealsRequest(session.IdUser))).ToArray();
+            ClosedDeals = (await _mediatr.Send(new UserClosedDealsRequest(session.IdUser))).ToArray();
         }
         catch (Exception ex)
         {

@@ -29,7 +29,7 @@ public class LoginComponent : AbstractComponent<LoginComponent>
             IdUser = result.UserId
         };
             
-        await _session.AddKey(SessionSettings.SessionKeys.UserLoggedData, userData);
+        await AddSessionKeyAsync(SessionSettings.SessionKeys.UserLoggedData, userData);
         SignOutManager.AuthenticateUser(userData);
         return true;
     }

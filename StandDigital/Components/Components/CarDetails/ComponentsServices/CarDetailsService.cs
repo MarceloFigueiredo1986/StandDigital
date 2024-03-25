@@ -1,12 +1,15 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using StandDigital.Components.Components.CarDetails.Opcoes;
 using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
 using StandDigital.Core.Models;
+using StandDigital.Core.RequestHandlers.CarDealDetails;
 using StandDigital.Core.RequestHandlers.NewCarDeal;
 using StandDigital.Core.RequestHandlers.TiposNegocios;
 using StandDigital.Core.RequestHandlers.UpdateCarDeal;
+using StandDigital.Enums;
 using StandDigital.Extensions;
 using StandDigital_Shared.Entities;
 
@@ -17,6 +20,8 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     protected List<ImageUpload> TemporaryPhotos { get; set; } = new();
     protected CarAdvertisementCrudModel Car { get; set; } = new();
     protected CarMetadataEntity CarMetadata { get; set; } = new();
+
+    protected Tab _tabuladorEscolhido;
 
     protected IEnumerable<TipoNegocioEntity> TiposNegocios { get; set; } = [];
 
@@ -41,6 +46,94 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     public string? Componente { get; set; }
 
     string? _primaryPhoto;
+
+    protected static Dictionary<int, string> MesesAno = new() {
+        { 0, "Escolher"},
+        { 1, "Janeiro" },
+        { 2, "Fevereiro" },
+        { 3, "Março" },
+        { 4, "Abril" },
+        { 5, "Maio" },
+        { 6, "Junho" },
+        { 7, "Julho" },
+        { 8, "Agosto" },
+        { 9, "Setembro" },
+        { 10, "Outubro" },
+        { 11, "Novembro" },
+        { 12, "Dezembro" },
+    };
+
+    protected enum Tab
+    {
+        Detalhes,
+        Extras,
+        EstadoViatura,
+        Fotos,
+        TipoNegocio
+    }
+
+    protected void GoBack() => navMan.NavigateTo("/admin");
+
+    protected Type? MenuOpcoesTipoCombustivel;
+    protected Dictionary<string, object> ParametrosComponenteOpcoesCombustivel => new(1) { { "Carro", Car } };
+
+    protected async Task<IEnumerable<string>> SearchBrand(string searchText)
+        => await Task.FromResult(
+            DefaultMarcas!.
+            Where(x =>
+                x.Nome.ToLower().Contains(searchText.ToLower())).
+                Select(a => a.Nome).
+                Order().
+                ToList());
+
+    protected async Task<IEnumerable<string>> SearchModel(string searchText)
+        => await Task.FromResult(DefaultModelos.
+            Where(x => x.Nome.ToLower().
+                    Contains(searchText.ToLower())).
+            Select(a => a.Nome).
+            Order().
+            ToList());
+
+    protected async void SetCombustivel(Combustivel Combustivel)
+    {
+        Car.Combustivel = Combustivel.ToString();
+        MenuOpcoesTipoCombustivel = Combustivel switch
+        {
+            Combustivel.Electrico => typeof(Eletrico),
+            Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
+            _ => typeof(Combustao)
+        };
+
+        Car.Bateria = null;
+        Car.Cilindrada = null;
+        Car.Caixa = null;
+        Car.TipoCarregamento = null;
+
+        await CheckIfShouldClearModelsForLoading();
+    }
+
+    protected async Task CheckIfShouldClearModelsForLoading()
+    {
+        if (!string.IsNullOrEmpty(Car.Combustivel) && !string.IsNullOrEmpty(Car.Marca))
+            await LoadModelsAsync();
+    }
+
+    protected async Task<string> DefaultWhenBrandNotFound(string value)
+    {
+        Car.Marca = value;
+        return await Task.FromResult(value);
+    }
+
+    protected void ManageClickedExtra(string name)
+    {
+        if (Extras.Contains(name))
+            Extras.Remove(name);
+        else
+            Extras.Add(name);
+    }
+
+    protected override async Task OnInitializedAsync()
+        => await InitialLoadAsync();
 
     protected async Task ManageCommandToApply(EditContext editContext)
     {
@@ -181,6 +274,22 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         catch (Exception ex)
         {
             _logger.LogError(ex,nameof(LoadModelsAsync));
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (Carid != null)
+            {
+                var result = await _mediatr.Send(new CarDealDetailsRequest(Carid.Value), cts.Token);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, nameof(OnParametersSetAsync));
+            _toaster.ShowWarning(ex.Message);
         }
     }
 }

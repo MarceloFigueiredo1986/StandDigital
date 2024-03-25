@@ -27,9 +27,9 @@ public class BaseCar
     {
         get
         {
-            if (DataFimAnuncio is null) return "";
+            if (DataInicioAnuncio is null) return "";
 
-            var timeLeft = DateTimeOffset.Parse(DataFimAnuncio) - DateTime.UtcNow;
+            var timeLeft = DateTimeOffset.Parse(DataInicioAnuncio) .AddDays(14) - DateTime.UtcNow;
 
             if (timeLeft.Days < 2) return $"{timeLeft.Hours}:{timeLeft.Minutes} horas";
 

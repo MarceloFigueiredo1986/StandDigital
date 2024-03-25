@@ -9,5 +9,5 @@ internal sealed class GetOpenDealsRequestHandler(ICarRepository carRepository) :
     private readonly ICarRepository _carRepository = carRepository;
 
     public async Task<IEnumerable<CarCardModel>> Handle(GetOpenDealsRequest request, CancellationToken cancellationToken)
-        => await _carRepository.GetOpenDealsByBusinessTypeAsync(request.tipoNegocio);
+        => await _carRepository.GetOpenDealsByBusinessTypeAsync(request.tipoNegocio, request.userId);
 }

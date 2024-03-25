@@ -12,11 +12,18 @@ internal sealed class NewCarDealRequestHandler(
 {
     private readonly ICarUoW _carUoW = carUoW;
     private readonly ILogger<NewCarDealRequestHandler> _logger = logger;
+    private const string missingPrimaryphoto = "Escolha a foto principal";
 
     public async Task<ErrorOr<Created>> Handle(NewCarDealRequest request, CancellationToken cancellationToken)
     {
         _ = _logger.BeginScope(request);
         _logger.LogInformation("Start new deal creation process");
+
+        if(string.IsNullOrEmpty(request.PrimaryPhoto))
+        {
+            _logger.LogWarning(missingPrimaryphoto);
+            return Error.Validation(description: missingPrimaryphoto);
+        }
 
         var carEntity = request.Car.ToCardEntity();
         var result = await _carUoW.SaveNewCarAsync(carEntity, request.Photos, request.PrimaryPhoto, request.Extras, request.CarMetadataEntity, cancellationToken);

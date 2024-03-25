@@ -92,7 +92,7 @@
             if (firstRender)
             {
 
-                var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+                var session_already_started = await GetSessionKeyAsync<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
                 if (session_already_started == null) return;
                 if (session_already_started.ExpirationDate >= DateTimeOffset.UtcNow)
                     navMan.NavigateTo(navMan.Uri.Replace("Login?ReturnUrl=%2F", ""));

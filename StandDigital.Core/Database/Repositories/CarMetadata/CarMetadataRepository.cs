@@ -24,15 +24,11 @@ internal class CarMetadataRepository(IDatabase database) : ICarMetadataRepositor
             INSERT INTO 
             CarrosMetadata
             (CarroId,
-            DataVenda,
-            DataInicioAnuncio,
-            DataFimAnuncio)
+            DataInicioAnuncio)
             VALUES
             (
             @CarroId,
-            @DataVenda,
-            DATETIME('now'),
-            DATE(DATETIME('now'),'+14 days')
+            DATETIME('now')
             );
             """, value, cancellationToken);
 

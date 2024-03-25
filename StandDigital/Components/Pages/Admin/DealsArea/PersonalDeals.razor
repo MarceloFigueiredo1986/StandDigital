@@ -1,4 +1,4 @@
-﻿@inherits PersonalOpenDealsComponent
+﻿@inherits PersonalDealsComponent
 
 @attribute [StreamRendering]
 
@@ -7,7 +7,7 @@
 
     <h5 style="color:white">Viaturas para venda ativas</h5>
     <Virtualize Items="@OpenDeals" Context="Car">
-        <div style="margin:@_marginStr;float:@_float" class="card">
+        <div style="margin:@_marginStr;margin-bottom:25px;float:@_float" class="card">
             <div class="row">
                 <div class="leftdiv"><a><b>@Car.Marca</b></a></div>
                 <div class="leftdiv"><a>@Car.Modelo </a></div>
@@ -27,6 +27,7 @@
                 <div style="max-width:100px;position:absolute;right:2px">
                     <img src="@Car.MainImage.ImageStringBase64()" height="93" style="position:absolute;right:0px;border-radius:45px" />
                 </div>
+                <div class="leftdiv"><input type="button" class="btn btn-secondary" value="Ver" @onclick="() => GotoCarDetails()" /></div>
             </div>
         </div>
     </Virtualize>
@@ -35,13 +36,24 @@
 <div class="row" style="padding:15px;">
     <h5 style="color:white">Negócios terminados</h5>
     <Virtualize Items="@ClosedDeals" Context="Car">
-        <div style="margin:@_marginStr;float:@_float" class="card">
+        <div style="margin:@_marginStr;margin-bottom:25px;float:@_float" class="card">
             <div class="row">
                 <div class="leftdiv"><a><b>@Car.Marca</b></a></div>
                 <div class="leftdiv"><a>@Car.Modelo </a></div>
                 <div class="leftdiv"><a>@Car.Kms km <span style="position:absolute;right:110px">@Car.Cv cv</span></a></div>
                 <div class="leftdiv"><a>@Car.Combustivel</a></div>
-                <div class="leftdiv"><input type="button" class="btn btn-outline-secondary" value="Ver detalhes" /></div>
+                <div class="leftdiv">
+                    <a>
+                    @if (Car.TemProposta == 1)
+                    {
+                        <b style="color:forestgreen">Tem proposta</b>
+                    }
+                    else
+                    {
+                        <b>Sem proposta</b>
+                    }
+                    </a>
+                </div>
                 @if (Car.Combustivel == Combustivel.Electrico.GetDescription() ||
                 Car.Combustivel == Combustivel.HibridoGasolina.GetDescription() ||
                 Car.Combustivel == Combustivel.HibridoGasoleo.GetDescription())
@@ -54,6 +66,9 @@
                 }
                 <div style="max-width:100px;position:absolute;right:2px">
                     <img src="@Car.MainImage.ImageStringBase64()" height="93" style="position:absolute;right:0px;border-radius:45px" />
+                </div>
+                <div class="leftdiv">
+                    <input type="button" class="btn btn-secondary" value="Ver" @onclick="() => GotoCarDetails()" />
                 </div>
             </div>
         </div>

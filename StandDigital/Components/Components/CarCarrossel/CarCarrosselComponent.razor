@@ -1,4 +1,6 @@
-﻿@inject IMediator _mediator;
+﻿@inherits CarCarrosselService
+
+@attribute [StreamRendering]
 
 @{
     @if(Cars is null)
@@ -27,14 +29,4 @@
             <p style="color:white;font-size:18pt;margin:15px">Sem viaturas</p>
         }
     }
-}
-
-@code {
-    [Parameter]
-    public EnumTiposNegocios TipoNegocio { get; set; }
-
-    private IEnumerable<CarCardModel>? Cars;
-
-    protected override async Task OnInitializedAsync()
-        => Cars = await _mediator.Send(new GetOpenDealsRequest(TipoNegocio.GetDescription()));
 }

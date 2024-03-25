@@ -9,22 +9,22 @@ namespace StandDigital.Core.Database.Repositories.Car;
 internal class CarRepository(IDatabase database) : ICarRepository
 {
     private readonly IDatabase _dbcontext = database;
-    public async Task<IEnumerable<CarCardModel>> GetOpenDealsByBusinessTypeAsync(string tipoNegocio)
+    public async Task<IEnumerable<CarCardModel>> GetOpenDealsByBusinessTypeAsync(string tipoNegocio, int userId)
          => await _dbcontext.GetAsync<CarCardModel>("""
             SELECT 
             c.*,
             cf.Data as MainImage,
-            cm.DataFimAnuncio
+            cm.DataInicioAnuncio
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId 
             INNER JOIN TipoNegocios tn on c.TipoNegocioId = tn.TipoNegocioId
             INNER JOIN CarrosFotos cf on c.FotoId = cf.FotoId
-            WHERE strftime('%Y-%m-%d %H:%M:%S', DataFimAnuncio) > datetime('now')
-            and Name = @tiponegocio;
+            WHERE DataFimAnuncio is null
+            and Name = @tiponegocio and cm.VendedorId is not @userId;
             """, new Dictionary<string, object>() { 
-             {
-                 "@tiponegocio", tipoNegocio
-             } });
+             { "@tiponegocio", tipoNegocio },
+             { "@userId", userId }
+         });
     public async Task<IEnumerable<CarCompleteModel>> GetUserOpenDealsAsync(int userId)
      => await _dbcontext.GetAsync<CarCompleteModel>("""
             SELECT 
@@ -39,11 +39,11 @@ internal class CarRepository(IDatabase database) : ICarRepository
             Kms,
             Cv,
             cf.Data as MainImage,
-            cm.DataFimAnuncio
+            cm.DataInicioAnuncio
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
             LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
-            WHERE cm.VendedorId = @userId and cm.DataFimAnuncio == null
+            WHERE cm.VendedorId = @userId and cm.DataFimAnuncio is null
             """, new Dictionary<string, object>{ { "@userId", userId } });
     public async Task<ErrorOr<int>> CreateAsync(CarEntity value, CancellationToken cancellationToken)
     {
@@ -189,8 +189,25 @@ internal class CarRepository(IDatabase database) : ICarRepository
             cancellationToken);
     public Task<IEnumerable<CarEntity>> GetAllAsync() => throw new NotImplementedException();
 
-    public Task<IEnumerable<CarCompleteModel>> GetUserClosedDealsAsync(int userId)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<IEnumerable<ClosedDeals>> GetUserClosedDealsAsync(int userId)
+     => await _dbcontext.GetAsync<ClosedDeals>("""
+            SELECT 
+            c.CarroId,
+            Bateria,
+            TipoCarregamento,
+            Cilindrada,
+            Caixa,
+            Combustivel,
+            Marca,
+            Modelo,
+            Kms,
+            Cv,
+            cf.Data as MainImage,
+            cm.DataFimAnuncio,
+            (select valor is not null from HistoricoNegocios where CarroId = c.CarroId) as TemProposta
+            FROM Carros c 
+            INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId
+            LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
+            WHERE cm.VendedorId = @userId and cm.DataFimAnuncio not null
+            """, new Dictionary<string, object> { { "@userId", userId } });
 }

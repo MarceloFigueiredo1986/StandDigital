@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using StandDigital.Core.Entities;
 using StandDigital.Core.Models;
 
 namespace StandDigital.Core.RequestHandlers.UserOpenDeals;
