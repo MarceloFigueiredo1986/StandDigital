@@ -5,4 +5,5 @@ namespace StandDigital.Core.Database.Repositories.CarExtras;
 
 internal interface ICarExtrasRepository : IBaseRepository<CarExtraEntity>
 {
+    Task<IEnumerable<string>> GetAllExtrasByCarAsync(int carId, CancellationToken cancellationToken);
 }

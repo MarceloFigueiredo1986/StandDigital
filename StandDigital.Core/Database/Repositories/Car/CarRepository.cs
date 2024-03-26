@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
 using StandDigital.Core.Extensions;
 using StandDigital.Core.Models;
@@ -188,7 +189,6 @@ internal class CarRepository(IDatabase database) : ICarRepository
             },
             cancellationToken);
     public Task<IEnumerable<CarEntity>> GetAllAsync() => throw new NotImplementedException();
-
     public async Task<IEnumerable<ClosedDeals>> GetUserClosedDealsAsync(int userId)
      => await _dbcontext.GetAsync<ClosedDeals>("""
             SELECT 
@@ -210,4 +210,11 @@ internal class CarRepository(IDatabase database) : ICarRepository
             LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
             WHERE cm.VendedorId = @userId and cm.DataFimAnuncio not null
             """, new Dictionary<string, object> { { "@userId", userId } });
+    public async Task<CarAdvertisementCrudModel?> GetCarDealDetailsAsync(int carId, CancellationToken cancellationToken)
+        => await _dbcontext.GetSingleAsync<CarAdvertisementCrudModel>("""
+                    SELECT 
+                    *
+                    FROM Carros c 
+                    WHERE c.CarroId = @carroId
+                    """, new Dictionary<string, object> { { "@carroId", carId } });
 }

@@ -40,4 +40,9 @@ internal sealed class CarExtrasRepository(IDatabase dbContext) : ICarExtrasRepos
      => await _dbContext.GetAsync<CarExtraEntity>("""
             Select * from CarrosExtras
             """);
+
+    public async Task<IEnumerable<string>> GetAllExtrasByCarAsync(int carId, CancellationToken cancellationToken)
+     => await _dbContext.GetAsync<string>("""
+            Select Extra from CarrosExtras where CarroId = @carId
+            """, new Dictionary<string, object> { { "@carId", carId } });
 }

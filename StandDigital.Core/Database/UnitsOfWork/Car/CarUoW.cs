@@ -5,6 +5,7 @@ using StandDigital.Core.Database.Repositories.CarExtras;
 using StandDigital.Core.Database.Repositories.CarMetadata;
 using StandDigital.Core.Database.Repositories.CarPhotos;
 using StandDigital_Shared.Persistence;
+using StandDigital.Core.CarAdvertisement;
 
 namespace StandDigital.Core.Database.UnitsOfWork.Car;
 
@@ -21,6 +22,32 @@ internal class CarUoW(
     private readonly IDatabase _database = database;
 
     private readonly ICarMetadataRepository _carMetadataRepository = carMetadataRepository;
+
+    public async Task<ErrorOr<(
+        CarAdvertisementCrudModel? Car, 
+        IEnumerable<byte[]> Photos, 
+        HashSet<string> Extras, 
+        CarMetadataEntity? CarMetadataEntity)>> GetCarAsync(int carId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var carTsk = _carRepository.GetCarDealDetailsAsync(carId, cancellationToken);
+            var photosTsk = _photosRepository.GetAllPhotosByCarAsync(carId, cancellationToken);
+            var extrasTsk = _carExtrasRepository.GetAllExtrasByCarAsync(carId, cancellationToken);
+            var carMetadataTsk = _carMetadataRepository.GetCarMetadaByCarAsync(carId, cancellationToken);
+
+            await Task.WhenAll(carTsk,photosTsk,extrasTsk,carMetadataTsk);
+
+            return (carTsk.Result,
+                photosTsk.Result.Select(a =>a.Data),
+                extrasTsk.Result.ToHashSet(),
+                carMetadataTsk.Result);
+        }
+        catch (Exception ex)
+        {
+            return Error.Unexpected(description: ex.Message);
+        }    
+    }
 
     public async Task<ErrorOr<Created>> SaveNewCarAsync(
         CarEntity car,

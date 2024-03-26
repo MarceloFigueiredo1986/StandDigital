@@ -5,4 +5,5 @@ namespace StandDigital.Core.Database.Repositories.CarPhotos;
 
 internal interface IPhotosRepository : IBaseRepository<CarPhotoEntity>
 {
+    Task<IEnumerable<CarPhotoEntity>> GetAllPhotosByCarAsync(int carId,CancellationToken cancellationToken);
 }

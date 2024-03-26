@@ -284,6 +284,22 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             if (Carid != null)
             {
                 var result = await _mediatr.Send(new CarDealDetailsRequest(Carid.Value), cts.Token);
+                if(result.IsError)
+                {
+                    _logger.LogWarning(result.FirstError.Description, nameof(OnParametersSetAsync));
+                    _toaster.ShowWarning(result.FirstError.Description);
+                    return;
+                }
+
+                (CarAdvertisementCrudModel _car,
+        IEnumerable<byte[]> _photos,
+        HashSet<string> _extras,
+        CarMetadataEntity _carMetadataEntity) = result.Value;
+
+                Car = _car;
+                //TemporaryPhotos = _photos;
+                Extras = _extras;
+                CarMetadata = _carMetadataEntity;
             }
         }
         catch (Exception ex)

@@ -48,4 +48,9 @@ internal class CarMetadataRepository(IDatabase database) : ICarMetadataRepositor
      => await _dbcontext.GetAsync<CarMetadataEntity>("""
             Select * from CarrosMetadata
             """);
+
+    public async Task<CarMetadataEntity?> GetCarMetadaByCarAsync(int carId, CancellationToken cancellationToken)
+     => await _dbcontext.GetSingleAsync<CarMetadataEntity>("""
+            Select * from CarrosMetadata WHERE CarroId = @carId
+            """, new Dictionary<string, object> { { "@carId", carId } });
 }

@@ -39,4 +39,9 @@ internal class PhotosRepository(IDatabase database) : IPhotosRepository
      => await _dbcontext.GetAsync<CarPhotoEntity>("""
             Select * from CarrosFotos
             """);
+
+    public async Task<IEnumerable<CarPhotoEntity>> GetAllPhotosByCarAsync(int carId, CancellationToken cancellationToken)
+     => await _dbcontext.GetAsync<CarPhotoEntity>("""
+            Select * from CarrosFotos where CarroId = @carId
+            """,new Dictionary<string, object> { { "@carId",carId} });
 }
