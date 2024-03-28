@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using StandDigital.Components.Components.CarDetails.Opcoes;
+using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
 using StandDigital.Core.Models;
@@ -20,6 +21,7 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     protected List<ImageUpload> TemporaryPhotos { get; set; } = new();
     protected CarAdvertisementCrudModel Car { get; set; } = new();
     protected CarMetadataEntity CarMetadata { get; set; } = new();
+    protected CarSelledOffer? WinningProposal { get; set; }
 
     protected Tab _tabuladorEscolhido;
 
@@ -94,10 +96,9 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             Order().
             ToList());
 
-    protected async void SetCombustivel(Combustivel Combustivel)
+    protected async void SetCombustivel()
     {
-        Car.Combustivel = Combustivel.ToString();
-        MenuOpcoesTipoCombustivel = Combustivel switch
+        MenuOpcoesTipoCombustivel = Enum.Parse(typeof(Combustivel),Car.Combustivel) switch
         {
             Combustivel.Electrico => typeof(Eletrico),
             Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
@@ -111,19 +112,16 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
 
         await CheckIfShouldClearModelsForLoading();
     }
-
     protected async Task CheckIfShouldClearModelsForLoading()
     {
         if (!string.IsNullOrEmpty(Car.Combustivel) && !string.IsNullOrEmpty(Car.Marca))
             await LoadModelsAsync();
     }
-
     protected async Task<string> DefaultWhenBrandNotFound(string value)
     {
         Car.Marca = value;
         return await Task.FromResult(value);
     }
-
     protected void ManageClickedExtra(string name)
     {
         if (Extras.Contains(name))
@@ -131,10 +129,8 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         else
             Extras.Add(name);
     }
-
     protected override async Task OnInitializedAsync()
         => await InitialLoadAsync();
-
     protected async Task ManageCommandToApply(EditContext editContext)
     {
         try
@@ -174,7 +170,6 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             isSaving = false;
         }
     }
-
     async Task CreateNewAdvertisement()
     {
         var result = await _mediatr.Send(new NewCarDealRequest(
@@ -191,7 +186,6 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         if(result.Value != Result.Created)
             throw new Exception("Anúncio não foi criado.");
     }
-
     async Task UpdateAdvertisement()
     {
         var result = await _mediatr.Send(new UpdateCarDealRequest(
@@ -209,7 +203,6 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         if (result.Value != Result.Updated)
             throw new Exception("Anúncio não foi alterado.");
     }
-
     protected async Task InitialLoadAsync()
     {
         try
@@ -291,15 +284,13 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
                     return;
                 }
 
-                (CarAdvertisementCrudModel _car,
-        IEnumerable<byte[]> _photos,
-        HashSet<string> _extras,
-        CarMetadataEntity _carMetadataEntity) = result.Value;
+                var carDetails = result.Value;
 
-                Car = _car;
+                Car = carDetails.Car;
                 //TemporaryPhotos = _photos;
-                Extras = _extras;
-                CarMetadata = _carMetadataEntity;
+                Extras = carDetails.Extras;
+                CarMetadata = carDetails.CarMetadataEntity;
+                WinningProposal = carDetails.BuyingProposal;
             }
         }
         catch (Exception ex)

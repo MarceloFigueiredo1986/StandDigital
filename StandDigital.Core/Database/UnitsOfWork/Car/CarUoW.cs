@@ -6,6 +6,9 @@ using StandDigital.Core.Database.Repositories.CarMetadata;
 using StandDigital.Core.Database.Repositories.CarPhotos;
 using StandDigital_Shared.Persistence;
 using StandDigital.Core.CarAdvertisement;
+using StandDigital.Core.Database.Repositories.DealBidding;
+using StandDigital.Core.Models;
+using StandDigital.Core.Aggregates.CarAdvertisement;
 
 namespace StandDigital.Core.Database.UnitsOfWork.Car;
 
@@ -14,20 +17,18 @@ internal class CarUoW(
     ICarMetadataRepository carMetadataRepository,
     IPhotosRepository photosRepository,
     ICarExtrasRepository carExtrasRepository,
+    IDealRepository dealRepository,
     IDatabase database) : ICarUoW
 {
     private readonly ICarRepository _carRepository = carRepository;
     private readonly IPhotosRepository _photosRepository = photosRepository;
     private readonly ICarExtrasRepository _carExtrasRepository = carExtrasRepository;
+    private readonly IDealRepository _dealRepository = dealRepository;
     private readonly IDatabase _database = database;
 
     private readonly ICarMetadataRepository _carMetadataRepository = carMetadataRepository;
 
-    public async Task<ErrorOr<(
-        CarAdvertisementCrudModel? Car, 
-        IEnumerable<byte[]> Photos, 
-        HashSet<string> Extras, 
-        CarMetadataEntity? CarMetadataEntity)>> GetCarAsync(int carId, CancellationToken cancellationToken)
+    public async Task<ErrorOr<CarAdvertisementAggregate>> GetCarAsync(int carId, CancellationToken cancellationToken)
     {
         try
         {
@@ -35,13 +36,16 @@ internal class CarUoW(
             var photosTsk = _photosRepository.GetAllPhotosByCarAsync(carId, cancellationToken);
             var extrasTsk = _carExtrasRepository.GetAllExtrasByCarAsync(carId, cancellationToken);
             var carMetadataTsk = _carMetadataRepository.GetCarMetadaByCarAsync(carId, cancellationToken);
+            var carWinningProposalTsk = _dealRepository.GetWinningBidAsync(carId);
 
-            await Task.WhenAll(carTsk,photosTsk,extrasTsk,carMetadataTsk);
+            await Task.WhenAll(carTsk,photosTsk,extrasTsk,carMetadataTsk,carWinningProposalTsk);
 
-            return (carTsk.Result,
+            return new CarAdvertisementAggregate(
+                carTsk.Result??throw new Exception("Car not found"),
                 photosTsk.Result.Select(a =>a.Data),
                 extrasTsk.Result.ToHashSet(),
-                carMetadataTsk.Result);
+                carMetadataTsk.Result??throw new Exception("CarMetadata not found"),
+                carWinningProposalTsk.Result);
         }
         catch (Exception ex)
         {

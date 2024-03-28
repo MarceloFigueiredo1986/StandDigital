@@ -51,20 +51,19 @@
                                         <label for="firstName" class="form-label">Combustível</label>
                                     </p>
                                     <div class="row" style="margin:0px 10px 20px 10px">
-                                        @{
-
-                                            foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
-                                            {
-                                                string flexRadioDefault = $"flexRadioCombustivel{Random.Shared.Next()}";
-                                                <div class="form-check" style="float:left;width:fit-content">
-                                                    <input class="form-check-input" type="radio" name="flexRadioCombustivel" @onchange="() => SetCombustivel(tipoCombustivel)" id="@flexRadioDefault">
-                                                    <label class="form-check-label" for="@flexRadioDefault">
-                                                        @tipoCombustivel.GetDescription()
-                                                    </label>
-                                                </div>
-                                            }
-                                            <ValidationMessage For="@(() => Car.Combustivel)" />
+                                        <InputRadioGroup Name="CombustivelGroup" @bind-Value="Car.Combustivel">
+                                         @foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
+                                        {
+                                            string flexRadioDefault = $"flexRadioCombustivel{Random.Shared.Next()}";
+                                            <div class="form-check" style="float:left;width:fit-content">
+                                                    <InputRadio Name="CombustivelGroup" Value="tipoCombustivel.ToString()" @onchange="SetCombustivel" />
+                                                <label class="form-check-label" for="@flexRadioDefault">
+                                                @tipoCombustivel.GetDescription();
+                                                </label>
+                                            </div>
                                         }
+                                        </InputRadioGroup>
+                                        <ValidationMessage For="@(() => Car.Combustivel)" />
                                     </div>
                                 </div>
 
@@ -211,19 +210,20 @@
                                     <label for="firstName" class="form-label">Tipo de anúncio</label>
                                 </p>
                                 <div class="row" style="margin:0px 10px 20px 10px">
-                                    @{
-                                        foreach (var tipoNegocio in TiposNegocios)
-                                        {
-                                            string flexRadioDefault = $"flexRadioTipoNegocio{Random.Shared.Next()}";
-                                            <div class="form-check" style="float:left;width:170px;">
-                                                <input class="form-check-input" type="radio" name="flexRadioTipoNegocio"
-                                                       @onchange="() => Car.TipoNegocioId = tipoNegocio.TipoNegocioId" id="@flexRadioDefault">
-                                                <label class="form-check-label" for="@flexRadioDefault">
-                                                    @tipoNegocio.Name
-                                                </label>
-                                            </div>
+                                    <InputRadioGroup Name="TiposNegociosGroup" @bind-Value="Car.TipoNegocioId">
+                                        @{
+                                            foreach (var tipoNegocio in TiposNegocios)
+                                            {
+                                                string flexRadioDefault = $"flexRadioTipoNegocio{Random.Shared.Next()}";
+                                                <div class="form-check" style="float:left;width:180px;cursor:pointer">
+                                                    <InputRadio Name="TiposNegociosGroup" Value="@tipoNegocio.TipoNegocioId" />
+                                                    <label class="form-check-label" for="@flexRadioDefault">
+                                                        @tipoNegocio.Name
+                                                    </label>
+                                                </div>
+                                            }
                                         }
-                                    }
+                                    </InputRadioGroup>
                                 </div>
                                 <div class="form-outline inputValuesStyleDiv">
                                     <label for="firstName" class="form-label">Preço base</label>
@@ -231,6 +231,7 @@
                                 </div>
                             </div>
                         </div>
+                        <Proposal CarroId="Carid??0" FinalPurposal="@WinningProposal" />
                         break;
                 }
                 

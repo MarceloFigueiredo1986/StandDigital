@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using StandDigital.Core.CarAdvertisement;
+using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.Entities;
 
 namespace StandDigital.Core.Database.UnitsOfWork.Car;
@@ -21,8 +21,5 @@ internal interface ICarUoW
         CarMetadataEntity carMetadataEntity,
         CancellationToken cancellationToken);
 
-    Task<ErrorOr<(CarAdvertisementCrudModel? Car,
-        IEnumerable<byte[]> Photos,
-        HashSet<string> Extras,
-        CarMetadataEntity CarMetadataEntity)>> GetCarAsync(int carId, CancellationToken cancellationToken);
+    Task<ErrorOr<CarAdvertisementAggregate>> GetCarAsync(int carId, CancellationToken cancellationToken);
 }

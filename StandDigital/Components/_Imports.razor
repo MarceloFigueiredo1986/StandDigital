@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Data.Sqlite
 @using Microsoft.AspNetCore.Components.Web.Virtualization
@@ -14,9 +13,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using MediatR
 @using Blazored.Toast.Services
-@using StandDigital.Auth
-@using StandDigital.Settings
-@using static StandDigital.Components.Pages.Login.Login
+
 
 
 @using StandDigital_Shared
@@ -33,8 +30,13 @@
 @using StandDigital.Core.RequestHandlers.OpenDeals
 @using StandDigital.Core.RequestHandlers.UserOpenDeals
 @using StandDigital.Core.RequestHandlers.User
+@using StandDigital.Core.Aggregates.CarAdvertisement
+@using StandDigital.Components.Components.CarDetails.Proposal
 
 @using StandDigital.Core.Models
 @using System.Drawing
 @using StandDigital.Core.Entities
 @using StandDigital.Auth
+@using StandDigital.Settings
+@using static StandDigital.Components.Pages.Login.Login
+@using static Microsoft.AspNetCore.Components.Web.RenderMode

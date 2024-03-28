@@ -1,0 +1,35 @@
+﻿@attribute [StreamRendering]
+
+@inherits ProposalService
+
+<div class="row">
+@if(FinalPurposal is not null)
+{
+     @if (FinalPurposal.Paid)
+     {
+         <table>
+             <tbody>
+                 <tr>
+                     <td>Comprador</td>
+                     <td>@FinalPurposal.Buyer</td>
+                 </tr>
+                 <tr>
+                     <td>Proposta</td>
+                     <td>@FinalPurposal.Offer</td>
+                 </tr>
+                 <tr>
+                     <td>Telefone</td>
+                     <td>@FinalPurposal.Telefone</td>
+                 </tr>
+             </tbody>
+         </table>
+     }
+     else
+     {
+         <div>
+             <label>Para ver a proposta vencedora, terá de fazer o pagamento de 50€.</label>
+             <input type="button" class="btn btn-outline-dark" value="Requisitar código pagamento" />
+         </div>
+     }
+}
+</div>

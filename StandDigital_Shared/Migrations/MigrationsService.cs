@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
-using StandDigital_Shared.Persistence;
 
 namespace StandDigital_Shared.Migrations;
 
@@ -20,5 +19,6 @@ public class MigrationsService(IConfiguration configuration)
         await dbConn.ExecuteAsync(sql: new CreateScriptHistoricoNegocios().Script);
         await dbConn.ExecuteAsync(sql: new CreateScriptTiposNegocios().Script);
         await dbConn.ExecuteAsync(sql: new CreateScriptUsers().Script);
+        await dbConn.ExecuteAsync(sql: new CreateScriptPayments().Script);
     }
 }

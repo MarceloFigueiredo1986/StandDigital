@@ -19,20 +19,21 @@
             <div class="row" style="float:left">
                 @foreach (var foto in Files)
                 {
-                    <div style="height:15px;font-size:10pt;float:left;margin:5px;margin-bottom:20px;max-width:300px">
-                        <span>@foto.ImageName</span>
-                        <span style="cursor:pointer;color:red;font-weight:bolder;margin-right:15px" @onclick="() => RemoveImage(foto)">X</span>
+                    <div class="row">
+                    <img src="@foto.AbsoluteNameWithPath" style="float:left" />
+                    <span style="cursor:pointer;color:red;font-weight:bolder;margin-right:15px"
+                          @onclick="() => RemoveImage(foto)">X</span>
 
-                        @if (!foto.MainImage)
-                        {
-                            <span style="cursor:pointer;color:forestgreen;font-weight:bolder"
-                                  @onclick="() => ManageMainImage(foto)">definir</span>
-                        }
-                        else
-                        {
-                            <span style="cursor:pointer;color:darkolivegreen;font-weight:bolder">principal</span>
-                        }
-                    </div>
+                    @if (!foto.MainImage)
+                    {
+                        <span style="cursor:pointer;color:forestgreen;font-weight:bolder"
+                              @onclick="() => ManageMainImage(foto)">definir</span>
+                    }
+                    else
+                    {
+                        <span style="cursor:pointer;color:darkolivegreen;font-weight:bolder">principal</span>
+                    }
+                </div>
                 }
             </div>
         }
@@ -43,6 +44,9 @@
 
     [Parameter]
     public List<ImageUpload> Files { get; set; }
+
+    [Parameter]
+    public List<CarPhotoEntity> ExistingFiles { get; set; }
 
     [Parameter]
     public EventCallback<Dictionary<string, string>> FilesChanged { get; set; }
