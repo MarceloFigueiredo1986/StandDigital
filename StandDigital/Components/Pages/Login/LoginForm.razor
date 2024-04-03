@@ -32,6 +32,9 @@
                 <span style="color:red;margin:2px">@Erro</span>
             }
         </div>
+        <a class="ml-md-auto btn btn-primary"
+           href="/Identity/LoginGoogle.cshtml"
+           target="_top">Login</a>
         <a style="cursor:pointer" @onclick="() => { 
             ChoosedMenu = MenusLogin.CriarConta; 
             ChoosedMenuChanged.InvokeAsync(ChoosedMenu);

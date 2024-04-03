@@ -59,6 +59,7 @@ public class Program
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAntiforgery();
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 

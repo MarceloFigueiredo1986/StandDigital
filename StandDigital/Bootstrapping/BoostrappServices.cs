@@ -31,6 +31,8 @@ public static class BoostrappServices
         services.AddScoped(a => new SessionSettings(a.GetRequiredService<ILocalStorageService>()));
         services.AddScoped<AuthenticationStateProvider, Authentication>();
         services.AddScoped<IAppToastService, AppToastService>();
+        services.AddAuthentication(configuration);
+
 
         return services;
     }

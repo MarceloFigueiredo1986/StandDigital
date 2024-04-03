@@ -12,6 +12,7 @@
     <PackageReference Include="ErrorOr" Version="1.10.0" />
     <PackageReference Include="libphonenumber-csharp" Version="8.13.31" />
     <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
