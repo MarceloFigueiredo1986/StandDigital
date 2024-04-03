@@ -10,5 +10,6 @@ public interface IDealRepository
     Task<CarSellingPurposes?> GetDealLastBidingAsync(int carroId);
     Task<ErrorOr<Updated>> NewBidAsync(CarSellHistoryEntity newBid, CancellationToken cancellationToken);
     Task<CarSelledOffer?> GetWinningBidAsync(int carroId);
-    Task<CarPayingCode> GetPaymentDetailsAsync(int carroId);
+    Task<ErrorOr<CarPayingCode>> GetPaymentDetailsAsync(int carroId);
+    Task<ErrorOr<Success>> GeneratePaymentTokenForClosedDealsAsync(CancellationToken cancellationToken);
 }

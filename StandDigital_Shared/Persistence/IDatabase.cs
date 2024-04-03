@@ -8,6 +8,8 @@ public interface IDatabase : IDisposable
     void RollbackTransaction();
     void CommitTransaction();
     Task<bool> InsertAsync<T>(string query, T entity) where T : class;
+    Task<int> InsertAsync(string query, Dictionary<string, object> parameters, CancellationToken cancellationToken);
+
     Task<IEnumerable<T>> GetAsync<T>(string query, Dictionary<string, object>? dynamicParameters = null) where T : class;
 
     /// <summary>

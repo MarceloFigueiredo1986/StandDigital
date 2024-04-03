@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
 using StandDigital.Bootstrapping;
@@ -25,6 +26,8 @@ public class Program
                 .AddInteractiveServerComponents();
 
             builder.Services.InstallCoreDependencies();
+            builder.Services.AddBlazoredModal();
+            builder.Configuration.InitialValidations();
                      
             builder.Services.AddAuthentication(options =>
             {

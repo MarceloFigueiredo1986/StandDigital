@@ -1,4 +1,5 @@
 ﻿using StandDigital.Core.Database.Repositories.CarMetadata;
+using StandDigital.Core.Database.Repositories.DealBidding;
 
 namespace StandDigital.HostedServices;
 
@@ -17,10 +18,15 @@ public class CloseFinishedDeals(
         {
             var scope = _serviceProvider.CreateScope();
             var carRepository = scope.ServiceProvider.GetRequiredService<ICarMetadataRepository>();
+            var dealRepository = scope.ServiceProvider.GetRequiredService<IDealRepository>();
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 await carRepository.CloseFinishedDealsAsync(stoppingToken);
+                var generatedTokensSuccessfully = await dealRepository.GeneratePaymentTokenForClosedDealsAsync(stoppingToken);
+                if (generatedTokensSuccessfully.IsError)
+                    _logger.LogError("Error generating payment tokens.Error {Error}", generatedTokensSuccessfully.FirstError.Description);
+
                 _logger.LogInformation("Deals Finished closing Service runned.");
                 _logger.LogInformation("Deals Finish Service going to sleep.");
 

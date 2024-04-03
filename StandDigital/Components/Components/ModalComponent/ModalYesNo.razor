@@ -1,0 +1,27 @@
+﻿<div>
+    <div class="row" style="margin-bottom:15px">
+        @Message
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="button" style="float:left" class="btn btn-danger" value="Sim" @onclick="() => YesHandler.InvokeAsync(ValueToTransport)" />
+        </div>
+        <div class="col-sm-6">
+            <input type="button" style="float:right" class="btn btn-secondary" value="Não" @onclick="() => Modal.CloseAsync()" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Message { get; set; }
+
+    [Parameter]
+    public object ValueToTransport { get; set; }
+
+    [CascadingParameter]
+    public BlazoredModalInstance Modal { get; set; }
+
+    [Parameter]
+    public EventCallback<object> YesHandler { get; set; }
+}

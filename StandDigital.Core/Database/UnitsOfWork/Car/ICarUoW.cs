@@ -22,4 +22,6 @@ internal interface ICarUoW
         CancellationToken cancellationToken);
 
     Task<ErrorOr<CarAdvertisementAggregate>> GetCarAsync(int carId, CancellationToken cancellationToken);
+
+    Task<ErrorOr<Deleted>> DeleteCarAsync(int carId, CancellationToken cancellationToken);
 }

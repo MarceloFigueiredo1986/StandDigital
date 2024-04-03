@@ -1,4 +1,6 @@
-﻿using Blazored.Toast.Services;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Blazored.Toast.Services;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -41,6 +43,9 @@ public class AbstractComponent<T> : ComponentBase
 
     [Inject]
     public AppSettings _settings { get; init; }
+
+    [CascadingParameter]
+    public IModalService _modal { get; set; } = default!;
 
     protected async Task<(string user, int userId)> GetUserSessionDataAsync()
     {

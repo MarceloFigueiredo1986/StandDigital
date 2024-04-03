@@ -27,7 +27,10 @@
                 <div style="max-width:100px;position:absolute;right:2px">
                     <img src="@Car.MainImage.ImageStringBase64()" height="93" style="position:absolute;right:0px;border-radius:45px" />
                 </div>
-                <div class="leftdiv"><input type="button" class="btn btn-secondary" value="Ver" @onclick="() => GotoCarDetails(Car.CarroId)" /></div>
+                <div class="leftdiv">
+                    <input type="button" class="btn btn-secondary" value="Ver" @onclick="() => GotoCarDetails(Car.CarroId)" />
+                    <input type="button" class="btn btn-danger" value="Cancelar" @onclick="() => CancelOpenDeal(Car.CarroId)" />
+                </div>
             </div>
         </div>
     </Virtualize>

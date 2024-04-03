@@ -7,21 +7,35 @@ public class AppToastService(IToastService toastService) : IAppToastService
 {
     private readonly IToastService _toastService = toastService;
 
+    private int _timer = 1;
+
     Action<ToastSettings> Action => a => {
         a.Position = ToastPosition.BottomLeft;
-        a.Timeout = 5;
+        a.Timeout = _timer;
         a.ShowProgressBar = true;
     };
 
-    public void ShowError(string message)
-        => _toastService.ShowError(message, Action);
+    public void ShowError(string message, int timer = 5)
+    {
+        _timer = timer;
+        _toastService.ShowError(message, Action);
+    }
 
-    public void ShowInfo(string message)
-        => _toastService.ShowInfo(message, Action);
+    public void ShowInfo(string message, int timer = 5)
+    {
+        _timer = timer;
+        _toastService.ShowInfo(message, Action);
+    }
 
-    public void ShowSuccess(string message)
-        => _toastService.ShowSuccess(message, Action);
+    public void ShowSuccess(string message, int timer = 5)
+    {
+        _timer = timer;
+        _toastService.ShowSuccess(message, Action);
+    }
 
-    public void ShowWarning(string message)
-        => _toastService.ShowWarning(message, Action);
+    public void ShowWarning(string message, int timer = 5)
+    {
+        _timer = timer;
+        _toastService.ShowWarning(message, Action);
+    }
 }

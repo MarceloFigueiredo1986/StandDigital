@@ -9,6 +9,7 @@ using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Database.Repositories.DealBidding;
 using StandDigital.Core.Models;
 using StandDigital.Core.Aggregates.CarAdvertisement;
+using StandDigital.Core.Encryption;
 
 namespace StandDigital.Core.Database.UnitsOfWork.Car;
 
@@ -28,6 +29,11 @@ internal class CarUoW(
 
     private readonly ICarMetadataRepository _carMetadataRepository = carMetadataRepository;
 
+    public Task<ErrorOr<Deleted>> DeleteCarAsync(int carId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<ErrorOr<CarAdvertisementAggregate>> GetCarAsync(int carId, CancellationToken cancellationToken)
     {
         try
@@ -40,12 +46,20 @@ internal class CarUoW(
 
             await Task.WhenAll(carTsk,photosTsk,extrasTsk,carMetadataTsk,carWinningProposalTsk);
 
+            var winningProposal = carWinningProposalTsk.Result;
+
+            if (winningProposal != default)
+                winningProposal = winningProposal with
+                {
+                    Telefone = DataEncryption.Decrypt(winningProposal.Telefone)
+                };
+
             return new CarAdvertisementAggregate(
                 carTsk.Result??throw new Exception("Car not found"),
                 photosTsk.Result.Select(a =>a.Data),
                 extrasTsk.Result.ToHashSet(),
                 carMetadataTsk.Result??throw new Exception("CarMetadata not found"),
-                carWinningProposalTsk.Result);
+                winningProposal);
         }
         catch (Exception ex)
         {

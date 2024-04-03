@@ -9,7 +9,7 @@ internal class CreateScriptPayments : IScript
         	"CarroId"	INTEGER NOT NULL,
         	"TokenPagamento"	TEXT NOT NULL,
         	"DataCriacao"	TEXT NOT NULL,
-        	FOREIGN KEY("CarroId") REFERENCES "CarrosFotos"("CarroId"),
+        	FOREIGN KEY("CarroId") REFERENCES "Carros"("CarroId"),
         	PRIMARY KEY("PagamentoId" AUTOINCREMENT)
         )
         """;

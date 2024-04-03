@@ -148,7 +148,6 @@ a:hover {
 }
 
 .custom-link i {
-  position: absolute;
   opacity: 0;
   bottom: 0;
   left: 100%;
@@ -197,7 +196,6 @@ strong {
 .spinner::before {
   content: '';
   box-sizing: border-box;
-  position: absolute;
   top: 50%;
   left: 50%;
   width: 45px;
@@ -290,7 +288,6 @@ strong {
 }
 
 .div-separator span {
-  position: absolute;
   top: 50%;
   margin-left: -22.5px;
   left: 50%;

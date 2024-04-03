@@ -12,10 +12,28 @@ public class ProposalService : AbstractComponent<ProposalService>
     [Parameter]
     public int CarroId { get; set; }
 
-    CarPayingCode? _paymentDetails; 
-
     CancellationTokenSource cts = new();
 
     protected async Task GetTokenForPayment()
-        => _paymentDetails = await _mediatr.Send(new DealPaymentQuery(CarroId), cts.Token);
+    {
+        try
+        {
+            var result = await _mediatr.Send(new DealPaymentQuery(CarroId), cts.Token);
+            if(result.IsError)
+            {
+                _logger.LogWarning(result.FirstError.Description);
+                _toaster.ShowWarning(result.FirstError.Description);
+            }
+            else
+            {
+                _toaster.ShowInfo($"Envie um pagamento MbWay para o número {result.Value.Telemovel} " +
+                    $"com o código {result.Value.Codigo} para desbloquear a proposta vencedora", 60);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, nameof(GetTokenForPayment));
+            _toaster.ShowError(ex.Message);
+        }
+    }
 }

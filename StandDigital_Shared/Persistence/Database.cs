@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using static Dapper.SqlMapper;
 
 namespace StandDigital_Shared.Persistence;
 
@@ -86,4 +87,15 @@ public sealed class Database(IConfiguration configuration) : IDatabase
         => _dbConnection.ExecuteAsync(new CommandDefinition(
             commandText: query,
             cancellationToken: cancellationToken));
+
+    public async Task<int> InsertAsync(string query,Dictionary<string,object> parameters, CancellationToken cancellationToken)
+    {
+        var changedValues = await _dbConnection.ExecuteAsync(new CommandDefinition(
+                commandText: query,
+                transaction: transaction,
+                parameters: parameters,
+                cancellationToken: cancellationToken));
+
+        return changedValues;
+    }
 }

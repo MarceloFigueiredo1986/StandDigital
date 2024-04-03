@@ -7,18 +7,19 @@
 {
      @if (FinalPurposal.Paid)
      {
+         <label><b><u>Proposta vencedora</u></b></label>
          <table>
              <tbody>
                  <tr>
-                     <td>Comprador</td>
+                        <td><b>Comprador</b></td>
                      <td>@FinalPurposal.Buyer</td>
                  </tr>
                  <tr>
-                     <td>Proposta</td>
-                     <td>@FinalPurposal.Offer</td>
+                        <td><b>Proposta</b></td>
+                     <td>@FinalPurposal.Offer €</td>
                  </tr>
                  <tr>
-                     <td>Telefone</td>
+                        <td><b>Telefone</b></td>
                      <td>@FinalPurposal.Telefone</td>
                  </tr>
              </tbody>
@@ -28,7 +29,7 @@
      {
          <div>
              <label>Para ver a proposta vencedora, terá de fazer o pagamento de 50€.</label>
-             <input type="button" class="btn btn-outline-dark" value="Requisitar código pagamento" />
+             <input type="button" class="btn btn-outline-dark" value="Requisitar código pagamento" @onclick="GetTokenForPayment" />
          </div>
      }
 }

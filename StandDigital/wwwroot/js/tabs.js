@@ -1534,7 +1534,7 @@ $.ui.position = {
 	testElementParent = body || document.documentElement;
 	testElementParent.insertBefore( testElement, testElementParent.firstChild );
 
-	div.style.cssText = "position: absolute; left: 10.7432222px;";
+	div.style.cssText = " left: 10.7432222px;";
 
 	offsetLeft = $( div ).offset().left;
 	supportsOffsetFractions = offsetLeft > 10 && offsetLeft < 11;
@@ -4077,7 +4077,7 @@ $.extend(Datepicker.prototype, {
 			this.uuid += 1;
 			id = "dp" + this.uuid;
 			this._dialogInput = $("<input type='text' id='" + id +
-				"' style='position: absolute; top: -100px; width: 0px;'/>");
+				"' style=' top: -100px; width: 0px;'/>");
 			this._dialogInput.keydown(this._doKeyDown);
 			$("body").append(this._dialogInput);
 			inst = this._dialogInst = this._newInst(this._dialogInput, false);

@@ -1,3 +1,3 @@
 ﻿namespace StandDigital.Core.Aggregates.CarAdvertisement;
 
-public record CarPayingCode(string Telemovel,string codigo);
+public record CarPayingCode(string Telemovel,string Codigo);
