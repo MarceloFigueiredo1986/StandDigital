@@ -1,5 +1,6 @@
 using Blazored.Modal;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using StandDigital.Bootstrapping;
 using StandDigital.Components;
@@ -28,17 +29,6 @@ public class Program
             builder.Services.InstallCoreDependencies();
             builder.Services.AddBlazoredModal();
             builder.Configuration.InitialValidations();
-                     
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options =>
-            {
-                options.LoginPath = "/Login";
-            });
-
 
             builder.Services.InitializeSettings(builder.Configuration);
 
