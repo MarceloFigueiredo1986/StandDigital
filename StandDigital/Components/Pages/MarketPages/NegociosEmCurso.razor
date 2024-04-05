@@ -1,6 +1,9 @@
-﻿@attribute [Authorize]
+﻿@page "/mercado"
 
-<div style="padding:5px">
+@attribute [Authorize]
+
+<div style="padding:5px;margin-top:50px">
+ <Filtros />
  <CascadingValue Name="InvokingEndpoint" Value="CaminhosComponentes.Leilao">
         <StandDigital.Components.Components.CarCarrossel.CarCarrosselComponent TipoNegocio="EnumTiposNegocios.Leilao">
         </StandDigital.Components.Components.CarCarrossel.CarCarrosselComponent>

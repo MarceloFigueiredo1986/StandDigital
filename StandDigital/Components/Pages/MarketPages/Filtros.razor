@@ -1,0 +1,65 @@
+﻿@inject IConfiguration config
+
+<p style="color:white">Filtros</p>
+<div style="margin:0px 10px 0px 0px">
+    @foreach (var tipoNegocio in config.GetSection("Filtros:TiposNegocios").Get<string[]>())
+    {
+        var btnStyle = TiposNegocios.Contains(tipoNegocio) ? "outline-secondary" : "secondary";
+        <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
+               @onclick="() => GerirFiltroNegocio(tipoNegocio)" value="@tipoNegocio" />
+    }
+</div>
+<div style="margin:0px 10px 0px 0px">
+    @foreach (var combustivel in config.GetSection("Filtros:TipoCombustivel").Get<string[]>())
+    {
+        var btnStyle = TipoCombustivel.Contains(combustivel) ? "outline-primary" : "primary";
+        <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
+               @onclick="() => GerirFiltroTipoCombustivel(combustivel)" value="@combustivel" />
+    }
+</div>
+<div style="margin:0px 10px 0px 0px">
+    @foreach (var distrito in config.GetSection("Filtros:Distritos")!.Get<string[]>())
+    {
+        var btnStyle = Distritos.Contains(distrito) ? "outline-success" : "success";
+        <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
+               @onclick="() => GerirFiltroDistritos(distrito)" value="@distrito" />
+    }
+</div>
+<p style="color:white">Ordenar</p>
+<input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px;" type="button" class="btn btn-info" value="Data ínicio" />
+<input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px;" type="button" class="btn btn-info" value="Preço mais baixo" />
+
+@code {
+    [Parameter]
+    public List<string> Distritos { get; set; } = [];
+
+    [Parameter]
+    public List<string> TipoCombustivel { get; set; } = [];
+
+    [Parameter]
+    public List<string> TiposNegocios { get; set; } = [];
+
+    protected void GerirFiltroNegocio(string tipoNegocio)
+    {
+        if (TiposNegocios.Contains(tipoNegocio))
+            TiposNegocios.Remove(tipoNegocio);
+        else
+            TiposNegocios.Add(tipoNegocio);
+    }
+
+    protected void GerirFiltroTipoCombustivel(string tipoCombustivel)
+    {
+        if (TipoCombustivel.Contains(tipoCombustivel))
+            TipoCombustivel.Remove(tipoCombustivel);
+        else
+            TipoCombustivel.Add(tipoCombustivel);
+    }
+
+    protected void GerirFiltroDistritos(string distrito)
+    {
+        if (Distritos.Contains(distrito))
+            Distritos.Remove(distrito);
+        else
+            Distritos.Add(distrito);
+    }
+}

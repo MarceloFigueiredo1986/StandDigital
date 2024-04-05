@@ -683,9 +683,9 @@ banner
   margin-bottom: -7px;
 }
 
-#bg-video {
+#bg-splash {
     min-width: 100%;
-    min-height: 100vh;
+    min-height: 150px;
     max-width: 100%;
     max-height: 100vh;
     object-fit: cover;
@@ -697,7 +697,6 @@ banner
 }
 
 .video-overlay {
-    background-color: rgba(31,39,43,0.75);
     top: 0;
     left: 0;
     bottom: 0;
