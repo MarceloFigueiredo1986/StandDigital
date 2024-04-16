@@ -2,7 +2,6 @@
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using StandDigital.Auth;
-using StandDigital.Core.Database.Repositories.DealBidding;
 using StandDigital.HostedServices;
 using StandDigital.Services.Toaster;
 using StandDigital.Settings;
@@ -16,11 +15,8 @@ public static class BoostrappServices
 {
     public static IServiceCollection InitializeSettings(this IServiceCollection services, IConfiguration configuration)
     {
-        var sect = configuration.GetSection("Paths");
-        services.AddSingleton(new AppSettings { LogoPath = sect["LogoPath"] });
-
+        services.AddSingleton(a => new AppSettings(configuration));
         services.AddScoped<IDatabase, Database>();
-
         services.InstallHttpClient();
         services.InstallSharedProject();
         services.AddHostedService<DatabaseUpdate>();

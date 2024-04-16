@@ -1,9 +1,11 @@
 using Blazored.Modal;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 using Serilog;
 using StandDigital.Bootstrapping;
 using StandDigital.Components;
 using StandDigital.Core;
+using StandDigital.Settings;
 
 namespace StandDigital;
 
@@ -27,8 +29,7 @@ public class Program
 
             builder.Services.InstallCoreDependencies();
             builder.Services.AddBlazoredModal();
-            builder.Configuration.InitialValidations();
-                     
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -43,7 +44,6 @@ public class Program
             builder.Services.InitializeSettings(builder.Configuration);
 
             var app = builder.Build();
-
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
