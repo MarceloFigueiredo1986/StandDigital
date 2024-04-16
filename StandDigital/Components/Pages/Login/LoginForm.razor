@@ -6,10 +6,10 @@
     <label style="color:red">@Erro</label>
 }
 <div id="formContent">
-    <div id="formHeader" style="background-color:white">
+    <div id="formHeader" style="background-color:white;width:100px;margin:auto">
         @if (!string.IsNullOrEmpty(_settings.LogoPath))
         {
-            <img src="@_settings.LogoPath" height="60" width="100" style="border-radius:5px;margin-top:10px" />
+            <img src="@Path.Combine(_settings.CDNbaseUri,_settings.LogoPath)" height="60" width="60" style=";border-radius:5px;margin-top:10px" />
         }
     </div>
     <div style="padding-top:15px;padding-bottom:15px">

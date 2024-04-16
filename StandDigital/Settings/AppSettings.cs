@@ -4,12 +4,12 @@ namespace StandDigital.Settings;
 
 public class AppSettings
 {
-    public string? LogoPath { get; init; }
-    public string? CDNbaseUri { get; init; }
-    public FrozenSet<string>? TiposNegocios { get; init; }
-    public FrozenSet<string>? Distritos { get; init; }
-    public FrozenSet<string>? TiposCombustivel { get; init; }
-    public FrozenDictionary<string,string>? Segmentos { get; init; }
+    public string LogoPath { get; init; }
+    public string CDNbaseUri { get; init; }
+    public FrozenSet<string> TiposNegocios { get; init; }
+    public FrozenSet<string> Distritos { get; init; }
+    public FrozenSet<string> TiposCombustivel { get; init; }
+    public FrozenDictionary<string,string> Segmentos { get; init; }
 
     public AppSettings(IConfiguration configuration)
     {

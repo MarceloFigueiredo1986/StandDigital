@@ -1,8 +1,9 @@
-﻿@inject IConfiguration config
+﻿@inject AppSettings _settings
 
 <p style="color:white">Filtros</p>
+
 <div style="margin:0px 10px 0px 0px">
-    @foreach (var tipoNegocio in config.GetSection("Filtros:TiposNegocios").Get<string[]>())
+    @foreach (var tipoNegocio in _settings.TiposNegocios)
     {
         var btnStyle = TiposNegocios.Contains(tipoNegocio) ? "outline-secondary" : "secondary";
         <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
@@ -10,7 +11,7 @@
     }
 </div>
 <div style="margin:0px 10px 0px 0px">
-    @foreach (var combustivel in config.GetSection("Filtros:TipoCombustivel").Get<string[]>())
+    @foreach (var combustivel in _settings.TiposCombustivel)
     {
         var btnStyle = TipoCombustivel.Contains(combustivel) ? "outline-primary" : "primary";
         <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
@@ -18,7 +19,7 @@
     }
 </div>
 <div style="margin:0px 10px 0px 0px">
-    @foreach (var distrito in config.GetSection("Filtros:Distritos")!.Get<string[]>())
+    @foreach (var distrito in _settings.Distritos)
     {
         var btnStyle = Distritos.Contains(distrito) ? "outline-success" : "success";
         <input style="margin:0.5px;font-size:10pt;padding:3px;margin:2px" type="button" class="btn btn-@btnStyle"
