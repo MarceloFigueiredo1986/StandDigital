@@ -58,8 +58,6 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
         }
     }
 
-    CancellationTokenSource cts = new CancellationTokenSource();
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (WindowWidth == 0 || _WidthStr is not null) return;

@@ -2,8 +2,11 @@
 
 namespace StandDigital.Enums;
 
-public enum EnumTiposNegocios
+public enum EnumCarCarroselTipos
 {
     [Description("Leilão")]
     Leilao,
+
+    [Description("Destaques")]
+    Destaques,
 }

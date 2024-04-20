@@ -210,11 +210,24 @@ internal class CarRepository(IDatabase database) : ICarRepository
             LEFT JOIN CarrosFotos cf ON c.CarroId = cf.CarroId AND c.FotoId = cf.FotoId
             WHERE cm.VendedorId = @userId and cm.DataFimAnuncio not null
             """, new Dictionary<string, object> { { "@userId", userId } });
-    public async Task<CarAdvertisementCrudModel?> GetCarDealDetailsAsync(int carId, CancellationToken cancellationToken)
+    public async Task<CarAdvertisementCrudModel?> GetCarDealDetailsAsync(int carId)
         => await _dbcontext.GetSingleAsync<CarAdvertisementCrudModel>("""
                     SELECT 
                     *
                     FROM Carros c 
                     WHERE c.CarroId = @carroId
                     """, new Dictionary<string, object> { { "@carroId", carId } });
+    public async Task<IEnumerable<CarCardModel>> GetHighlightedDealsAsync()
+        => await _dbcontext.GetAsync<CarCardModel>("""
+            SELECT 
+            c.*,
+            cf.Data as MainImage,
+            cm.DataInicioAnuncio
+            FROM Carros c 
+            INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId 
+            INNER JOIN TipoNegocios tn on c.TipoNegocioId = tn.TipoNegocioId
+            INNER JOIN CarrosFotos cf on c.FotoId = cf.FotoId
+            INNER JOIN Destaques d on c.CarroId = d.CarroId
+            WHERE datetime(DataFimDestaque) >= datetime('now')
+            """);
 }

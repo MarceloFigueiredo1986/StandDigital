@@ -1,0 +1,38 @@
+﻿<StandDigital.Components.Components.FloatingButton ButtonClicked="floatingButtonClicked">
+    <FloatButton>
+        <input type="button"
+               style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/list.png?updatedAt=1705153925369');
+                        background-repeat:no-repeat;
+                        background-color:transparent;
+                        border-style:none;
+                        max-width:35px;
+                        width:70px;
+                        height:40px;
+                        margin-left:15px;" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}" />
+    </FloatButton>
+    <MenuOptions>
+        <div class="row menuOption">
+            <a href="/" style="color:darkolivegreen" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Início</a>
+        </div>
+        <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+            <Authorized>
+                <div class=" row menuOption">
+                    <a style="color:darkolivegreen" href="mercado" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Ofertas mercado</a>
+                </div>
+                <div class=" row menuOption">
+                    <a style="color:darkolivegreen" href="admin" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Gestão</a>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class=" row menuOption">
+                    <a style="color:darkolivegreen" href="login" @onclick="() => {floatingButtonClicked = !floatingButtonClicked;}">Login</a>
+                </div>
+            </NotAuthorized>
+        </Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+    </MenuOptions>
+</StandDigital.Components.Components.FloatingButton>
+
+@code {
+    private bool floatingButtonClicked;
+
+}

@@ -12,7 +12,6 @@ public class ProposalService : AbstractComponent<ProposalService>
     [Parameter]
     public int CarroId { get; set; }
 
-    CancellationTokenSource cts = new();
 
     protected async Task GetTokenForPayment()
     {

@@ -47,10 +47,14 @@ public class AbstractComponent<T> : ComponentBase
     [CascadingParameter]
     public IModalService _modal { get; set; } = default!;
 
+    public CancellationTokenSource cts { get; set; } = new();
+
     protected async Task<(string user, int userId)> GetUserSessionDataAsync()
     {
         var session_already_started = await _session.GetKey<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
-        return (session_already_started.Name, session_already_started.IdUser);
+        return session_already_started is null ? 
+            (string.Empty,default) : 
+            (session_already_started.Name, session_already_started.IdUser);
     }
 
     protected async Task AddSessionKeyAsync<T1>(SessionKeys sessionKey, T1 obj)

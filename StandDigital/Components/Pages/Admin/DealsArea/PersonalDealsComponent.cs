@@ -14,7 +14,6 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
     protected ICollection<CarCompleteModel> OpenDeals = [];
     protected ICollection<ClosedDeals> ClosedDeals = [];
 
-    protected CancellationTokenSource _cts = new CancellationTokenSource();
 
     [CascadingParameter]
     public int WindowWidth { get; set; }
@@ -54,7 +53,7 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
         try
         {
             var carId = (int)value;
-            var result = await _mediatr.Send(new DeleteAdvertisementRequest(carId), _cts.Token);
+            var result = await _mediatr.Send(new DeleteAdvertisementRequest(carId), cts.Token);
             
             if(result.IsError)
             {

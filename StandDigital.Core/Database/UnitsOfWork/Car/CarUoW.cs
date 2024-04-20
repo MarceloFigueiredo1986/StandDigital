@@ -38,7 +38,7 @@ internal class CarUoW(
     {
         try
         {
-            var carTsk = _carRepository.GetCarDealDetailsAsync(carId, cancellationToken);
+            var carTsk = _carRepository.GetCarDealDetailsAsync(carId);
             var photosTsk = _photosRepository.GetAllPhotosByCarAsync(carId, cancellationToken);
             var extrasTsk = _carExtrasRepository.GetAllExtrasByCarAsync(carId, cancellationToken);
             var carMetadataTsk = _carMetadataRepository.GetCarMetadaByCarAsync(carId, cancellationToken);

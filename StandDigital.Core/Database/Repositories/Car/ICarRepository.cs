@@ -12,5 +12,6 @@ internal interface ICarRepository : IBaseRepository<CarEntity>
     Task<int> SetPrimaryPhotoAsync(int carroId, int fotoId, CancellationToken cancellationToken);
     Task<IEnumerable<CarCompleteModel>> GetUserOpenDealsAsync(int userId);
     Task<IEnumerable<ClosedDeals>> GetUserClosedDealsAsync(int userId);
-    Task<CarAdvertisementCrudModel?> GetCarDealDetailsAsync(int carId, CancellationToken cancellationToken);
+    Task<CarAdvertisementCrudModel?> GetCarDealDetailsAsync(int carId);
+    Task<IEnumerable<CarCardModel>> GetHighlightedDealsAsync();
 }

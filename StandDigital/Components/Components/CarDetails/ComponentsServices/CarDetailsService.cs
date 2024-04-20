@@ -34,7 +34,6 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
 
     protected string? error;
     protected bool isSaving;
-    private CancellationTokenSource cts = new();
 
     //Default values for typeahead
     protected IEnumerable<BrandEntity>? DefaultMarcas;
