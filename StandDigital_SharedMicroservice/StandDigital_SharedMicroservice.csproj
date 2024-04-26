@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="shared_database.sqbpro" />
     <None Remove="shared_database.sqlite" />
+    <None Remove="shared_database.sqlite-journal" />
   </ItemGroup>
 
   <ItemGroup>

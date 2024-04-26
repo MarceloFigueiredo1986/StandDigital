@@ -3,41 +3,19 @@
     <div class="floatingmenuUp">
         @MenuOptions
     </div>
-    <div class="floatingmenu">
-        <input type="button"
-               style="background-image:url('https://ik.imagekit.io/da113ycvp/StandDigital/undo.png?updatedAt=1705156194876');
-                        transform:scale(1);
-                        background-repeat:no-repeat;
-                        background-color:transparent;
-                        border-style:none;
-                        max-width:35px;
-                        width:50px;
-                        height:40px;
-                        margin-left:15px;" @onclick="() => {ButtonClicked = false;}" />
-    </div>
 }
-else
-{
-    <div class="floatingmenu">
-        @FloatButton
-    </div>
-}
+@FloatButton
+
 <style type="text/css">
-    .floatingmenu {
-        position: fixed;
-        bottom: 15px;
-        right: 15px;
-    }
 
     .floatingmenuUp{
         position: fixed;
         bottom: 75px;
-        right: 20px;
-        width: 250px;
-        height: 130px;
-        background-color: #D4D4D4;
+        width: 150px;
+        top:0px;
+        bottom:0px;
+        background-color: white;
         opacity: 1;
-        border-radius:15px;
         padding:10px;
     }
 </style>

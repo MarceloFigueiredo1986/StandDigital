@@ -1,6 +1,7 @@
 using StandDigital_Shared.Bootstrapping;
 using StandDigital_SharedMicroservice.EndpointsServices;
-using System.Net;
+using StandDigital_SharedMicroservice.HostedServices;
+using StandDigital_SharedMicroservice.Migrations;
 
 namespace StandDigital_SharedMicroservice;
 
@@ -16,6 +17,8 @@ public class Program
         builder.Services.AddScoped<IBrandModelService, BrandModelService>();
         builder.Services.AddScoped<IExtrasService, ExtrasService>();
         builder.Services.AddProblemDetails();
+        builder.Services.AddScoped<MigrationsService>();
+        builder.Services.AddHostedService<DatabaseUpdate>();
 
         var app = builder.Build();
         app.EndpointsInstaller();

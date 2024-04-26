@@ -1,10 +1,10 @@
 ﻿
 namespace StandDigital_Shared.Migrations;
 
-public class CreateScriptCarrosFotos : IScript
+internal class CreateScriptCarrosFotos : IScript
 {
     public string Script { get; init; } = """
-                CREATE TABLE IF NOT EXISTS "CarrosFotos" (
+        CREATE TABLE IF NOT EXISTS "CarrosFotos" (
         	"FotoId"	INTEGER NOT NULL UNIQUE,
         	"CarroId"	INTEGER NOT NULL,
         	"Name"	TEXT NOT NULL,
