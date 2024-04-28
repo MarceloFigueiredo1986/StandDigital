@@ -6,8 +6,6 @@ namespace StandDigital_Shared.Migrations;
 
 public class MigrationsService(IConfiguration configuration)
 {
-    private readonly IConfiguration _configuration = configuration;
-
     public async Task RunMigrations()
     {
         using var dbConn = new SqliteConnection(configuration.GetValue<string>("DatabaseName"));
@@ -20,5 +18,7 @@ public class MigrationsService(IConfiguration configuration)
         await dbConn.ExecuteAsync(sql: new CreateScriptTiposNegocios().Script);
         await dbConn.ExecuteAsync(sql: new CreateScriptUsers().Script);
         await dbConn.ExecuteAsync(sql: new CreateScriptPayments().Script);
+        await dbConn.ExecuteAsync(sql: new CreateScriptDestaques().Script);
+        await dbConn.ExecuteAsync(sql: new FillScriptTiposNegocios().Script);
     }
 }

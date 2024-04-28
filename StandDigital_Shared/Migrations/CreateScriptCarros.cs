@@ -8,7 +8,7 @@ internal class CreateScriptCarros : IScript
         	"Marca"	TEXT NOT NULL,
         	"Modelo"	TEXT NOT NULL,
         	"Combustivel"	NUMERIC NOT NULL,
-        	"ImageMin"	REAL,
+        	"FotoId"	INTEGER,
         	"Kms"	INTEGER NOT NULL,
         	"Cv"	TEXT NOT NULL,
         	"Bateria"	INTEGER,

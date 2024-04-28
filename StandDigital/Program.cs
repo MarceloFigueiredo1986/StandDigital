@@ -1,11 +1,9 @@
 using Blazored.Modal;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
 using Serilog;
 using StandDigital.Bootstrapping;
 using StandDigital.Components;
 using StandDigital.Core;
-using StandDigital.Settings;
 
 namespace StandDigital;
 

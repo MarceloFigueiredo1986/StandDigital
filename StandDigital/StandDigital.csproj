@@ -51,4 +51,8 @@
     <ProjectReference Include="..\StandDigital_Shared\StandDigital_Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>

@@ -225,7 +225,7 @@ internal class CarRepository(IDatabase database) : ICarRepository
             cm.DataInicioAnuncio
             FROM Carros c 
             INNER JOIN CarrosMetadata cm on c.CarroId = cm.CarroId 
-            INNER JOIN TipoNegocios tn on c.TipoNegocioId = tn.TipoNegocioId
+            INNER JOIN TipoNegocios tn on cm.TipoNegocioId = tn.TipoNegocioId
             INNER JOIN CarrosFotos cf on c.FotoId = cf.FotoId
             INNER JOIN Destaques d on c.CarroId = d.CarroId
             WHERE datetime(DataFimDestaque) >= datetime('now')

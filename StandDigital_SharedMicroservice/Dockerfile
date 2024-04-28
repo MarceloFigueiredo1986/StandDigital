@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 RUN apt-get update \
@@ -21,6 +22,5 @@ RUN dotnet publish "./StandDigital_SharedMicroservice.csproj" -c $BUILD_CONFIGUR
 
 FROM base AS final
 WORKDIR /app
-EXPOSE 8080
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet","StandDigital_SharedMicroservice.dll"]
