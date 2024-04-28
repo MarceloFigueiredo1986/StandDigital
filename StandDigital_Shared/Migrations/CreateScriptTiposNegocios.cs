@@ -1,6 +1,4 @@
-﻿using StandDigital_Shared.Migrations;
-
-namespace StandDigital_Shared.Migrations;
+﻿namespace StandDigital_Shared.Migrations;
 
 internal class CreateScriptTiposNegocios : IScript
 {

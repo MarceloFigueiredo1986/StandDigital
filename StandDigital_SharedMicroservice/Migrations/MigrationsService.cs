@@ -7,7 +7,7 @@ public class MigrationsService(IConfiguration configuration, ILogger<MigrationsS
 {
     public async Task RunMigrations()
     {
-        using var dbConn = new SqliteConnection(configuration.GetValue<string>("DatabaseName"));
+        using var dbConn = new SqliteConnection(configuration.GetValue<string>("DatabaseName") ?? throw new SqliteException("Empty database connection string", 404));
 
         try
         {
