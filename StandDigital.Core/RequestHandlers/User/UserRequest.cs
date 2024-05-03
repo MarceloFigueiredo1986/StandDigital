@@ -1,7 +1,7 @@
-﻿using ErrorOr;
+﻿
+using ErrorOr;
 using MediatR;
 using StandDigital.Core.DataValidators;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace StandDigital.Core.RequestHandlers.User;
