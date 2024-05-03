@@ -10,9 +10,9 @@ internal class CreateScriptUsers : IScript
         	"Address"	TEXT,
         	"NIF"	TEXT UNIQUE,
         	"Email"	TEXT NOT NULL UNIQUE,
-        	"Mobile"	TEXT NOT NULL,
+        	"Mobile"	TEXT NOT NULL UNIQUE,
         	"EmailValidated"	INTEGER NOT NULL,
-        	"Username"	TEXT NOT NULL,
+        	"Username"	TEXT NOT NULL UNIQUE,
         	"Password"	TEXT NOT NULL,
         	"Ativo"	INTEGER NOT NULL,
         	PRIMARY KEY("UserId" AUTOINCREMENT)

@@ -95,25 +95,34 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             Order().
             ToList());
 
-    protected async void SetCombustivel()
+    protected void SetCombustivel()
     {
-        MenuOpcoesTipoCombustivel = Enum.Parse(typeof(Combustivel),Car.Combustivel) switch
+        try
         {
-            Combustivel.Electrico => typeof(Eletrico),
-            Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
-            _ => typeof(Combustao)
-        };
+            MenuOpcoesTipoCombustivel = Enum.Parse(typeof(Combustivel), Car.Combustivel) switch
+            {
+                Combustivel.Electrico => typeof(Eletrico),
+                Combustivel.HibridoGasoleo or Combustivel.HibridoGasolina => typeof(Hibrido),
+                _ => typeof(Combustao)
+            };
 
-        Car.Bateria = null;
-        Car.Cilindrada = null;
-        Car.Caixa = null;
-        Car.TipoCarregamento = null;
+            Car.Bateria = null;
+            Car.Cilindrada = null;
+            Car.Caixa = null;
+            Car.TipoCarregamento = null;
 
-        await CheckIfShouldClearModelsForLoading();
+            _logger.LogInformation(nameof(Car.Combustivel) + Car.Combustivel);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"error {ex.Message}");
+        }
     }
+
     protected async Task CheckIfShouldClearModelsForLoading()
     {
-        if (!string.IsNullOrEmpty(Car.Combustivel) && !string.IsNullOrEmpty(Car.Marca))
+        if (!string.IsNullOrEmpty(Car.Marca))
             await LoadModelsAsync();
     }
     protected async Task<string> DefaultWhenBrandNotFound(string value)
@@ -250,8 +259,7 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
                 queryStringParams: null,
                 parameters: new()
                 {
-                    { marcaId.ToString() },
-                    { Car.Combustivel }
+                    { marcaId.ToString() }
                 }, 
                 cts.Token);
 

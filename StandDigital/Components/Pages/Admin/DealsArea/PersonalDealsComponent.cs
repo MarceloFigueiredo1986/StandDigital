@@ -26,6 +26,7 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
         try
         {
             var session = await GetSessionKeyAsync<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
+            if (session is null) return;
             OpenDeals = (await _mediatr.Send(new UserOpenDealsRequest(session.IdUser))).ToArray();
             ClosedDeals = (await _mediatr.Send(new UserClosedDealsRequest(session.IdUser))).ToArray();
         }

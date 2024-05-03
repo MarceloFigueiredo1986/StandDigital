@@ -6,14 +6,9 @@ internal class CreateScriptModelos : IScript
 {
     public string Script { get; init; } = """
         CREATE TABLE IF NOT EXISTS "Modelos" (
-        "ModeloId"	INTEGER NOT NULL UNIQUE,
-        "Nome"	TEXT NOT NULL,
-        "Cilindrada"	TEXT,
-        "Cavalagem"	INTEGER NOT NULL,
+        "Nome"	TEXT NOT NULL UNIQUE,
         "MarcaId"	INTEGER NOT NULL,
-        "Combustivel"	TEXT NOT NULL DEFAULT 'Diesel',
-        "Segmento"	TEXT,
-        PRIMARY KEY("ModeloId" AUTOINCREMENT)
+        FOREIGN KEY("MarcaId") REFERENCES "Marcas"("MarcaId")
         )
         """;
 }

@@ -32,7 +32,7 @@
                                     <ComponentLoader LoadingObj="DefaultMarcas">
                                         <Fragment>
                                             <label for="firstName" class="form-label">Marca</label>
-                                            <BlazoredTypeahead @onfocusout="async () => await CheckIfShouldClearModelsForLoading()" AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
+                                            <BlazoredTypeahead @onfocusout="CheckIfShouldClearModelsForLoading"  AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound" SearchMethod="SearchBrand" @bind-Value="Car.Marca">
                                                 <SelectedTemplate Context="contextA">
                                                     @contextA
                                                 </SelectedTemplate>
@@ -51,12 +51,12 @@
                                         <label for="firstName" class="form-label">Combustível</label>
                                     </p>
                                     <div class="row" style="margin:0px 10px 20px 10px">
-                                        <InputRadioGroup Name="CombustivelGroup" @bind-Value="Car.Combustivel">
+                                        <InputRadioGroup Name="CombustivelGroup" @bind-Value="Car.Combustivel" @onfocusout="SetCombustivel">
                                          @foreach (var tipoCombustivel in Enum.GetValues(typeof(Combustivel)).Cast<Combustivel>().ToList())
                                         {
                                             string flexRadioDefault = $"flexRadioCombustivel{Random.Shared.Next()}";
                                             <div class="form-check" style="float:left;width:fit-content">
-                                                    <InputRadio Name="CombustivelGroup" Value="tipoCombustivel.ToString()" @onchange="SetCombustivel" />
+                                                    <InputRadio Name="CombustivelGroup" Value="tipoCombustivel.ToString()" />
                                                 <label class="form-check-label" for="@flexRadioDefault">
                                                 @tipoCombustivel.GetDescription()
                                                 </label>
@@ -71,7 +71,8 @@
                                     <ComponentLoader LoadingObj="DefaultModelos">
                                         <Fragment>
                                             <label for="firstName" class="form-label">Modelo</label>
-                                            <BlazoredTypeahead SearchMethod="SearchModel" @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
+                                            <BlazoredTypeahead @onfocus="async () => await CheckIfShouldClearModelsForLoading()" SearchMethod="SearchModel" 
+                                            @bind-Value="Car.Modelo" Disabled="Car.Marca is null || Car.Combustivel is null">
                                                 <SelectedTemplate Context="contextB">
                                                     @contextB
                                                 </SelectedTemplate>

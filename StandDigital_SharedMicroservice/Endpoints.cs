@@ -11,15 +11,13 @@ public static class Endpoints
             var service = input.ServiceProvider.GetRequiredService<IBrandService>();
             return await service.GetAllBrandsAsync(httpconxt.RequestAborted);
         }));
-        app.MapGet("/brandmodels/v1/byBrandidAndFuel/{brandid}/{fuel}", httpconxt => DealWithRequest(httpconxt, async input =>
+        app.MapGet("/brandmodels/v1/byBrandid/{brandid}", httpconxt => DealWithRequest(httpconxt, async input =>
         {
             var brandIdint = Convert.ToInt32(httpconxt.Request.RouteValues["brandid"]);
-            var fuel = httpconxt.Request.RouteValues["fuel"]?.ToString();
             ArgumentException.ThrowIfNullOrWhiteSpace(nameof(brandIdint));
-            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(fuel));
 
             var service = input.ServiceProvider.GetRequiredService<IBrandModelService>();
-            return await service.GetModelsByBrandAndFuelAsync(brandIdint,fuel!);
+            return await service.GetModelsByBrandAsync(brandIdint);
         }));
 
         app.MapGet("/allcarextrastypes/v1/", httpconxt => DealWithRequest(httpconxt, async input =>

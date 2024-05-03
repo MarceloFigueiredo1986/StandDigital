@@ -24,7 +24,7 @@ public class CarAdvertisementCrudModel : IRequest<ErrorOr<bool>>
     public string? Caixa { get; set; }
 
     [Required(ErrorMessage = "Insira a potência em cavalos")]
-    [Range(minimum:1,maximum:9999)]
+    [Range(minimum:1,maximum:9999, ErrorMessage = "Entre 1 e 9999")]
     public short? Cv { get; set; }
 
     [Required(ErrorMessage = "Escolha o nº. de portas")]

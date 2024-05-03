@@ -12,7 +12,7 @@ public class BrandModelService(
     private readonly ICarBrandModelRepository _carBrandModelRepository = carBrandModelRepository;
     private const string CacheKey = "BrandModels";
 
-    public async Task<BrandModelEntity[]> GetModelsByBrandAndFuelAsync(int brandId,string fuel)
+    public async Task<BrandModelEntity[]> GetModelsByBrandAsync(int brandId)
     {
         if (!_memoryCache.TryGetValue(CacheKey, out BrandModelEntity[] brandModels))
         {
@@ -28,6 +28,6 @@ public class BrandModelService(
             _memoryCache.Set(CacheKey, brandModels, cacheEntryOptions);
         }
 
-        return brandModels!.Where(a => a.Combustivel == fuel && a.MarcaId == brandId).ToArray();
+        return brandModels!.Where(a => a.MarcaId == brandId).ToArray();
     }
 }
