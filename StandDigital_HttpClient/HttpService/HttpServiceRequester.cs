@@ -1,30 +1,47 @@
 ﻿using ErrorOr;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Text.Json.Serialization;
 using System.Web;
 
 namespace StandDigital_HttpClient.HttpService;
 
-public sealed class HttpServiceRequester : IHttpService
+public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfiguration configuration) : IHttpService
 {
     private readonly HttpClient _httpClientFactory;
     private readonly IConfiguration _configuration;
 
-    public HttpServiceRequester(HttpClient httpClientFactory, IConfiguration configuration)
+    public enum ServicesEndpoints
     {
-        _configuration = configuration;
-        _httpClientFactory = httpClientFactory;
-        _httpClientFactory.BaseAddress = new Uri(_configuration.GetValue<string>("BrandMicroservice") 
-            ?? throw new NullReferenceException("BrandMicroservice"));
+        ValidateLogin,
+        CreateUser,
+        AllBrands,
+        AllExtras,
+        BrandModels
     }
 
+    string GetMicroserviceEndpoint(ServicesEndpoints endpoint)
+        => endpoint switch
+        {
+            ServicesEndpoints.AllBrands => Path.Combine(
+                configuration.GetValue<string>("BrandMicroservice") ?? throw new Exception("Brand Microservice settings is empty"),
+                configuration.GetValue<string>("AllBrandEndpoint") ?? throw new Exception("AllBrandEndpoint settings empty")),
+            ServicesEndpoints.AllExtras => Path.Combine(
+                configuration.GetValue<string>("BrandMicroservice") ?? throw new Exception("Brand Microservice settings is empty"),
+                configuration.GetValue<string>("ExtrasModelsEndpoint") ?? throw new Exception("ExtrasModelsEndpoint settings empty")),
+            ServicesEndpoints.BrandModels => Path.Combine(
+                configuration.GetValue<string>("BrandMicroservice") ?? throw new Exception("Brand Microservice settings is empty"),
+                configuration.GetValue<string>("BrandModelsEndpoint") ?? throw new Exception("BrandModelsEndpoint settings empty")),
+            _ => throw new Exception("Endpoint not found")
+        };
+
     public async Task<ErrorOr<Tout?>> SendAsync<Tout>(
-        string endpointUrl,
+        ServicesEndpoints service,
         Dictionary<string, string>? queryStringParams, 
         HashSet<string>? parameters,
         CancellationToken cancellationToken)
     {
+        var endpointUrl = GetMicroserviceEndpoint(service);  
+
         if (parameters is not null)
            endpointUrl += string.Join('/', parameters);
 

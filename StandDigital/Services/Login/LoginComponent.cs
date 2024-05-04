@@ -1,6 +1,6 @@
 ﻿using StandDigital.Auth;
 using StandDigital.Components;
-using StandDigital.Core.RequestHandlers.ValidateLogin;
+using StandDigital.Core.Entities;
 
 namespace StandDigital.Services;
 
@@ -10,9 +10,10 @@ public class LoginComponent : AbstractComponent<LoginComponent>
     protected async Task<bool> ValidateLogin(string username,string password, 
         Authentication SignOutManager)
     {
-        var result = await _mediatr.Send(new ValidateLoginRequest(username, password));
+        var result = await _httpClient.SendAsync<UserEntity>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.ValidateLogin,
+            null, [username,password], cts.Token);
 
-        if (result == null) return false;
+        if (result.Value == null) return false;
            
         DateTime expirationDate = default;
 
@@ -23,10 +24,10 @@ public class LoginComponent : AbstractComponent<LoginComponent>
 #endif
 
         var userData = new Authentication.AuthenticationData { 
-            Name = result.Name is null ? result.UserId.ToString() : result.Name,
+            Name = result.Value.Name is null ? result.Value.UserId.ToString() : result.Value.Name,
             ExpirationDate = expirationDate, 
             Role = "default",
-            IdUser = result.UserId
+            IdUser = result.Value.UserId
         };
             
         await AddSessionKeyAsync(SessionSettings.SessionKeys.UserLoggedData, userData);

@@ -33,9 +33,6 @@ public class AbstractComponent<T> : ComponentBase
     protected IAppToastService _toaster { get; set; }
 
     [Inject]
-    protected IMediator _mediatr { get; set; }
-
-    [Inject]
     public AuthenticationStateProvider _authenticator { get; init; }
 
     [Inject]

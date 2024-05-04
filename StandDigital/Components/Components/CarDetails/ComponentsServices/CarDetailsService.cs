@@ -215,8 +215,7 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     {
         try
         {
-            var brandMicroserviceUri = _configuration.GetValue<string>("AllBrandEndpoint") ?? throw new NullReferenceException("AllBrandEndpoint");
-            var result = await _httpClient.SendAsync<IEnumerable<BrandEntity>>(brandMicroserviceUri, null,null,cts.Token);
+            var result = await _httpClient.SendAsync<IEnumerable<BrandEntity>>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllBrands, null,null,cts.Token);
 
             if(result.IsError)
             {
@@ -227,8 +226,7 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             if (result.Value!.Any())
                 DefaultMarcas = result.Value;
 
-            var extrasMicroserviceUri = _configuration.GetValue<string>("ExtrasModelsEndpoint") ?? throw new NullReferenceException("ExtrasModelsEndpoint");
-            var resultExtras = await _httpClient.SendAsync<IEnumerable<ExtraEntity>>(extrasMicroserviceUri, null, null, cts.Token);
+            var resultExtras = await _httpClient.SendAsync<IEnumerable<ExtraEntity>>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllExtras, null, null, cts.Token);
 
             if (resultExtras.IsError)
             {
@@ -253,9 +251,8 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         try
         {
             var marcaId = DefaultMarcas.First(a => a.Nome == Car.Marca).MarcaId;
-            var brandMicroserviceUri = _configuration.GetValue<string>("BrandModelsEndpoint") ?? throw new NullReferenceException("BrandModelsEndpoint");
             var result = await _httpClient.SendAsync<IEnumerable<BrandModelEntity>>(
-                endpointUrl: brandMicroserviceUri,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.BrandModels,
                 queryStringParams: null,
                 parameters: new()
                 {
