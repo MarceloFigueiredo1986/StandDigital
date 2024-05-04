@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StandDigital.Core.RequestHandlers.User;
 
-public class UserRequest : IRequest<ErrorOr<bool>>
+public class CreateUserRequest : IRequest<ErrorOr<bool>>
 {
     [Required(ErrorMessage = "Escolha um nome")]
     public string? Name { get; set; }

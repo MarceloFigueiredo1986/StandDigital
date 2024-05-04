@@ -1,0 +1,6 @@
+@StandDigital.Microservice_HostAddress = http://localhost:5222
+
+GET {{StandDigital.Microservice_HostAddress}}/user/v1/validatelogin/1/ss
+Accept: application/json
+
+###

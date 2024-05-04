@@ -5,7 +5,7 @@ namespace StandDigital.Core.Mappers;
 
 public static class UserRequestMapper
 {
-    public static UserEntity ToUserEntity(this UserRequest userRequest)
+    public static UserEntity ToUserEntity(this CreateUserRequest userRequest)
         => new UserEntity
         {
             Address = userRequest.Address!,

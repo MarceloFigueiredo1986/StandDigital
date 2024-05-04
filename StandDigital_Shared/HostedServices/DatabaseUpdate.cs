@@ -1,18 +1,20 @@
-﻿
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using StandDigital_Shared.Migrations;
 
-namespace StandDigital.HostedServices;
+namespace StandDigital_SharedMicroservice.HostedServices;
 
 public class DatabaseUpdate : IHostedService
 {
     private readonly ILogger<DatabaseUpdate> _logger;
-    private readonly MigrationsService _migrationsService;
+    private readonly IMigration _migrationsService;
 
     public DatabaseUpdate(IServiceProvider serviceProvider)
     {
         var serviceScope = serviceProvider.CreateScope();
         _logger = serviceScope.ServiceProvider.GetService<ILogger<DatabaseUpdate>>();
-        _migrationsService = serviceScope.ServiceProvider.GetService<MigrationsService>();   
+        _migrationsService = serviceScope.ServiceProvider.GetService<IMigration>();   
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -21,7 +23,7 @@ public class DatabaseUpdate : IHostedService
 
         try
         {
-           await _migrationsService.RunMigrations();
+           await _migrationsService.RunMigrationsAsync();
         
         _logger.LogInformation("Migrations applied successfully");
         }

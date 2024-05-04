@@ -7,7 +7,7 @@ namespace StandDigital.Components.Pages.Login.CriarConta;
 
 public class CriarContaComponent : AbstractComponent<CriarContaComponent>
 {
-    protected UserRequest _user = new();
+    protected CreateUserRequest _user = new();
     protected bool _isSaving;
     protected string? _error;
 

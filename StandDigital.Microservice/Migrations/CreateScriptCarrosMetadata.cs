@@ -1,5 +1,7 @@
 ﻿
-namespace StandDigital_Shared.Migrations;
+using StandDigital_Shared.Migrations;
+
+namespace StandDigital.Microservice.Migrations;
 
 internal class CreateScriptCarrosMetadata : IScript
 {

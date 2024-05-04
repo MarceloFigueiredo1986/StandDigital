@@ -25,7 +25,6 @@ public class Program
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.InstallCoreDependencies();
             builder.Services.AddBlazoredModal();
 
             builder.Services.AddAuthentication(options =>

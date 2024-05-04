@@ -1,4 +1,8 @@
-﻿using StandDigital_SharedMicroservice.EndpointsServices;
+﻿using ErrorOr;
+using MediatR;
+using Microsoft.AspNetCore.Components.Forms;
+using StandDigital_SharedMicroservice.EndpointsServices;
+using System.Threading;
 
 namespace StandDigital_SharedMicroservice;
 
@@ -6,31 +10,22 @@ public static class Endpoints
 {
     public static void EndpointsInstaller(this WebApplication app)
     {
-        app.MapGet("/brands/v1/all", httpconxt => DealWithRequest(httpconxt, async input =>
+        app.MapGet("/brands/v1/all", async(IBrandService service, CancellationToken cancellationToken) =>
         {
-            var service = input.ServiceProvider.GetRequiredService<IBrandService>();
-            return await service.GetAllBrandsAsync(httpconxt.RequestAborted);
-        }));
-        app.MapGet("/brandmodels/v1/byBrandid/{brandid}", httpconxt => DealWithRequest(httpconxt, async input =>
+            var result = await service.GetAllBrandsAsync(cancellationToken);
+            return result.Any() ? Results.Ok(result) : Results.NoContent();
+        });
+        app.MapGet("/brandmodels/v1/byBrandid/{brandId}", async (IBrandModelService service, CancellationToken cancellationToken, int brandId) =>
         {
-            var brandIdint = Convert.ToInt32(httpconxt.Request.RouteValues["brandid"]);
-            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(brandIdint));
+            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(brandId));
 
-            var service = input.ServiceProvider.GetRequiredService<IBrandModelService>();
-            return await service.GetModelsByBrandAsync(brandIdint);
-        }));
-
-        app.MapGet("/allcarextrastypes/v1/", httpconxt => DealWithRequest(httpconxt, async input =>
+            var result = await service.GetModelsByBrandAsync(brandId);
+            return result is not null ? Results.Ok(result) : Results.NotFound();
+        });
+        app.MapGet("/extras/v1/all", async(IExtrasService service, CancellationToken cancellationToken) =>
         {
-            var service = input.ServiceProvider.GetRequiredService<IExtrasService>();
-            return await service.GetAllExtrasAsync(httpconxt.RequestAborted);
-        }));
-    }
-
-    private static async Task DealWithRequest<Tout>(HttpContext httpContext, Func<IServiceScope, Tout> endpointServiceHandler)
-    {
-        var scope = httpContext.RequestServices.CreateScope();
-        var result = endpointServiceHandler(scope);
-        await httpContext.Response.WriteAsJsonAsync(result, httpContext.RequestAborted);
+            var result = await service.GetAllExtrasAsync(cancellationToken);
+            return result.Any() ? Results.Ok(result) : Results.NoContent();
+        });
     }
 }

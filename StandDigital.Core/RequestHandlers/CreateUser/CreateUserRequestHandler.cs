@@ -5,11 +5,11 @@ using StandDigital.Core.Mappers;
 
 namespace StandDigital.Core.RequestHandlers.User;
 
-public sealed class UserRequestHandler(IUserRepository userRepository) : IRequestHandler<UserRequest, ErrorOr<bool>>
+public sealed class CreateUserRequestHandler(IUserRepository userRepository) : IRequestHandler<CreateUserRequest, ErrorOr<bool>>
 {
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<ErrorOr<bool>> Handle(UserRequest request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<bool>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
     {
 		try
 		{

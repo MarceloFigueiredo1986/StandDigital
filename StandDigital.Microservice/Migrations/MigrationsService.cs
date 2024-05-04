@@ -1,15 +1,14 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using StandDigital_Shared.Migrations;
 
-namespace StandDigital_Shared.Migrations;
+namespace StandDigital.Microservice.Migrations;
 
-public class MigrationsService(IConfiguration configuration, ILogger<MigrationsService> logger)
+public class MigrationsService(IConfiguration configuration, ILogger<MigrationsService> logger) : IMigration
 {
-    public async Task RunMigrations()
+    public async Task RunMigrationsAsync()
     {
-        using var dbConn = new SqliteConnection(configuration.GetValue<string>("DatabaseName")??throw new SqliteException("Empty database connection string",404));
+        using var dbConn = new SqliteConnection(configuration.GetValue<string>("DatabaseName") ?? throw new SqliteException("Empty database connection string", 404));
 
         try
         {
