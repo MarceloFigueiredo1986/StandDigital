@@ -13,9 +13,9 @@ public static class ImageResize
     private static IImageEncoder jpgEncoder => new JpegEncoder() { Quality = 100 };
     private static IImageEncoder pngEncoder => new PngEncoder();
 
-    public static async Task<Dictionary<string, byte[]>> ResizePhotos(this List<ImageUpload> imagesAbsolutePaths)
+    public static async Task<(byte[] imageStream,bool isPrimary)[]> ResizePhotos(this List<ImageUpload> imagesAbsolutePaths,string? primaryPhoto)
     {
-        ConcurrentBag<KeyValuePair<string, byte[]>> resultDic = [];
+        ConcurrentBag<(byte[],bool)> resultDic = [];
 
         await Parallel.ForEachAsync(imagesAbsolutePaths, async (image, cancellation) =>
         {
@@ -26,12 +26,14 @@ public static class ImageResize
                 {
                     imageSharpImg.Save(ms, ImageEncoder(image.ImageName));
                     ms.Position = 0;
-                    resultDic.Add(new(image.ImageName, ms.ToArray()));
+
+                    if(Equals(image.ImageName,primaryPhoto))
+                        resultDic.Add((ms.ToArray(),true));
                 }
             }
         });
 
-        return resultDic.ToDictionary(a => a.Key, a => a.Value);
+        return [.. resultDic];
     }
 
     private static IImageEncoder ImageEncoder(string imageName) =>

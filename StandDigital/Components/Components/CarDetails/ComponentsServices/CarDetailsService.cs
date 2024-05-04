@@ -5,6 +5,7 @@ using StandDigital.Components.Components.CarDetails.Opcoes;
 using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Entities;
+using StandDigital.Core.Mappers;
 using StandDigital.Core.Models;
 using StandDigital.Core.RequestHandlers.CarDealDetails;
 using StandDigital.Core.RequestHandlers.NewCarDeal;
@@ -180,13 +181,19 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     }
     async Task CreateNewAdvertisement()
     {
-        var result = await _mediatr.Send(new NewCarDealRequest(
-             Car,
-             await TemporaryPhotos.ResizePhotos(),
-             _primaryPhoto,
-             Extras,
-             CarMetadata,
-             cts.Token));
+        var carAdverAggr = new CarAdvertisementAggregate(
+            Car, 
+            await TemporaryPhotos.ResizePhotos(_primaryPhoto),
+            Extras,
+            CarMetadata);
+
+        var result = await _httpClient.SendAsync<Created,CarAdvertisementAggregate>(
+            HttpMethod.Post,
+             StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.NewCarRequest,
+             null,
+             null,
+             carAdverAggr,
+             cts.Token);
 
         if (result.IsError)
             throw new Exception(result.FirstError.Description);

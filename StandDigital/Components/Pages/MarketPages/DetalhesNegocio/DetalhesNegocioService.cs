@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Data.Sqlite;
 using StandDigital.Auth;
 using StandDigital.Core.Models;
@@ -81,18 +82,23 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
         {
             _ = _logger.BeginScope(_newBid);
 
-            var result = await _mediatr.Send(new AuctionRequest(
-                CarroId!.Value,
-                _newBid,
-                _sessionUserId
-                ), cts.Token);
+            var result = await _httpClient.SendAsync<ErrorOr<Updated>,(decimal newBid,int sessionUserId)>(
+                HttpMethod.Post,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.NewBidDetails,
+                null,
+                [CarroId!.Value.ToString()],
+                (_newBid, _sessionUserId),
+                cts.Token
+                );
 
             if (result.IsError)
                 if (result.FirstError.Type == ErrorOr.ErrorType.Conflict)
                 {
                     _detalhesCarro = _detalhesCarro with
                     {
-                        CarSellHistory = JsonSerializer.Deserialize<CarSellingPurposes>(result.FirstError.Metadata!.First().Value.ToString()!)
+                        CarSellHistory = JsonSerializer.Deserialize<CarSellingPurposes>(
+                            json: result.FirstError.Metadata!.First().Value.ToString(),
+                            options: new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
                     };
 
                     _newBid = _detalhesCarro.CarSellHistory.BiggestBid + 1;

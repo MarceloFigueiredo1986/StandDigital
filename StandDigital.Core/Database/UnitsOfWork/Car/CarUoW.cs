@@ -10,6 +10,7 @@ using StandDigital.Core.Database.Repositories.DealBidding;
 using StandDigital.Core.Models;
 using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.Encryption;
+using StandDigital.Core.Mappers;
 
 namespace StandDigital.Core.Database.UnitsOfWork.Car;
 
@@ -68,47 +69,42 @@ internal class CarUoW(
     }
 
     public async Task<ErrorOr<Created>> SaveNewCarAsync(
-        CarEntity car,
-        Dictionary<string, byte[]> photos,
-        string primaryPhoto,
-        HashSet<string> extras,
-        CarMetadataEntity carMetadataEntity,
+        CarAdvertisementAggregate carAdvertisement,
         CancellationToken cancellationToken)
     {
         try
         {
             await _database.OpenTransactionAsync();
 
-            var carCreationResult = await _carRepository.CreateAsync(car, cancellationToken);
+            var carCreationResult = await _carRepository.CreateAsync(carAdvertisement.Car.ToCardEntity(), cancellationToken);
 
             if (carCreationResult.IsError)
                 return Error.Failure(description: $"Car creation proccess:{carCreationResult.FirstError.Description}");
 
-            carMetadataEntity.CarroId = carCreationResult.Value;
-            var carMetadataCreationResult = await _carMetadataRepository.CreateAsync(carMetadataEntity, cancellationToken);
+            carAdvertisement.CarMetadataEntity.CarroId = carCreationResult.Value;
+            var carMetadataCreationResult = await _carMetadataRepository.CreateAsync(carAdvertisement.CarMetadataEntity, cancellationToken);
 
             if (carMetadataCreationResult.IsError)
                 return Error.Failure(description: $"Car metadata creation proccess:{carMetadataCreationResult.FirstError.Description}");
 
-            foreach (var pht in photos)
+            foreach (var pht in carAdvertisement.Photos)
             {
-                var isPrimaryPhoto = pht.Key == primaryPhoto;
-                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.Value, isPrimaryPhoto);
+                var newPhoto = new CarPhotoEntity(carCreationResult.Value, pht.photoStream, pht.isPrimary);
 
                 var photoCreationResult = await _photosRepository.CreateAsync(newPhoto, cancellationToken);
 
                 if (photoCreationResult.IsError)
                     return photoCreationResult.FirstError;
             
-                if(isPrimaryPhoto)
+                if(pht.isPrimary)
                 {
                     var updated = await _carRepository.SetPrimaryPhotoAsync(carCreationResult.Value, photoCreationResult.Value, cancellationToken);
                     if (updated == 0)
-                        return Error.Failure(description: $"Set photo {pht.Key} as primary failed");
+                        return Error.Failure(description: $"Error defining photo as primary.");
                 }
             }
 
-            foreach (var extra in extras)
+            foreach (var extra in carAdvertisement.Extras)
             {
                 var newExtra = new CarExtraEntity(0, carCreationResult.Value, extra);
 

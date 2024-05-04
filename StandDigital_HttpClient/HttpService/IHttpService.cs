@@ -10,4 +10,12 @@ public interface IHttpService
             Dictionary<string, string>? queryStringParams,
             HashSet<string>? parameters,
             CancellationToken cancellationToken);
+
+    Task<ErrorOr<Tout?>> SendAsync<Tout, Tbody>(
+        HttpMethod method,
+        ServicesEndpoints service,
+        Dictionary<string, string>? queryStringParams,
+        HashSet<string>? parameters,
+        Tbody bodyObj,
+       CancellationToken cancellationToken);
 }

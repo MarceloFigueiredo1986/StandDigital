@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Net.Http.Json;
 using System.Web;
 
 namespace StandDigital_HttpClient.HttpService;
@@ -16,7 +17,9 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
         CreateUser,
         AllBrands,
         AllExtras,
-        BrandModels
+        BrandModels,
+        NewCarRequest,
+        NewBidDetails
     }
 
     string GetMicroserviceEndpoint(ServicesEndpoints endpoint)
@@ -31,6 +34,18 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
             ServicesEndpoints.BrandModels => Path.Combine(
                 configuration.GetValue<string>("BrandMicroservice") ?? throw new Exception("Brand Microservice settings is empty"),
                 configuration.GetValue<string>("BrandModelsEndpoint") ?? throw new Exception("BrandModelsEndpoint settings empty")),
+            ServicesEndpoints.ValidateLogin => Path.Combine(
+                configuration.GetValue<string>("MainMicroservice") ?? throw new Exception("Main Microservice settings is empty"),
+                configuration.GetValue<string>("ValidateLoginEndpoint") ?? throw new Exception("ValidateLoginEndpoint settings empty")),
+            ServicesEndpoints.CreateUser => Path.Combine(
+                configuration.GetValue<string>("MainMicroservice") ?? throw new Exception("Main Microservice settings is empty"),
+                configuration.GetValue<string>("CreateUserEndpoint") ?? throw new Exception("CreateUserEndpoint settings empty")),
+            ServicesEndpoints.NewCarRequest => Path.Combine(
+                configuration.GetValue<string>("MainMicroservice") ?? throw new Exception("Main Microservice settings is empty"),
+                configuration.GetValue<string>("NewCarEndpoint") ?? throw new Exception("NewCarEndpoint settings empty")),
+            ServicesEndpoints.NewBidDetails => Path.Combine(
+                configuration.GetValue<string>("MainMicroservice") ?? throw new Exception("Main Microservice settings is empty"),
+                configuration.GetValue<string>("NewBidDetailsEndpoint") ?? throw new Exception("NewBidDetailsEndpoint settings empty")),
             _ => throw new Exception("Endpoint not found")
         };
 
@@ -55,6 +70,47 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
         }
 
         var result = await _httpClientFactory.GetAsync(endpointUrl,cancellationToken);
+
+        if (!result.IsSuccessStatusCode)
+            return Error.Failure(description: await result.Content.ReadAsStringAsync());
+
+        var resulString = await result.Content.ReadAsStringAsync();
+        var resultJson = JsonConvert.DeserializeObject<ResultDeserializer<Tout>>(resulString);
+
+        return resultJson!.Result;
+    }
+
+    public async Task<ErrorOr<Tout?>> SendAsync<Tout, Tbody>(
+        HttpMethod method,
+        ServicesEndpoints service, 
+        Dictionary<string, string>? queryStringParams, 
+        HashSet<string>? parameters, 
+        Tbody bodyObj,
+       CancellationToken cancellationToken)
+    {
+        var endpointUrl = GetMicroserviceEndpoint(service);
+
+        if (parameters is not null)
+            endpointUrl += string.Join('/', parameters);
+
+        if (queryStringParams is not null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            foreach ((string key, string value) in queryStringParams)
+                query[key] = value;
+
+            endpointUrl = string.Join("?", endpointUrl, query.ToString());
+        }
+
+        var request = new HttpRequestMessage(
+                method: method,
+                requestUri: endpointUrl);
+
+        request.Content = JsonContent.Create(bodyObj);
+
+        var result = await _httpClientFactory.SendAsync(
+            request : request,
+            cancellationToken: cancellationToken); ;
 
         if (!result.IsSuccessStatusCode)
             return Error.Failure(description: await result.Content.ReadAsStringAsync());
