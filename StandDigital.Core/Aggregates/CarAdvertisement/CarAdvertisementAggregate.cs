@@ -11,4 +11,5 @@ public class CarAdvertisementAggregate(CarAdvertisementCrudModel car, (byte[], b
     public HashSet<string> Extras { get; private set; } = extras;
     public CarMetadataEntity CarMetadataEntity { get; private set; } = carMetadataEntity;
     public CarSelledOffer? BuyingProposal { get; private set; }
+    public void SetWinningPurposal(CarSelledOffer selledOffer) => BuyingProposal = selledOffer;
 }

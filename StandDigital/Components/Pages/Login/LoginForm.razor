@@ -53,7 +53,7 @@
     public EventCallback<MenusLogin> ChoosedMenuChanged { get; set; }
 
 
-    public async void ValidaLogin()
+    public async Task ValidaLogin()
     {
         bool RunButtonReset = false;
         try
@@ -70,8 +70,8 @@
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, nameof(ValidaLogin));
             Erro = ex.Message;
-            Console.WriteLine("Login.ValidaLogin:" + ex.Message);
             RunButtonReset = true;
         }
         finally

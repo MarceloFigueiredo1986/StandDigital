@@ -47,20 +47,23 @@ internal class CarUoW(
 
             await Task.WhenAll(carTsk,photosTsk,extrasTsk,carMetadataTsk,carWinningProposalTsk);
 
-            var winningProposal = carWinningProposalTsk.Result;
+             CarSelledOffer winningProposal = carWinningProposalTsk.Result;
 
             if (winningProposal != default)
                 winningProposal = winningProposal with
                 {
                     Telefone = DataEncryption.Decrypt(winningProposal.Telefone)
                 };
-
-            return new CarAdvertisementAggregate(
-                carTsk.Result??throw new Exception("Car not found"),
-                photosTsk.Result.Select(a =>a.Data),
+           
+            var cardeal = new CarAdvertisementAggregate(
+                carTsk.Result ?? throw new Exception("Car not found"),
+                photosTsk.Result.Select(a => (a.Data,false)).ToArray(),
                 extrasTsk.Result.ToHashSet(),
-                carMetadataTsk.Result??throw new Exception("CarMetadata not found"),
-                winningProposal);
+                carMetadataTsk.Result ?? throw new Exception("CarMetadata not found"));
+
+            cardeal.SetWinningPurposal(winningProposal);
+
+            return cardeal;
         }
         catch (Exception ex)
         {
@@ -125,7 +128,7 @@ internal class CarUoW(
         return Result.Created;
     }
 
-    public Task<ErrorOr<Updated>> UpdateCarAsync(CarEntity car, Dictionary<string, byte[]> photos, string? primaryPhoto, HashSet<string> extras, CarMetadataEntity carMetadataEntity, CancellationToken cancellationToken)
+    public Task<ErrorOr<Updated>> UpdateCarAsync(CarAdvertisementAggregate car, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

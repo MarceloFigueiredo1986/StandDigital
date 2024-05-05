@@ -2,9 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using StandDigital.Core.Aggregates.CarAdvertisement;
-using StandDigital.Core.CarAdvertisement;
 using StandDigital.Core.Database.UnitsOfWork.Car;
-using StandDigital.Core.Entities;
 using StandDigital.Core.RequestHandlers.NewCarDeal;
 
 namespace StandDigital.Core.RequestHandlers.CarDealDetails;

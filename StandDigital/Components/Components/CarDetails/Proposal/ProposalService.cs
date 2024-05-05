@@ -17,7 +17,13 @@ public class ProposalService : AbstractComponent<ProposalService>
     {
         try
         {
-            var result = await _mediatr.Send(new DealPaymentQuery(CarroId), cts.Token);
+            var result = await _httpClient.SendAsync<CarPayingCode>(
+            HttpMethod.Get,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.DealPayment,
+                null,
+                [CarroId.ToString()], 
+                cts.Token);
+
             if(result.IsError)
             {
                 _logger.LogWarning(result.FirstError.Description);

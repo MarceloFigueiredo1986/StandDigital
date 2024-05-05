@@ -23,7 +23,11 @@ public class CriarContaComponent : AbstractComponent<CriarContaComponent>
         {
             _ = _logger.BeginScope(_user);
 
-            var result = await _mediatr.Send(_user);
+            var result = await _httpClient.SendAsync<bool,CreateUserRequest>(
+                HttpMethod.Post,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.CreateUser,
+                null,null,
+                _user, cts.Token);
 
             if(result.IsError)
             {

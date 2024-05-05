@@ -203,14 +203,20 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     }
     async Task UpdateAdvertisement()
     {
-        var result = await _mediatr.Send(new UpdateCarDealRequest(
-             Carid!.Value,
-             Car,
-             await TemporaryPhotos.ResizePhotos(),
-             _primaryPhoto,
-             Extras,
-             CarMetadata,
-             cts.Token));
+        var carAdvertisemnt = new CarAdvertisementAggregate(
+            car: Car,
+            photos: await TemporaryPhotos.ResizePhotos(_primaryPhoto),
+            extras: Extras,
+            carMetadataEntity: CarMetadata);
+
+        var result = await _httpClient.SendAsync<ErrorOr<Updated>, CarAdvertisementAggregate>(
+            method: HttpMethod.Put,
+            service: StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.UpdateCarDeal,
+            queryStringParams:null,
+            parameters: null,
+            bodyObj: carAdvertisemnt,
+            cancellationToken: cts.Token
+            );
 
         if (result.IsError)
             throw new Exception(result.FirstError.Description);
@@ -222,7 +228,9 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
     {
         try
         {
-            var result = await _httpClient.SendAsync<IEnumerable<BrandEntity>>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllBrands, null,null,cts.Token);
+            var result = await _httpClient.SendAsync<IEnumerable<BrandEntity>>(
+            HttpMethod.Get,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllBrands, null,null,cts.Token);
 
             if(result.IsError)
             {
@@ -233,7 +241,9 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             if (result.Value!.Any())
                 DefaultMarcas = result.Value;
 
-            var resultExtras = await _httpClient.SendAsync<IEnumerable<ExtraEntity>>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllExtras, null, null, cts.Token);
+            var resultExtras = await _httpClient.SendAsync<IEnumerable<ExtraEntity>>(
+            HttpMethod.Get,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllExtras, null, null, cts.Token);
 
             if (resultExtras.IsError)
             {
@@ -244,7 +254,12 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
             if (resultExtras.Value!.Any())
                 DefaultExtras = resultExtras.Value;
 
-            TiposNegocios = await _mediatr.Send(new GetTiposNegociosRequest());
+            var resultTiposNegocios = await _httpClient.SendAsync<IEnumerable<TipoNegocioEntity>>(
+            HttpMethod.Get,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.AllDealTypes,
+                null, null, cts.Token);
+
+            TiposNegocios = resultTiposNegocios.Value;
         }
         catch (Exception ex)
         {
@@ -259,6 +274,7 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         {
             var marcaId = DefaultMarcas.First(a => a.Nome == Car.Marca).MarcaId;
             var result = await _httpClient.SendAsync<IEnumerable<BrandModelEntity>>(
+            HttpMethod.Get,
                 StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.BrandModels,
                 queryStringParams: null,
                 parameters: new()
@@ -287,18 +303,28 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         {
             if (Carid != null)
             {
-                var result = await _mediatr.Send(new CarDealDetailsRequest(Carid.Value), cts.Token);
+                var result = await _httpClient.SendAsync<CarAdvertisementAggregate>(
+                    HttpMethod.Get,
+                    StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.DealDetails,
+                    null,
+                    [Carid.Value.ToString()],
+                    cts.Token);
+
                 if(result.IsError)
                 {
-                    _logger.LogWarning(result.FirstError.Description, nameof(OnParametersSetAsync));
-                    _toaster.ShowWarning(result.FirstError.Description);
+                    DealWithError(result.FirstError.Description);
+                    return;
+                }
+
+                if(result.Value is null)
+                {
+                    _toaster.ShowWarning("Negócio não encontrado");
                     return;
                 }
 
                 var carDetails = result.Value;
 
                 Car = carDetails.Car;
-                //TemporaryPhotos = _photos;
                 Extras = carDetails.Extras;
                 CarMetadata = carDetails.CarMetadataEntity;
                 WinningProposal = carDetails.BuyingProposal;
@@ -306,8 +332,13 @@ public class CarDetailsService : AbstractComponent<CarDetailsService>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, nameof(OnParametersSetAsync));
-            _toaster.ShowWarning(ex.Message);
+            DealWithError(ex.Message);
+        }
+    
+    
+        void DealWithError(string msg)
+        {
+            _logger.LogError(msg, nameof(OnParametersSetAsync));
         }
     }
 }

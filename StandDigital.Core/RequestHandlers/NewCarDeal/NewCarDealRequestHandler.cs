@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.Database.UnitsOfWork.Car;
-using StandDigital.Core.Mappers;
 
 namespace StandDigital.Core.RequestHandlers.NewCarDeal;
 
@@ -19,14 +19,19 @@ internal sealed class NewCarDealRequestHandler(
         _ = _logger.BeginScope(request);
         _logger.LogInformation("Start new deal creation process");
 
-        if(string.IsNullOrEmpty(request.PrimaryPhoto))
+        if(!request.CarAdvertisement.Photos.Any(a => a.isPrimary))
         {
             _logger.LogWarning(missingPrimaryphoto);
             return Error.Validation(description: missingPrimaryphoto);
         }
 
-        var carEntity = request.Car.ToCardEntity();
-        var result = await _carUoW.SaveNewCarAsync(carEntity, request.Photos, request.PrimaryPhoto, request.Extras, request.CarMetadataEntity, cancellationToken);
+        var carAdvertisment = new CarAdvertisementAggregate(
+            request.CarAdvertisement.Car,
+            request.CarAdvertisement.Photos,
+            request.CarAdvertisement.Extras,
+            request.CarAdvertisement.CarMetadataEntity);
+
+        var result = await _carUoW.SaveNewCarAsync(carAdvertisment, cancellationToken);
         _logger.LogInformation("Finished new deal creation process with result {result}",result);
         return result;
     }

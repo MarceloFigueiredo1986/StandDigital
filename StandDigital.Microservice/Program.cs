@@ -1,5 +1,6 @@
 
 using StandDigital.Core;
+using StandDigital.Microservice.HostedServices;
 using StandDigital.Microservice.Middleware;
 using StandDigital.Microservice.Migrations;
 using StandDigital_Shared.Bootstrapping;
@@ -22,6 +23,7 @@ namespace StandDigital.Microservice
             builder.Services.AddHostedService<DatabaseUpdate>();
             builder.Services.InstallExceptionMiddleware();
             builder.Services.InstallCoreDependencies();
+            builder.Services.AddHostedService<CloseFinishedDeals>();
 
             var app = builder.Build();
             app.EndpointsInstaller();

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using StandDigital.Core.Models;
-using StandDigital.Core.RequestHandlers.HighlightedDeals;
-using StandDigital.Core.RequestHandlers.OpenDeals;
 using StandDigital.Enums;
 
 namespace StandDigital.Components.Components.CarCarrossel;
@@ -22,17 +20,58 @@ public class CarCarrosselService : AbstractComponent<CarCarrosselService>
                 (_, _userId) = await GetUserSessionDataAsync();
 
                 if (TipoNegocio == EnumCarCarroselTipos.Destaques)
-                    Cars = await _mediatr.Send(new GetHighlightedDealsQuery());
+                    await GetHighlightedDeals();
                 else
-                    Cars = await _mediatr.Send(new GetOpenDealsRequest(TipoNegocio.GetDescription(), _userId));
+                    await GetAllDealsByUser();
 
                 await InvokeAsync(StateHasChanged);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, nameof(CarCarrosselService));
-            _toaster.ShowWarning("Não foi possível carregar os negócios em destaque.");
+            DealWithError(ex.Message);
         }
+    }
+
+    async Task GetHighlightedDeals()
+    {
+        var result = await _httpClient.SendAsync<IEnumerable<CarCardModel>>(
+            HttpMethod.Get,
+            StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.HighlightedDeals,
+            null,
+            null,
+            cts.Token);
+
+        if (result.IsError)
+        {
+            DealWithError(result.FirstError.Description);
+            return;
+        }
+
+        Cars = result.Value ?? [];
+    }
+
+    async Task GetAllDealsByUser()
+    {
+        var result = await _httpClient.SendAsync<IEnumerable<CarCardModel>>(
+            HttpMethod.Get,
+            StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.OpenDealsByUser,
+            null,
+            [_userId.ToString()],
+            cts.Token);
+
+        if (result.IsError)
+        {
+            DealWithError(result.FirstError.Description);
+            return;
+        }
+
+        Cars = result.Value;
+    }
+
+    void DealWithError(string msg)
+    {
+        _logger.LogWarning(msg, nameof(CarCarrosselService));
+        _toaster.ShowWarning("Não foi possível carregar os negócios em destaque.");
     }
 }

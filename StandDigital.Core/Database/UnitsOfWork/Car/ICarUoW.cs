@@ -7,18 +7,11 @@ namespace StandDigital.Core.Database.UnitsOfWork.Car;
 internal interface ICarUoW
 {
     Task<ErrorOr<Created>> SaveNewCarAsync(
-        CarEntity car,
-        Dictionary<string, byte[]> photos,
-        string? primaryPhoto,
-        HashSet<string> extras,
-        CarMetadataEntity carMetadataEntity,
+        CarAdvertisementAggregate car,
         CancellationToken cancellationToken);
 
-    Task<ErrorOr<Updated>> UpdateCarAsync(CarEntity car,
-        Dictionary<string, byte[]> photos,
-        string? primaryPhoto,
-        HashSet<string> extras,
-        CarMetadataEntity carMetadataEntity,
+    Task<ErrorOr<Updated>> UpdateCarAsync(
+        CarAdvertisementAggregate car,
         CancellationToken cancellationToken);
 
     Task<ErrorOr<CarAdvertisementAggregate>> GetCarAsync(int carId, CancellationToken cancellationToken);

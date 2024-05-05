@@ -10,7 +10,9 @@ public class LoginComponent : AbstractComponent<LoginComponent>
     protected async Task<bool> ValidateLogin(string username,string password, 
         Authentication SignOutManager)
     {
-        var result = await _httpClient.SendAsync<UserEntity>(StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.ValidateLogin,
+        var result = await _httpClient.SendAsync<UserEntity>(
+            HttpMethod.Get,
+            StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.ValidateLogin,
             null, [username,password], cts.Token);
 
         if (result.Value == null) return false;

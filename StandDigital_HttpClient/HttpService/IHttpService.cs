@@ -6,6 +6,7 @@ namespace StandDigital_HttpClient.HttpService;
 public interface IHttpService
 {
     Task<ErrorOr<Tout?>> SendAsync<Tout>(
+            HttpMethod method,
             ServicesEndpoints service,
             Dictionary<string, string>? queryStringParams,
             HashSet<string>? parameters,

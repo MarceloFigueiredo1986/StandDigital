@@ -2,7 +2,6 @@
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using StandDigital.Auth;
-using StandDigital.HostedServices;
 using StandDigital.Services.Toaster;
 using StandDigital.Settings;
 using StandDigital_HttpClient;
@@ -19,7 +18,6 @@ public static class BoostrappServices
         services.AddScoped<IDatabase, Database>();
         services.InstallHttpClient();
         services.InstallSharedProject();
-        services.AddHostedService<CloseFinishedDeals>();
         services.AddAuthorizationCore();
         services.AddBlazoredLocalStorage();
         services.AddBlazoredToast();

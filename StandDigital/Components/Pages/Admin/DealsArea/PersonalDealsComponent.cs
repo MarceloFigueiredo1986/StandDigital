@@ -1,4 +1,5 @@
 ﻿using Blazored.Modal;
+using ErrorOr;
 using Microsoft.AspNetCore.Components;
 using StandDigital.Auth;
 using StandDigital.Components.Components.ModalComponent;
@@ -27,8 +28,30 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
         {
             var session = await GetSessionKeyAsync<Authentication.AuthenticationData>(SessionSettings.SessionKeys.UserLoggedData);
             if (session is null) return;
-            OpenDeals = (await _mediatr.Send(new UserOpenDealsRequest(session.IdUser))).ToArray();
-            ClosedDeals = (await _mediatr.Send(new UserClosedDealsRequest(session.IdUser))).ToArray();
+
+            var resultOpenDeals = await _httpClient.SendAsync<ICollection<CarCompleteModel>>(
+            HttpMethod.Get,
+                service: StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.OpenDealsByUser,
+                null,
+                parameters: [session.IdUser.ToString()],
+                cts.Token);
+
+            var resultClosedDeals = await _httpClient.SendAsync<ICollection<ClosedDeals>>(
+            HttpMethod.Get,
+                service: StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.ClosedDealsByUser,
+                null,
+                parameters: [session.IdUser.ToString()],
+                cts.Token);
+
+            if (resultClosedDeals.IsError)
+                _logger.LogError(resultClosedDeals.FirstError.Description);
+            else
+                ClosedDeals = resultClosedDeals.Value;
+
+            if (resultOpenDeals.IsError)
+                _logger.LogError(resultOpenDeals.FirstError.Description);
+            else
+                OpenDeals = resultOpenDeals.Value;
         }
         catch (Exception ex)
         {
@@ -54,7 +77,12 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
         try
         {
             var carId = (int)value;
-            var result = await _mediatr.Send(new DeleteAdvertisementRequest(carId), cts.Token);
+
+            var result = await _httpClient.SendAsync<Deleted>(
+                HttpMethod.Delete, 
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.DeleteDeal,
+                null,
+                [carId.ToString()], cts.Token);
             
             if(result.IsError)
             {

@@ -38,7 +38,16 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
         {
             if (CarroId != null)
             {
-                _detalhesCarro = await _mediatr.Send(new GetCompleteCarRequest(CarroId.Value));
+                var result = await _httpClient.SendAsync<CarWithExtrasAndImagesDto>(
+            HttpMethod.Get,
+                    StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.CompleteCarById,
+                    null, [CarroId.Value.ToString()], cts.Token);
+
+                if(result.IsError)
+                {
+                    _logger.LogError(result.FirstError.Description);
+                    return;
+                }
 
                 if (_detalhesCarro is not null)
                     if (_detalhesCarro.CarSellHistory.BiggestBid > 0)
@@ -84,7 +93,7 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
 
             var result = await _httpClient.SendAsync<ErrorOr<Updated>,(decimal newBid,int sessionUserId)>(
                 HttpMethod.Post,
-                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.NewBidDetails,
+                StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.NewBid,
                 null,
                 [CarroId!.Value.ToString()],
                 (_newBid, _sessionUserId),
@@ -98,7 +107,7 @@ public class DetalhesNegocioService : AbstractComponent<DetalhesNegocioService>
                     {
                         CarSellHistory = JsonSerializer.Deserialize<CarSellingPurposes>(
                             json: result.FirstError.Metadata!.First().Value.ToString(),
-                            options: new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                            options: new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!
                     };
 
                     _newBid = _detalhesCarro.CarSellHistory.BiggestBid + 1;

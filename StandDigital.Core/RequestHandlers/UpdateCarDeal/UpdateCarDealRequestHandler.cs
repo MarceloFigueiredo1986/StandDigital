@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using StandDigital.Core.Aggregates.CarAdvertisement;
 using StandDigital.Core.Database.UnitsOfWork.Car;
 using StandDigital.Core.Mappers;
 
@@ -18,10 +19,8 @@ internal sealed class UpdateCarDealRequestHandler(
         _ = _logger.BeginScope(request);
         _logger.LogInformation("Start deal update process");
 
-        var carEntity = request.Car.ToCardEntity();
-        carEntity.CarroId = request.CarroId;
-        var result = await _carUoW.UpdateCarAsync(carEntity, request.Photos, request.PrimaryPhoto, request.Extras, 
-            request.CarMetadataEntity, cancellationToken);
+        var result = await _carUoW.UpdateCarAsync(
+            request.Car, cancellationToken);
         _logger.LogInformation("Finished deal update process with result {result}", result);
         return result;
     }
