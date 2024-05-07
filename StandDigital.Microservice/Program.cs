@@ -27,7 +27,6 @@ namespace StandDigital.Microservice
 
             var app = builder.Build();
             app.EndpointsInstaller();
-            app.Run();
         }
     }
 }

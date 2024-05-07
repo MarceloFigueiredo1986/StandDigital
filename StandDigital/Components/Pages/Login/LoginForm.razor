@@ -58,6 +58,20 @@
         bool RunButtonReset = false;
         try
         {
+            if(string.IsNullOrEmpty(utilizador))
+            {
+                _toaster.ShowWarning("Preencha utilizador");
+                RunButtonReset = true;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(passwordutilizador))
+            {
+                _toaster.ShowWarning("Preencha password");
+                RunButtonReset = true;
+                return;
+            }
+
             var validLogin = await ValidateLogin(utilizador, passwordutilizador, ((Authentication)_authenticator));
             if (!validLogin)
             {

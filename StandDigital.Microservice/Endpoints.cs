@@ -16,6 +16,8 @@ using StandDigital.Core.RequestHandlers.UserClosedDeals;
 using StandDigital.Core.RequestHandlers.UserOpenDeals;
 using StandDigital.Core.RequestHandlers.ValidateLogin;
 using StandDigital.Microservice.BodyModels;
+using System.Buffers.Text;
+using System.Text;
 
 namespace StandDigital.Microservice;
 
@@ -27,7 +29,10 @@ public static class Endpoints
             string user,
             string pass) => 
         {
-            var result = await mediator.Send(new ValidateLoginRequest(user, pass), cancellationToken);
+            var result = await mediator.Send(new ValidateLoginRequest(
+                Encoding.UTF8.GetString(Convert.FromBase64String(user)),
+                Encoding.UTF8.GetString(Convert.FromBase64String(pass))),
+                cancellationToken);
             return result is not null ? Results.Ok(result) : Results.NoContent();
         });
         app.MapPost("/newuser/v1", async (

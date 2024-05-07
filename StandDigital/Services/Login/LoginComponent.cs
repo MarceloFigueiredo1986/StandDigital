@@ -1,6 +1,7 @@
 ﻿using StandDigital.Auth;
 using StandDigital.Components;
 using StandDigital.Core.Entities;
+using System.Text;
 
 namespace StandDigital.Services;
 
@@ -13,7 +14,10 @@ public class LoginComponent : AbstractComponent<LoginComponent>
         var result = await _httpClient.SendAsync<UserEntity>(
             HttpMethod.Get,
             StandDigital_HttpClient.HttpService.HttpServiceRequester.ServicesEndpoints.ValidateLogin,
-            null, [username,password], cts.Token);
+            null, [
+                Convert.ToBase64String(Encoding.ASCII.GetBytes(username)),
+                Convert.ToBase64String(Encoding.ASCII.GetBytes(password))], 
+                cts.Token);
 
         if (result.Value == null) return false;
            

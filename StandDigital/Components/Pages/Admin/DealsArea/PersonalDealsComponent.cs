@@ -46,12 +46,12 @@ public class PersonalDealsComponent : AbstractComponent<PersonalDealsComponent>
             if (resultClosedDeals.IsError)
                 _logger.LogError(resultClosedDeals.FirstError.Description);
             else
-                ClosedDeals = resultClosedDeals.Value;
+                ClosedDeals = resultClosedDeals.Value ?? [];
 
             if (resultOpenDeals.IsError)
                 _logger.LogError(resultOpenDeals.FirstError.Description);
             else
-                OpenDeals = resultOpenDeals.Value;
+                OpenDeals = resultOpenDeals.Value ?? [];
         }
         catch (Exception ex)
         {

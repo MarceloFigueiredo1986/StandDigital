@@ -116,9 +116,9 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
             return default(Tout);
 
         var resulString = await result.Content.ReadAsStringAsync();
-        var resultJson = JsonConvert.DeserializeObject<ResultDeserializer<Tout>>(resulString);
+        var resultJson = JsonConvert.DeserializeObject<Tout>(resulString);
 
-        return resultJson!.Result;
+        return resultJson;
     }
 
     public async Task<ErrorOr<Tout?>> SendAsync<Tout, Tbody>(
@@ -151,19 +151,14 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
 
         var result = await httpClientFactory.SendAsync(
             request : request,
-            cancellationToken: cancellationToken); ;
+            cancellationToken: cancellationToken);
 
         if (!result.IsSuccessStatusCode)
             return Error.Failure(description: await result.Content.ReadAsStringAsync());
 
         var resulString = await result.Content.ReadAsStringAsync();
-        var resultJson = JsonConvert.DeserializeObject<ResultDeserializer<Tout>>(resulString);
+        var resultJson = JsonConvert.DeserializeObject<Tout>(resulString);
 
-        return resultJson!.Result;
+        return resultJson;
     }
-}
-
-class ResultDeserializer<T>
-{
-    public T Result { get; set; }
 }
