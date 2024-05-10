@@ -7,21 +7,22 @@ on:
 
 jobs:
 
-  build:
+  build_StandDigital:
 
     runs-on: ubuntu-latest
-
+    env:
+      ImageName: standdigital
     steps:
     - uses: actions/checkout@v2
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag <your-docker-image-name>
+      run: docker build . --file Dockerfile --tag $ImageName
 
     - name: Run vulnerability scan
       run: |
-        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy --exit-code 1 --severity HIGH <your-docker-image-name>
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy --exit-code 1 --severity HIGH $ImageName
 
     - name: Push to Docker Hub
       run: |
-        echo "Lanidor#2019" | docker login -u marceloffigueiredo57@gmail.com --password-stdin
-        docker push <your-docker-image-name>
+        echo {{secrets.DOCKERHUBPASS}} | docker login -u {{secrets.DOCKERHUBUSER}} --password-stdin
+        docker push $ImageName
