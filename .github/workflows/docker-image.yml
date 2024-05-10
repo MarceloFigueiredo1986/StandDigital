@@ -2,9 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - '*'
 
 jobs:
 
@@ -13,6 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag <your-docker-image-name>
+
+    - name: Run vulnerability scan
+      run: |
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy --exit-code 1 --severity HIGH <your-docker-image-name>
+
+    - name: Push to Docker Hub
+      run: |
+        echo "Lanidor#2019" | docker login -u marceloffigueiredo57@gmail.com --password-stdin
+        docker push <your-docker-image-name>
