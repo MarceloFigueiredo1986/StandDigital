@@ -38,7 +38,7 @@ internal sealed class UserRepository(IDatabase database) : IUserRepository
         }
         catch(SqliteException sqlex) when(sqlex.Message.Contains("UNIQUE constraint failed"))
         {
-            return Error.Validation(description: $"Já existe um registo com este {sqlex.Message.Substring(sqlex.Message.LastIndexOf('.') + 1)}");
+            return Error.Validation(description: $"Já existe um registo com este {sqlex.Message.Substring(sqlex.Message.LastIndexOf(':') + 1)}");
         }
         catch (Exception ex)
         {
