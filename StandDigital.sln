@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital_HttpClient", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital.Core", "StandDigital.Core\StandDigital.Core.csproj", "{969826FF-57E5-41A8-8E8A-8B9D30134F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandDigital.Microservice", "StandDigital.Microservice\StandDigital.Microservice.csproj", "{5903C965-86FC-4130-9EEA-A79CE6E53822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandDigital.Microservice", "StandDigital.Microservice\StandDigital.Microservice.csproj", "{5903C965-86FC-4130-9EEA-A79CE6E53822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Components;
 using StandDigital.Auth;
 using StandDigital.Components.Components.ModalComponent;
 using StandDigital.Core.Models;
-using StandDigital.Core.RequestHandlers.DeleteAdvertisement;
-using StandDigital.Core.RequestHandlers.UserClosedDeals;
-using StandDigital.Core.RequestHandlers.UserOpenDeals;
 
 namespace StandDigital.Components.Pages.Admin.DealsArea;
 

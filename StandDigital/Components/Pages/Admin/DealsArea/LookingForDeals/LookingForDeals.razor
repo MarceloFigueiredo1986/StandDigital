@@ -1,0 +1,93 @@
+﻿@attribute [StreamRendering]
+
+@inherits LookingForDealsComponent
+
+<EditForm Model="_lookingForDealsFormModel" OnValidSubmit="ValidSubmitBrand">
+    <DataAnnotationsValidator />
+    <div class="edit-form-container" style="width:90%">
+        <div style="padding:10px">
+            <div class="row justify-content-center">
+                 <div style="width:280px;float:left">
+                     <ComponentLoader LoadingObj="_defaultMarcas">
+                         <Fragment>
+                             <label for="firstName" style="color:white" class="form-label">Marca</label>
+                            <BlazoredTypeahead
+                                SearchMethod="SearchBrand"
+                                @onfocusout="CheckIfShouldClearModelsForLoading"
+                                @bind-Value="_lookingForDealsFormModel.Marca"
+                                AddItemOnEmptyResultMethod="DefaultWhenBrandNotFound">
+                                 <SelectedTemplate Context="contextA">
+                                    <a style="color:white">@contextA</a>
+                                 </SelectedTemplate>
+                                 <ResultTemplate Context="contextA">
+                                     @contextA
+                                 </ResultTemplate>
+                             </BlazoredTypeahead>
+                             <ValidationMessage For="@(() => _lookingForDealsFormModel.Marca)" />
+                             <span style="color:gray">Carregue em Enter para confirmar valor</span>
+                         </Fragment>
+                     </ComponentLoader>
+                 </div>
+                <div style="width:280px;float:left">
+                    <ComponentLoader LoadingObj="_defaultModelos">
+                        <Fragment>
+                            <label for="firstName" style="color:white" class="form-label">Modelo</label>
+                            <BlazoredTypeahead AddItemOnEmptyResultMethod="DefaultWhenModelNotFound"
+                                               SearchMethod="SearchModel" @bind-Value="_lookingForDealsFormModel.Modelo"
+                                               Disabled="_lookingForDealsFormModel.Marca is null">
+                                <SelectedTemplate Context="contextB">
+                                    <a style="color:white">@contextB</a>
+                                </SelectedTemplate>
+                                <ResultTemplate Context="contextB">
+                                    @contextB
+                                </ResultTemplate>
+                            </BlazoredTypeahead>
+                            <ValidationMessage For="@(() => _lookingForDealsFormModel.Modelo)" />
+                            <span style="color:gray">Carregue em Enter para confirmar valor</span>
+                        </Fragment>
+                    </ComponentLoader>
+                </div>
+                <div style="width:200px;float:left">
+                    <label for="firstName" style="color:white;width:200px" class="form-label">Distrito</label>
+                    <InputSelect style="font-size:11pt;padding:1px;text-align:left;max-width:200px;height:40px;margin:0px" 
+                    id="distrito" @bind-Value="_lookingForDealsFormModel.Distrito">
+                        <option>Seleccionar</option>
+                        @foreach (var dept in Distritos)
+                        {
+                            <option value="@dept">@dept</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="inputValuesFloat">
+                    <label for="firstName" style="color:white" class="form-label">Ano</label>
+                    <input type="number" id="typeNumberAno" min="0" max="@DateTime.Now.Year" style="width:100px"
+                           placeholder="Ano" class="form-control" @bind-value="_lookingForDealsFormModel.Ano" />
+                </div>
+                <div class="inputValuesFloat">
+                    <label for="firstName" style="color:white" class="form-label">Portas</label>
+                    <input type="number" id="typeNumberPortas" min="0" max="5" style="width:100px" 
+                    placeholder="Portas" class="form-control" @bind-value="_lookingForDealsFormModel.Portas" />
+                </div>
+                <div class="form-outline inputValuesFloat">
+                    <label for="firstName" style="color:white" class="form-label">Lotação</label>
+                    <input type="number" id="typeNumberLotacao" min="0" max="7" style="width:100px" 
+                    placeholder="Lotação" class="form-control" @bind-value="_lookingForDealsFormModel.Lotacao" />
+                </div>
+                <div class="form-outline inputValuesFloat">
+                    <label for="firstName" style="color:white" class="form-label">Quilómetros</label>
+                    <input type="number" id="typeNumberKms" min="0" max="9999999" style="width:100px"
+                           placeholder="Kms" class="form-control" @bind-value="_lookingForDealsFormModel.Kms" />
+                </div>
+            </div>
+        </div>
+    <input type="submit" class="btn btn-success" value="Guardar" />
+    </div>
+</EditForm>
+
+<style type="text/css">
+.inputValuesFloat{
+    float:left;
+    width:100px;
+    margin-right:20px;
+}    
+</style>

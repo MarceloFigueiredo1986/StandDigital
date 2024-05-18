@@ -57,7 +57,7 @@ public sealed class HttpServiceRequester(HttpClient httpClientFactory, IConfigur
                 configuration.GetValue<string>("Endpoints:NewBid") ?? throw new Exception("NewBidDetailsEndpoint settings empty")),
             ServicesEndpoints.AllDealTypes => Path.Combine(
                 MainMicroservice,
-                configuration.GetValue<string>("Endponts:AllDealTypes") ?? throw new Exception("AllDealTypesEndpoint settings empty")),
+                configuration.GetValue<string>("Endpoints:AllDealTypes") ?? throw new Exception("AllDealTypesEndpoint settings empty")),
             ServicesEndpoints.DealDetails => Path.Combine(
                 MainMicroservice,
                 configuration.GetValue<string>("Endpoints:DealDetails") ?? throw new Exception("DealDetailsEndpoint settings empty")),

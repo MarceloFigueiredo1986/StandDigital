@@ -1,5 +1,4 @@
 ﻿@page "/admin"
-@using StandDigital.Components.Pages.Admin.DealsArea
 
 @layout MainLayout
 
@@ -75,7 +74,8 @@
     Dictionary<string, Type> _tabs = new()
     {
         {"Histórico Negócios", typeof(PersonalDeals) },
-        {"Area Pessoal", typeof(PersonalInfo) }
+        {"Area Pessoal", typeof(PersonalInfo) },
+        {"Prospeção Negócios", typeof(LookingForDeals) }
     };
 
     private Type _menu;
